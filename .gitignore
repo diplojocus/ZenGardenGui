@@ -1,2 +1,8 @@
 ### MAC OS X FOLDER INFO ###
 .DS_Store
+
+### XCODE USER DATA ###
+ZenGarden_GUI.xcodeproj/project.xcworkspace/*
+ZenGarden_GUI.xcodeproj/xcuserdata/*
+
+ZenGarden_GUITests/*
