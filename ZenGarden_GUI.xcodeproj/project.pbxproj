@@ -1,0 +1,498 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D8196229137290CB00E6B775 /* osc.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8196228137290CB00E6B775 /* osc.icns */; };
+		D8F3BF5A13708576002E6B3C /* libzengarden.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F3BF5913708576002E6B3C /* libzengarden.a */; };
+		D8F92BB71368970F002174E6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F92BB61368970F002174E6 /* Cocoa.framework */; };
+		D8F92BC11368970F002174E6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8F92BBF1368970F002174E6 /* InfoPlist.strings */; };
+		D8F92BC41368970F002174E6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92BC31368970F002174E6 /* main.m */; };
+		D8F92BC71368970F002174E6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = D8F92BC51368970F002174E6 /* Credits.rtf */; };
+		D8F92BCA1368970F002174E6 /* ZenGarden_GUIAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92BC91368970F002174E6 /* ZenGarden_GUIAppDelegate.m */; };
+		D8F92BCD1368970F002174E6 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8F92BCB1368970F002174E6 /* MainMenu.xib */; };
+		D8F92BD41368970F002174E6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F92BB61368970F002174E6 /* Cocoa.framework */; };
+		D8F92BDC1368970F002174E6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8F92BDA1368970F002174E6 /* InfoPlist.strings */; };
+		D8F92BDF1368970F002174E6 /* ZenGarden_GUITests.h in Resources */ = {isa = PBXBuildFile; fileRef = D8F92BDE1368970F002174E6 /* ZenGarden_GUITests.h */; };
+		D8F92BE11368970F002174E6 /* ZenGarden_GUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92BE01368970F002174E6 /* ZenGarden_GUITests.m */; };
+		D8F92C1A13689D78002174E6 /* CanvasMainView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92C1913689D78002174E6 /* CanvasMainView.m */; };
+		D8F92C381368B370002174E6 /* ObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92C371368B370002174E6 /* ObjectView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D8F92BD51368970F002174E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D8F92BA91368970F002174E6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D8F92BB11368970F002174E6;
+			remoteInfo = ZenGarden_GUI;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		D8196228137290CB00E6B775 /* osc.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = osc.icns; sourceTree = "<group>"; };
+		D8DE6AFD1369543D00709B41 /* CanvasController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasController.h; sourceTree = "<group>"; };
+		D8DE6AFE1369543D00709B41 /* CanvasController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasController.m; sourceTree = "<group>"; };
+		D8F3BF4C137072F2002E6B3C /* ZenGarden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZenGarden.h; sourceTree = "<group>"; };
+		D8F3BF5913708576002E6B3C /* libzengarden.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzengarden.a; sourceTree = "<group>"; };
+		D8F92BB21368970F002174E6 /* ZenGarden_GUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZenGarden_GUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8F92BB61368970F002174E6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		D8F92BB91368970F002174E6 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		D8F92BBA1368970F002174E6 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		D8F92BBB1368970F002174E6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		D8F92BBE1368970F002174E6 /* ZenGarden_GUI-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ZenGarden_GUI-Info.plist"; sourceTree = "<group>"; };
+		D8F92BC01368970F002174E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D8F92BC21368970F002174E6 /* ZenGarden_GUI-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZenGarden_GUI-Prefix.pch"; sourceTree = "<group>"; };
+		D8F92BC31368970F002174E6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		D8F92BC61368970F002174E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		D8F92BC81368970F002174E6 /* ZenGarden_GUIAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZenGarden_GUIAppDelegate.h; sourceTree = "<group>"; };
+		D8F92BC91368970F002174E6 /* ZenGarden_GUIAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZenGarden_GUIAppDelegate.m; sourceTree = "<group>"; };
+		D8F92BCC1368970F002174E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		D8F92BD31368970F002174E6 /* ZenGarden_GUITests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZenGarden_GUITests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D8F92BD91368970F002174E6 /* ZenGarden_GUITests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ZenGarden_GUITests-Info.plist"; sourceTree = "<group>"; };
+		D8F92BDB1368970F002174E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D8F92BDD1368970F002174E6 /* ZenGarden_GUITests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZenGarden_GUITests-Prefix.pch"; sourceTree = "<group>"; };
+		D8F92BDE1368970F002174E6 /* ZenGarden_GUITests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZenGarden_GUITests.h; sourceTree = "<group>"; };
+		D8F92BE01368970F002174E6 /* ZenGarden_GUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZenGarden_GUITests.m; sourceTree = "<group>"; };
+		D8F92BF513689A26002174E6 /* ZGCallbackFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCallbackFunction.h; sourceTree = "<group>"; };
+		D8F92C1813689D78002174E6 /* CanvasMainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasMainView.h; sourceTree = "<group>"; };
+		D8F92C1913689D78002174E6 /* CanvasMainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasMainView.m; sourceTree = "<group>"; };
+		D8F92C361368B370002174E6 /* ObjectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectView.h; sourceTree = "<group>"; };
+		D8F92C371368B370002174E6 /* ObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectView.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D8F92BAF1368970F002174E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8F92BB71368970F002174E6 /* Cocoa.framework in Frameworks */,
+				D8F3BF5A13708576002E6B3C /* libzengarden.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8F92BCF1368970F002174E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8F92BD41368970F002174E6 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D8F92BA71368970F002174E6 = {
+			isa = PBXGroup;
+			children = (
+				D8F92BBC1368970F002174E6 /* ZenGarden_GUI */,
+				D8F92BD71368970F002174E6 /* ZenGarden_GUITests */,
+				D8F92BB51368970F002174E6 /* Frameworks */,
+				D8F92BB31368970F002174E6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D8F92BB31368970F002174E6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D8F92BB21368970F002174E6 /* ZenGarden_GUI.app */,
+				D8F92BD31368970F002174E6 /* ZenGarden_GUITests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D8F92BB51368970F002174E6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D8F92BB61368970F002174E6 /* Cocoa.framework */,
+				D8F92BB81368970F002174E6 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D8F92BB81368970F002174E6 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D8F92BB91368970F002174E6 /* AppKit.framework */,
+				D8F92BBA1368970F002174E6 /* CoreData.framework */,
+				D8F92BBB1368970F002174E6 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		D8F92BBC1368970F002174E6 /* ZenGarden_GUI */ = {
+			isa = PBXGroup;
+			children = (
+				D8F92C361368B370002174E6 /* ObjectView.h */,
+				D8F92C371368B370002174E6 /* ObjectView.m */,
+				D8F3BF5913708576002E6B3C /* libzengarden.a */,
+				D8F92C1813689D78002174E6 /* CanvasMainView.h */,
+				D8F92C1913689D78002174E6 /* CanvasMainView.m */,
+				D8DE6AFD1369543D00709B41 /* CanvasController.h */,
+				D8DE6AFE1369543D00709B41 /* CanvasController.m */,
+				D8F92BC81368970F002174E6 /* ZenGarden_GUIAppDelegate.h */,
+				D8F92BC91368970F002174E6 /* ZenGarden_GUIAppDelegate.m */,
+				D8F3BF4C137072F2002E6B3C /* ZenGarden.h */,
+				D8F92BF513689A26002174E6 /* ZGCallbackFunction.h */,
+				D8F92BCB1368970F002174E6 /* MainMenu.xib */,
+				D8F92BBD1368970F002174E6 /* Supporting Files */,
+			);
+			path = ZenGarden_GUI;
+			sourceTree = "<group>";
+		};
+		D8F92BBD1368970F002174E6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D8196228137290CB00E6B775 /* osc.icns */,
+				D8F92BBE1368970F002174E6 /* ZenGarden_GUI-Info.plist */,
+				D8F92BBF1368970F002174E6 /* InfoPlist.strings */,
+				D8F92BC21368970F002174E6 /* ZenGarden_GUI-Prefix.pch */,
+				D8F92BC31368970F002174E6 /* main.m */,
+				D8F92BC51368970F002174E6 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D8F92BD71368970F002174E6 /* ZenGarden_GUITests */ = {
+			isa = PBXGroup;
+			children = (
+				D8F92BDE1368970F002174E6 /* ZenGarden_GUITests.h */,
+				D8F92BE01368970F002174E6 /* ZenGarden_GUITests.m */,
+				D8F92BD81368970F002174E6 /* Supporting Files */,
+			);
+			path = ZenGarden_GUITests;
+			sourceTree = "<group>";
+		};
+		D8F92BD81368970F002174E6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D8F92BD91368970F002174E6 /* ZenGarden_GUITests-Info.plist */,
+				D8F92BDA1368970F002174E6 /* InfoPlist.strings */,
+				D8F92BDD1368970F002174E6 /* ZenGarden_GUITests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D8F92BB11368970F002174E6 /* ZenGarden_GUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8F92BE41368970F002174E6 /* Build configuration list for PBXNativeTarget "ZenGarden_GUI" */;
+			buildPhases = (
+				D8F92BAE1368970F002174E6 /* Sources */,
+				D8F92BAF1368970F002174E6 /* Frameworks */,
+				D8F92BB01368970F002174E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ZenGarden_GUI;
+			productName = ZenGarden_GUI;
+			productReference = D8F92BB21368970F002174E6 /* ZenGarden_GUI.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D8F92BD21368970F002174E6 /* ZenGarden_GUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D8F92BE71368970F002174E6 /* Build configuration list for PBXNativeTarget "ZenGarden_GUITests" */;
+			buildPhases = (
+				D8F92BCE1368970F002174E6 /* Sources */,
+				D8F92BCF1368970F002174E6 /* Frameworks */,
+				D8F92BD01368970F002174E6 /* Resources */,
+				D8F92BD11368970F002174E6 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D8F92BD61368970F002174E6 /* PBXTargetDependency */,
+			);
+			name = ZenGarden_GUITests;
+			productName = ZenGarden_GUITests;
+			productReference = D8F92BD31368970F002174E6 /* ZenGarden_GUITests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D8F92BA91368970F002174E6 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = D8F92BAC1368970F002174E6 /* Build configuration list for PBXProject "ZenGarden_GUI" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = D8F92BA71368970F002174E6;
+			productRefGroup = D8F92BB31368970F002174E6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D8F92BB11368970F002174E6 /* ZenGarden_GUI */,
+				D8F92BD21368970F002174E6 /* ZenGarden_GUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D8F92BB01368970F002174E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8F92BC11368970F002174E6 /* InfoPlist.strings in Resources */,
+				D8F92BC71368970F002174E6 /* Credits.rtf in Resources */,
+				D8F92BCD1368970F002174E6 /* MainMenu.xib in Resources */,
+				D8196229137290CB00E6B775 /* osc.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8F92BD01368970F002174E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8F92BDC1368970F002174E6 /* InfoPlist.strings in Resources */,
+				D8F92BDF1368970F002174E6 /* ZenGarden_GUITests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D8F92BD11368970F002174E6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D8F92BAE1368970F002174E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8F92BC41368970F002174E6 /* main.m in Sources */,
+				D8F92BCA1368970F002174E6 /* ZenGarden_GUIAppDelegate.m in Sources */,
+				D8F92C1A13689D78002174E6 /* CanvasMainView.m in Sources */,
+				D8F92C381368B370002174E6 /* ObjectView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8F92BCE1368970F002174E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8F92BE11368970F002174E6 /* ZenGarden_GUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D8F92BD61368970F002174E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D8F92BB11368970F002174E6 /* ZenGarden_GUI */;
+			targetProxy = D8F92BD51368970F002174E6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D8F92BBF1368970F002174E6 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8F92BC01368970F002174E6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		D8F92BC51368970F002174E6 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8F92BC61368970F002174E6 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		D8F92BCB1368970F002174E6 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8F92BCC1368970F002174E6 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		D8F92BDA1368970F002174E6 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D8F92BDB1368970F002174E6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D8F92BE21368970F002174E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		D8F92BE31368970F002174E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		D8F92BE51368970F002174E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ZenGarden_GUI/ZenGarden_GUI-Prefix.pch";
+				INFOPLIST_FILE = "ZenGarden_GUI/ZenGarden_GUI-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/ZenGarden_GUI\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "x86_64 i386";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		D8F92BE61368970F002174E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ZenGarden_GUI/ZenGarden_GUI-Prefix.pch";
+				INFOPLIST_FILE = "ZenGarden_GUI/ZenGarden_GUI-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/ZenGarden_GUI\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "x86_64 i386";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		D8F92BE81368970F002174E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ZenGarden_GUI.app/Contents/MacOS/ZenGarden_GUI";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ZenGarden_GUITests/ZenGarden_GUITests-Prefix.pch";
+				INFOPLIST_FILE = "ZenGarden_GUITests/ZenGarden_GUITests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		D8F92BE91368970F002174E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/ZenGarden_GUI.app/Contents/MacOS/ZenGarden_GUI";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ZenGarden_GUITests/ZenGarden_GUITests-Prefix.pch";
+				INFOPLIST_FILE = "ZenGarden_GUITests/ZenGarden_GUITests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D8F92BAC1368970F002174E6 /* Build configuration list for PBXProject "ZenGarden_GUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8F92BE21368970F002174E6 /* Debug */,
+				D8F92BE31368970F002174E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8F92BE41368970F002174E6 /* Build configuration list for PBXNativeTarget "ZenGarden_GUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8F92BE51368970F002174E6 /* Debug */,
+				D8F92BE61368970F002174E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D8F92BE71368970F002174E6 /* Build configuration list for PBXNativeTarget "ZenGarden_GUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D8F92BE81368970F002174E6 /* Debug */,
+				D8F92BE91368970F002174E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D8F92BA91368970F002174E6 /* Project object */;
+}
