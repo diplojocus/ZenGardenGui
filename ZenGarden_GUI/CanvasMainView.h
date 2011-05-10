@@ -10,20 +10,26 @@
 #import "ObjectView.h"
 #import "ZenGarden.h"
 
-
 @interface CanvasMainView : NSView {
 
+  // Objects
+  int frameWidth;
+  int frameHeight;
+  ObjectView *newView;
+  
+  // Selection Marquee
   NSPoint firstPoint;
   NSPoint secondPoint;
   NSRect selectionRect;
   NSBezierPath *selectionPath;
   
-  ObjectView *newView;
-  
+  // ZenGarden
   ZGContext *zgContext;
   ZGGraph *zgGraph;
 }
 
 -(IBAction)putObject:(id)sender;
+
+-(void)setObjectFrameOrigin;
 
 @end

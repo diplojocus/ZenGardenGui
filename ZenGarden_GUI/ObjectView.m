@@ -7,7 +7,7 @@
 //
 
 #import "ObjectView.h"
-
+#import "CanvasMainView.h"
 
 @implementation ObjectView
 
@@ -67,6 +67,8 @@
 // mouse behaviour
 
 - (void)mouseDown:(NSEvent *)theEvent {
+  
+  [self.superview setObjectFrameOrigin];
   
   // edit text field
   [textField setEditable:YES];

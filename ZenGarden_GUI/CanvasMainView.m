@@ -9,8 +9,12 @@
 #import "CanvasMainView.h"
 #import "ObjectView.h"
 
+#define OBJECT_FRAME_HEIGHT @"25"
+#define OBJECT_FRAME_WIDTH @"80"
+
 @implementation CanvasMainView
 
+// C function
 void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) {
   
   switch (function) {
@@ -33,15 +37,20 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   
     self = [super initWithFrame:frame];
     if (self) {
-      [[self window] setAcceptsMouseMovedEvents:YES];
+      
+      //[[self window] setAcceptsMouseMovedEvents:YES];
       zgContext = zg_new_context(0,
                                  2,
                                  64,
                                  44100.0f,
                                  zgCallbackFunction,
                                  NULL);
+      
       zgGraph = zg_new_empty_graph(zgContext);
       zg_attach_graph(zgContext, zgGraph);
+      
+      frameHeight = 20;
+      frameWidth = 85;
     }
     
     return self;
@@ -73,9 +82,6 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 
 -(IBAction)putObject:(id)sender {
   
-  int frameHeight = 20;
-  int frameWidth = 85;
-  
   NSPoint currentMouseLocation = [[self window] mouseLocationOutsideOfEventStream];
   
   // For some reason the coordinates are from lower-left instead of upper-left
@@ -95,15 +101,26 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   
 }
 
--(void)mouseMoved:(NSEvent *)theEvent {
-  NSLog(@"Mouse");
+-(void)setObjectFrameOrigin {
   
-  [newView setFrameOrigin:[theEvent locationInWindow]];
+  newView = nil;
+  NSLog(@"MOUSE DOWN");
+}
+
+-(void)awakeFromNib {
+  
+  [[self window] setAcceptsMouseMovedEvents:YES]; 
+} 
+
+-(void)mouseMoved:(NSEvent *)theEvent {
+  
+  // invert y axis mouse coordinates
+  NSPoint mouseLocation = NSMakePoint(([theEvent locationInWindow].x - (frameWidth/2)), 
+                                      ([self frame].size.height + 3) - [theEvent locationInWindow].y - (frameHeight/2)); 
+  [newView setFrameOrigin:mouseLocation];
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-  
-  newView = nil;
   
   // release focus of objects
   [[self window] makeFirstResponder:self];
@@ -115,25 +132,23 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
                                   fromView:nil];
   secondPoint.x = firstPoint.x;
   secondPoint.y = firstPoint.y;
-  
-  
-  
-  NSLog(@"firstPoint X = %f, Y = %f", firstPoint.x, firstPoint.y);
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
   
   // set selection marquee points
-  secondPoint = [self convertPoint:[theEvent locationInWindow] 
-                                    fromView:self];
+  secondPoint = NSMakePoint(([theEvent locationInWindow].x - firstPoint.x), 
+                            (([self frame].size.height + 3) - [theEvent locationInWindow].y - firstPoint.y));
   selectionRect = NSMakeRect(firstPoint.x, 
                              firstPoint.y, 
                              secondPoint.x, 
                              secondPoint.y);
+  
+  // Calculates if object is selected (currently not working)
+  BOOL selectedObject = NSIntersectsRect(selectionRect, [newView frame]);
+  NSLog(@"Object Selected %d", selectedObject);
+  
   [self setNeedsDisplay:YES];
-  
-  NSLog(@"secondPoint X = %f, Y = %f", secondPoint.x, secondPoint.y);
-  
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
@@ -142,7 +157,6 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   [self setNeedsDisplay:YES];
   firstPoint = [theEvent locationInWindow];
   secondPoint = [theEvent locationInWindow];
-  
 }
 
 - (BOOL)isFlipped {

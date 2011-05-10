@@ -18,7 +18,6 @@
   BOOL isObjectInstantiated;
   NSColor *ObjectBackgroundState;
   
-  
 }
 
 @end
