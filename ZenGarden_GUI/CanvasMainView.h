@@ -8,13 +8,20 @@
 
 #import <Cocoa/Cocoa.h>
 #import "ObjectView.h"
+#import "ZenGarden.h"
 
 
 @interface CanvasMainView : NSView {
+
+  NSPoint firstPoint;
+  NSPoint secondPoint;
+  NSRect selectionRect;
+  NSBezierPath *selectionPath;
   
-  NSPoint marquee;
-  NSPoint anchor;
+  ObjectView *newView;
   
+  ZGContext *zgContext;
+  ZGGraph *zgGraph;
 }
 
 -(IBAction)putObject:(id)sender;

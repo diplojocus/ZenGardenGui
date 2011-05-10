@@ -75,6 +75,12 @@ typedef MessageObject ZGObject;
    */
   void zg_remove_object(ZGGraph *graph, ZGObject *object);
 
+  ZGObject *zg_new_object(const char *initString);
+
+  void zg_add_connection(ZGObject *fromObject, int fromOutletIndex, ZGObject *toObject, int toOutletIndex);
+
+  void zg_remove_connection(ZGObject *fromObject, int fromOutletIndex, ZGObject *toObject, int toOutletIndex);
+
   /** Process the given context. */
   void zg_process(ZGContext *context, float *inputBuffers, float *outputBuffers);
   
