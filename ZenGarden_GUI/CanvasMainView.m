@@ -38,7 +38,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
     self = [super initWithFrame:frame];
     if (self) {
       
-      //[[self window] setAcceptsMouseMovedEvents:YES];
+      /* ZenGarden Stuff
       zgContext = zg_new_context(0,
                                  2,
                                  64,
@@ -47,10 +47,26 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
                                  NULL);
       
       zgGraph = zg_new_empty_graph(zgContext);
+      
+      zgObject1 = @"osc~ 440";
+      zgObject2 = @"dac~";
+      
+      zg_add_object(zgGraph, zgObject1, 10, 10);
+      zg_add_object(zgGraph, zgObject2, 10, 30);
+      zg_add_connection(zgGraph, zgObject1, 0, zgObject2, 0);
+      
       zg_attach_graph(zgContext, zgGraph);
       
-      frameHeight = 20;
-      frameWidth = 85;
+      float *inputBuffers = (float *) calloc(0 * 64, sizeof(float));
+      float *outputBuffers = (float *) calloc(2 * 64, sizeof(float));
+      
+      for (int i = 0; i < 9999985; i++) {
+        
+      zg_process(zgContext, inputBuffers, outputBuffers);
+      } */ 
+       
+      defaultFrameHeight = 20;
+      defaultFrameWidth = 30;
     }
     
     return self;
@@ -87,14 +103,14 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   // For some reason the coordinates are from lower-left instead of upper-left
   // Invert y coordinate and center frame with respect to mouse location (not sure why 3 has to be added)
   // Not sure why 3 has to be added to center it
-  currentMouseLocation.y = ([self frame].size.height + 3) - currentMouseLocation.y - (frameHeight/2);
-  currentMouseLocation.x -= (frameWidth/2);
+  currentMouseLocation.y = ([self frame].size.height + 3) - currentMouseLocation.y - (defaultFrameHeight/2);
+  currentMouseLocation.x -= (defaultFrameWidth/2);
   
   // Create new object at current mouse location
   NSRect frame;
   frame.origin = currentMouseLocation;
-  frame.size.width = frameWidth;
-  frame.size.height = frameHeight;
+  frame.size.width = defaultFrameWidth;
+  frame.size.height = defaultFrameHeight;
   newView = [[[ObjectView alloc] initWithFrame:frame] autorelease];
   [self addSubview:newView];
   [newView setFrameOrigin:currentMouseLocation];
@@ -115,8 +131,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 -(void)mouseMoved:(NSEvent *)theEvent {
   
   // invert y axis mouse coordinates
-  NSPoint mouseLocation = NSMakePoint(([theEvent locationInWindow].x - (frameWidth/2)), 
-                                      ([self frame].size.height + 3) - [theEvent locationInWindow].y - (frameHeight/2)); 
+  NSPoint mouseLocation = NSMakePoint(([theEvent locationInWindow].x - (defaultFrameWidth/2)), 
+                                      ([self frame].size.height + 3) - [theEvent locationInWindow].y - (defaultFrameHeight/2)); 
   [newView setFrameOrigin:mouseLocation];
 }
 
@@ -145,8 +161,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
                              secondPoint.y);
   
   // Calculates if object is selected (currently not working)
-  BOOL selectedObject = NSIntersectsRect(selectionRect, [newView frame]);
-  NSLog(@"Object Selected %d", selectedObject);
+  //BOOL selectedObject = NSIntersectsRect(selectionRect, [newView frame]);
+  //NSLog(@"Object Selected %d", selectedObject);
   
   [self setNeedsDisplay:YES];
 }
@@ -168,6 +184,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 - (void)dealloc {
   
   zg_delete_context(zgContext);
+  
   [super dealloc];
 }
 

@@ -13,8 +13,8 @@
 @interface CanvasMainView : NSView {
 
   // Objects
-  int frameWidth;
-  int frameHeight;
+  int defaultFrameWidth;
+  int defaultFrameHeight;
   ObjectView *newView;
   
   // Selection Marquee
@@ -26,6 +26,8 @@
   // ZenGarden
   ZGContext *zgContext;
   ZGGraph *zgGraph;
+  ZGObject *zgObject1;
+  ZGObject *zgObject2;
 }
 
 -(IBAction)putObject:(id)sender;

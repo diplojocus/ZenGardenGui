@@ -7,11 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "ZenGarden.h"
 
 
 @interface ObjectView : NSView <NSTextFieldDelegate> {
   
   NSTextField *textField;
+  int stringCharSize;
+  
+  int currentFrameWidth;
+  int currentFrameHeight;
   
   NSPoint updatedFrameOrigin;
   

@@ -16,13 +16,20 @@
     self = [super initWithFrame:frame];
     if (self) {
       // Initialization code here.
-      textField = [[NSTextField alloc] initWithFrame:frame];
+      currentFrameWidth = frame.size.width;
+      currentFrameHeight = frame.size.height;
+      textField = [[NSTextField alloc] initWithFrame:NSMakeRect(2,
+                                                                2,
+                                                                (currentFrameWidth - 4),
+                                                                currentFrameHeight - 4)];
       [textField setDelegate:self];
       [textField setEditable:NO];
       [textField setSelectable:NO];
       [textField setBezeled:NO];
       [textField setDrawsBackground:NO];
       [self addSubview:textField]; 
+      
+      stringCharSize = 10;
       
       ObjectBackgroundState = [NSColor redColor];
       isObjectInstantiated = NO;
@@ -32,9 +39,6 @@
 }
 
 - (void)drawRect:(NSRect)rect {
-  
-  // adjust padding for textfield
-  [textField setFrame:NSMakeRect(2, 2, (rect.size.width - 4), rect.size.height - 4)];
   
   // Set default line join style
   [NSBezierPath setDefaultLineJoinStyle:NSRoundLineJoinStyle];
@@ -49,18 +53,9 @@
   [path fill];
   
   // set border width and colour
-  [path setLineWidth:3];
-  [ObjectBackgroundState set]; 
-  
-  float lineDash[4];
-  
-  lineDash[0] = 4.0;
-  lineDash[1] = 4.0;
-  lineDash[2] = 4.0;
-  lineDash[3] = 4.0;
-  
-  [path setLineDash:lineDash count:4 phase:0.0];
-  [path stroke]; 
+  //[path setLineWidth:3];
+  //[ObjectBackgroundState set]; 
+
 }
 
 
@@ -68,7 +63,7 @@
 
 - (void)mouseDown:(NSEvent *)theEvent {
   
-  [self.superview setObjectFrameOrigin];
+  [(CanvasMainView *)self.superview setObjectFrameOrigin];
   
   // edit text field
   [textField setEditable:YES];
@@ -81,17 +76,7 @@
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
-  
-  // move object on cmd + mouse drag
-  BOOL commandKeyDown = (([[NSApp currentEvent] modifierFlags] & NSCommandKeyMask) == NSCommandKeyMask);
-  if (commandKeyDown == 1) {
-  
-    [self setFrameOrigin:NSMakePoint([theEvent locationInWindow].x + updatedFrameOrigin.x, 
-                                     [theEvent locationInWindow].y + updatedFrameOrigin.y)];
     
-    NSLog(@"CMD+MOVE");
-    
-  }
 }
 
 
@@ -99,8 +84,19 @@
 
 - (void)controlTextDidBeginEditing:(NSNotification *)obj {
 
-    ObjectBackgroundState = [NSColor redColor];
-    isObjectInstantiated = NO;
+  ObjectBackgroundState = [NSColor redColor];
+  isObjectInstantiated = NO;
+  
+}
+
+-(void)controlTextDidChange:(NSNotification *)obj {
+  
+  NSString *textFieldValue = [textField stringValue];
+  NSLog(@"string length %lu", [textFieldValue length]);
+  
+  currentFrameWidth = (int) (currentFrameWidth + ([textFieldValue length] * 10)); 
+  [self setFrame:NSMakeRect([self frame].origin.x, [self frame].origin.y, currentFrameWidth, currentFrameHeight)];
+
 }
 
 - (void) controlTextDidEndEditing:(NSNotification *)obj {
@@ -123,10 +119,6 @@
   
   // Output Text Field value
   NSLog(@"%@", [textField stringValue]);
-  
-}
-
-- (void) controlTextDidChange:(NSNotification *)obj {
   
 }
 
