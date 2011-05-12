@@ -36,7 +36,7 @@
 #import <AudioUnit/AudioUnit.h>
 #import <Foundation/Foundation.h>
 
-#import "PdBase.h"
+#import "ZenGarden.h"
 
 @interface PdAudio : NSObject {
   AudioUnit audioUnit;

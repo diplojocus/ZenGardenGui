@@ -49,16 +49,6 @@
 @synthesize isPlaying;
 @synthesize wasPlayingBeforeInterruption;
 
-@synthesize recording;
-@synthesize recordingAudioFileId;
-//@synthesize toneStreamFormatInput;
-@synthesize recordBuffer;
-@synthesize recordBufferLength;
-@synthesize recordBufferHead;
-@synthesize recordBufferWriteIndex;
-
-extern int z_has_accelerate;
-
 /** The render callback used by the audio unit. This is where all of the action is regarding the AU. */
 // This function must be listed first (and thus defined) because a pointer to this function is used
 // to define the AU later in the code during setup.
@@ -80,94 +70,57 @@ OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlag
   // the buffer contains the input, and when libpd_process_float returns, it contains the output
   short *shortBuffer = (short *) ioData->mBuffers[0].mData;
   
-  if (z_has_accelerate) {
-    #if __APPLE__
-    float *floatBuffer = controller.floatBuffer;
-    int floatBufferLength = controller.floatBufferLength;
-    int bufferSize = controller.bufferSize;
-    int numInputChannels = controller.numInputChannels;
-    int numOutputChannels = controller.numOutputChannels;
-    
-    // convert short to float, and uninterleave the samples into the float buffer
-    // allow fallthrough in all cases
-    switch (numInputChannels) {
-      default: { // input channels > 2
-        for (int i = 3; i < numInputChannels; ++i) {
-          vDSP_vflt16(shortBuffer+i-1, numInputChannels, floatBuffer+(i-1)*bufferSize, 1, bufferSize);
-        }
+  float *floatBuffer = controller.floatBuffer;
+  int floatBufferLength = controller.floatBufferLength;
+  int bufferSize = controller.bufferSize;
+  int numInputChannels = controller.numInputChannels;
+  int numOutputChannels = controller.numOutputChannels;
+
+  // convert short to float, and uninterleave the samples into the float buffer
+  // allow fallthrough in all cases
+  switch (numInputChannels) {
+    default: { // input channels > 2
+      for (int i = 3; i < numInputChannels; ++i) {
+        vDSP_vflt16(shortBuffer+i-1, numInputChannels, floatBuffer+(i-1)*bufferSize, 1, bufferSize);
       }
-      case 2: vDSP_vflt16(shortBuffer+1, numInputChannels, floatBuffer+bufferSize, 1, bufferSize);
-      case 1: vDSP_vflt16(shortBuffer, numInputChannels, floatBuffer, 1, bufferSize);
-      case 0: break;
     }
-    
-    // convert samples to range of [-1,+1], also accounting for microphone scale
-    float a = 0.000030517578125f * controller.microphoneVolume; // == 1/32768 * microphone volume
-    vDSP_vsmul(floatBuffer, 1, &a, floatBuffer, 1, floatBufferLength);
-    
-    // process the samples
-    [PdBase processNoninterleavedFloatWithInputBuffer:floatBuffer andOutputBuffer:floatBuffer];
-    
-    // clip the output to [-1,+1]
-    float min = -1.0f;
-    float max = 1.0f;
-    vDSP_vclip(floatBuffer, 1, &min, &max, floatBuffer, 1, floatBufferLength);
-    
-    // scale the floating-point samples to short range
-    a = 32767.0f;
-    vDSP_vsmul(floatBuffer, 1, &a, floatBuffer, 1, floatBufferLength);
-    
-    // convert float to short and interleave into short buffer
-    // allow fallthrough in all cases
-    switch (numOutputChannels) {
-      default: { // output channels > 2
-        for (int i = 3; i < numOutputChannels; ++i) {
-          vDSP_vfix16(floatBuffer+(i-1)*bufferSize, numOutputChannels, shortBuffer+i-1, 1, bufferSize);
-        }
-      }
-      case 2: vDSP_vfix16(floatBuffer+bufferSize, 1, shortBuffer+1, numOutputChannels, bufferSize);
-      case 1: vDSP_vfix16(floatBuffer, 1, shortBuffer, numOutputChannels, bufferSize);
-      case 0: break;
-    }
-    
-    #endif // __APPLE__
-  } else {
-    float *floatBuffer = controller.floatBuffer;
-    int floatBufferLength = controller.floatBufferLength;
-    float a = 0.000030517578125f * controller.microphoneVolume; // == 1/32768 * microphone volume
-    
-    // If the numbers of input and output channels differ, we may not need to initialize the entire 
-    // buffer, but we do it anyway for simplicity. Same issue when filling the output buffer.
-    for (int i = 0; i < floatBufferLength; i++) {
-      floatBuffer[i] = ((float) shortBuffer[i]) * a;
-    }
-    [PdBase processFloatWithInputBuffer:floatBuffer andOutputBuffer:floatBuffer];
-    for (int i = 0; i < floatBufferLength; i++) {
-      float f = floatBuffer[i];
-      if (f < -1.0f) shortBuffer[i] = -32767;
-      else if (f > 1.0f) shortBuffer[i] = 32767;
-      else shortBuffer[i] = (short) (f * 32767.0f);
-    }
+    case 2: vDSP_vflt16(shortBuffer+1, numInputChannels, floatBuffer+bufferSize, 1, bufferSize);
+    case 1: vDSP_vflt16(shortBuffer, numInputChannels, floatBuffer, 1, bufferSize);
+    case 0: break;
   }
-  
-  if (controller.recording) {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    memcpy(controller.recordBuffer + controller.recordBufferHead, ioData->mBuffers[0].mData, ioData->mBuffers[0].mDataByteSize);
-    controller.recordBufferHead += ioData->mBuffers[0].mDataByteSize;
-    if (controller.recordBufferHead == controller.recordBufferLength >> 1) {
-      controller.recordBufferWriteIndex = 0;
-      [controller performSelectorInBackground:@selector(writeAudioBuffer) withObject:nil];
-    } else if (controller.recordBufferHead >= controller.recordBufferLength) {
-      controller.recordBufferWriteIndex =  controller.recordBufferLength >> 1;
-      [controller performSelectorInBackground:@selector(writeAudioBuffer) withObject:nil];
-      controller.recordBufferHead = 0;
+
+  // convert samples to range of [-1,+1], also accounting for microphone scale
+  float a = 0.000030517578125f * controller.microphoneVolume; // == 1/32768 * microphone volume
+  vDSP_vsmul(floatBuffer, 1, &a, floatBuffer, 1, floatBufferLength);
+
+  // process the samples
+  zg_process(zgContext, floatBuffer, floatBuffer);
+
+  // clip the output to [-1,+1]
+  float min = -1.0f;
+  float max = 1.0f;
+  vDSP_vclip(floatBuffer, 1, &min, &max, floatBuffer, 1, floatBufferLength);
+
+  // scale the floating-point samples to short range
+  a = 32767.0f;
+  vDSP_vsmul(floatBuffer, 1, &a, floatBuffer, 1, floatBufferLength);
+
+  // convert float to short and interleave into short buffer
+  // allow fallthrough in all cases
+  switch (numOutputChannels) {
+    default: { // output channels > 2
+      for (int i = 3; i < numOutputChannels; ++i) {
+        vDSP_vfix16(floatBuffer+(i-1)*bufferSize, numOutputChannels, shortBuffer+i-1, 1, bufferSize);
+      }
     }
-    [pool release];
+    case 2: vDSP_vfix16(floatBuffer+bufferSize, 1, shortBuffer+1, numOutputChannels, bufferSize);
+    case 1: vDSP_vfix16(floatBuffer, 1, shortBuffer, numOutputChannels, bufferSize);
+    case 0: break;
   }
   
   return 0; // no errors
 }
-
+/*
 - (void)printAudioSessionProperties {
   int outputBus = 0;
   int inputBus = 1;
@@ -242,7 +195,7 @@ OSStatus renderCallback(void *inRefCon, AudioUnitRenderActionFlags *ioActionFlag
           audioSessionPropertyU32, numOutputChannels);
   }
 }
-
+*/
 // the interrupt listener for the audio session
 void audioSessionInterruptListener(void *inClientData, UInt32 inInterruption) {
   PdAudio *controller = (PdAudio *) inClientData;
@@ -404,8 +357,7 @@ void audioSessionRouteChangeListener(void *indata, AudioSessionPropertyID proper
   // set the audio category to PlayAndRecord so that we can have low-latency IO
   UInt32 audioCategory = kAudioSessionCategory_PlayAndRecord;
   AudioSessionSetProperty(kAudioSessionProperty_AudioCategory, sizeof(audioCategory), &audioCategory);
-  
-  /* 
+  /*
    * NOTE(mhroth): does not seem to be working because when a BT headset is used, the samplerate
    * is dropped to 8KHz. Not sure how to reset it.
    */
@@ -438,7 +390,9 @@ void audioSessionRouteChangeListener(void *indata, AudioSessionPropertyID proper
 }
 
 - (void)setSampleRate:(Float64)newSampleRate {
-  AudioSessionSetProperty(kAudioSessionProperty_PreferredHardwareSampleRate, sizeof(newSampleRate), &newSampleRate);
+  AudioQueueSetProperty(kAudioDevicePropertyNominalSampleRate, sizeof(newSampleRate), &newSampleRate);
+
+  AudioQueueSetProperty(<#AudioQueueRef inAQ#>, <#AudioQueuePropertyID inID#>, <#const void *inData#>, <#UInt32 inDataSize#>)
 }
 
 - (void)setBufferSize:(int)newBufferSize {
@@ -553,55 +507,5 @@ void audioSessionRouteChangeListener(void *indata, AudioSessionPropertyID proper
   [self printAudioSessionProperties];
 }
 
-#pragma mark -
-#pragma mark Recording Functions
-
-// http://developer.apple.com/iphone/library/documentation/MusicAudio/Reference/AudioFileConvertRef/Reference/reference.html
-- (void)startRecordingToFile:(NSString *)recordingPath {
-  
-  AudioStreamBasicDescription toneStreamFormatInput;
-  memset(&toneStreamFormatInput, 0, sizeof(toneStreamFormatInput));
-  UInt32 toneStreamFormatSize = sizeof(AudioStreamBasicDescription);
-  AudioUnitGetProperty(audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input,
-      0, &toneStreamFormatInput, &toneStreamFormatSize);
-  
-  
-  NSURL *fileUrl = [NSURL fileURLWithPath:recordingPath];
-  // overwrite the file if it already exists
-  OSStatus err = AudioFileCreateWithURL((CFURLRef) fileUrl, kAudioFileWAVEType, &toneStreamFormatInput,
-      kAudioFileFlags_EraseFile, &recordingAudioFileId);
-  if (err != 0) {
-    NSLog(@"There was an error while opening the recording file: %ld", err);
-  } else {
-    NSLog(@"Starting recording audio to file: %@", recordingPath);
-  }
-  recording = YES;
-}
-
-// perform on background thread
-- (void)writeAudioBuffer {
-  UInt32 ioNumPackets = recordBufferLength >> 3;
-  OSStatus err = AudioFileWritePackets(recordingAudioFileId, NO, recordBufferLength>>1, NULL,
-      recordPacketsWritten, &ioNumPackets, recordBuffer + recordBufferWriteIndex);
-  if (err != 0) {
-    NSLog(@"There was an error while saving recording audio data: %ld", err);
-  }
-  recordPacketsWritten += ioNumPackets;
-}
-
-- (void)stopRecording {
-  if (!recording) return;
-  NSLog(@"Stopping recording audio.");
-  recording = NO;
-  AudioFileOptimize(recordingAudioFileId); // necessary?
-  OSStatus err = AudioFileClose(recordingAudioFileId);
-  if (err != 0) {
-    NSLog(@"Error while closing recording file: %ld", err);
-  }
-  recordBufferHead = 0;
-  recordPacketsWritten = 0;
-  recordBufferWriteIndex = 0;
-  recordingAudioFileId = nil;
-}
 
 @end
