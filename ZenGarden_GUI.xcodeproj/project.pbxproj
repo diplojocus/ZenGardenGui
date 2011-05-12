@@ -110,8 +110,6 @@
 		D8F92BA71368970F002174E6 = {
 			isa = PBXGroup;
 			children = (
-				D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */,
-				D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */,
 				D8F92BBC1368970F002174E6 /* ZenGarden_GUI */,
 				D8F92BD71368970F002174E6 /* ZenGarden_GUITests */,
 				D8C24BDA1379F1CF00363F38 /* Libraries */,
@@ -133,6 +131,8 @@
 			isa = PBXGroup;
 			children = (
 				D832DFE01379B9DA0065A9D0 /* Accelerate.framework */,
+				D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */,
+				D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */,
 				D8F92BB61368970F002174E6 /* Cocoa.framework */,
 				D8F92BB81368970F002174E6 /* Other Frameworks */,
 			);

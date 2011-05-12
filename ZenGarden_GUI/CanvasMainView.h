@@ -16,6 +16,7 @@
   int defaultFrameWidth;
   int defaultFrameHeight;
   ObjectView *newView;
+  NSMutableArray *arrayOfObjects;
   
   // Selection Marquee
   NSPoint firstPoint;

@@ -17,6 +17,8 @@
   
   int currentFrameWidth;
   int currentFrameHeight;
+  int defaultFrameWidth;
+  int defaultFrameHeight;
   
   NSPoint updatedFrameOrigin;
   
@@ -24,5 +26,8 @@
   NSColor *ObjectBackgroundState;
   
 }
+
+-(void)drawInlet;
+-(void)drawOutlet;
 
 @end

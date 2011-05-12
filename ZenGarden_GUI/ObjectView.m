@@ -28,7 +28,8 @@
       [textField setBezeled:NO];
       [textField setDrawsBackground:NO];
       [self addSubview:textField]; 
-      
+      [self drawInlet];
+      [self drawOutlet];
       stringCharSize = 10;
       
       ObjectBackgroundState = [NSColor redColor];
@@ -56,6 +57,14 @@
   //[path setLineWidth:3];
   //[ObjectBackgroundState set]; 
 
+}
+
+-(void)drawInlet {
+  
+}
+
+-(void)drawOutlet {
+  
 }
 
 
@@ -94,9 +103,22 @@
   NSString *textFieldValue = [textField stringValue];
   NSLog(@"string length %lu", [textFieldValue length]);
   
-  currentFrameWidth = (int) (currentFrameWidth + ([textFieldValue length] * 10)); 
-  [self setFrame:NSMakeRect([self frame].origin.x, [self frame].origin.y, currentFrameWidth, currentFrameHeight)];
-
+  if (textFieldValue > 0) {
+    
+    currentFrameWidth = (int) (([textFieldValue length] * 10) + 30); 
+  }
+  else {
+    
+    currentFrameWidth = 30;
+  }
+  
+  [textField sizeToFit];
+  
+  [self setFrame:NSMakeRect([self frame].origin.x,
+                            [self frame].origin.y,
+                            [textField frame].size.width + 4, 
+                            [textField frame].size.height + 4)];
+  
 }
 
 - (void) controlTextDidEndEditing:(NSNotification *)obj {

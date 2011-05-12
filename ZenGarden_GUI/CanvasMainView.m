@@ -67,6 +67,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
        
       defaultFrameHeight = 20;
       defaultFrameWidth = 30;
+      
+      arrayOfObjects = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -114,7 +116,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   newView = [[[ObjectView alloc] initWithFrame:frame] autorelease];
   [self addSubview:newView];
   [newView setFrameOrigin:currentMouseLocation];
-  
+  [arrayOfObjects addObject:newView];
 }
 
 -(void)setObjectFrameOrigin {
@@ -161,8 +163,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
                              secondPoint.y);
   
   // Calculates if object is selected (currently not working)
-  //BOOL selectedObject = NSIntersectsRect(selectionRect, [newView frame]);
-  //NSLog(@"Object Selected %d", selectedObject);
+  BOOL selectedObject = NSIntersectsRect(selectionRect, [newView frame]);
+  NSLog(@"Object Selected %d", selectedObject);
   
   [self setNeedsDisplay:YES];
 }
@@ -183,6 +185,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 
 - (void)dealloc {
   
+  [arrayOfObjects release];
   zg_delete_context(zgContext);
   
   [super dealloc];
