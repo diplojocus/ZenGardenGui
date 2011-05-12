@@ -32,6 +32,15 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/* 
+ 
+ Martin Roth
+ http://developer.apple.com/library/mac/#documentation/MusicAudio/Conceptual/AudioQueueProgrammingGuide/Introduction/Introduction.html
+ Martin Roth
+ http://developer.apple.com/library/mac/#documentation/MusicAudio/Reference/AudioQueueReference/Reference/reference.html
+ 
+*/
+
 #import <AudioToolbox/AudioToolbox.h>
 #import <AudioUnit/AudioUnit.h>
 #import <Foundation/Foundation.h>
