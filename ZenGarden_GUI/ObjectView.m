@@ -28,9 +28,7 @@
       [textField setBezeled:NO];
       [textField setDrawsBackground:NO];
       [self addSubview:textField]; 
-      [self drawInlet];
       [self drawOutlet];
-      stringCharSize = 10;
       
       ObjectBackgroundState = [NSColor redColor];
       isObjectInstantiated = NO;
@@ -46,20 +44,23 @@
   
   // rounded corners
   NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:rect 
-                                                     xRadius:6
-                                                     yRadius:6];
+                                                     xRadius:5
+                                                     yRadius:5];
   
   // background colour
-  [[ObjectBackgroundState colorWithAlphaComponent:0.1f]set];
+  [[ObjectBackgroundState colorWithAlphaComponent:0.15f]set];
   [path fill];
-  
-  // set border width and colour
-  //[path setLineWidth:3];
-  //[ObjectBackgroundState set]; 
+
 
 }
 
 -(void)drawInlet {
+  
+  NSRect firstInlet = NSMakeRect([self frame].origin.x + 2,
+                                 ([super size].height - [self frame].origin.y),
+                                 5,
+                                 2);
+  NSFrameRect(firstInlet);
   
 }
 
@@ -67,6 +68,16 @@
   
 }
 
+-(void)highlightObject:(NSString *)colour {
+  
+  if (colour == @"GREEN") {
+    ObjectBackgroundState = [NSColor greenColor];
+  }
+  else {
+    
+    ObjectBackgroundState = [NSColor blueColor];
+  }
+}
 
 // mouse behaviour
 
@@ -131,6 +142,8 @@
     
     ObjectBackgroundState = [NSColor blueColor];
     isObjectInstantiated = YES;
+    
+    [self drawInlet];
     
   }
   else {
