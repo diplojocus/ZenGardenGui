@@ -38,7 +38,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
     self = [super initWithFrame:frame];
     if (self) {
       
-      pdAudio = [[PdAudio alloc] init];
+      pdAudio = [[PdAudio alloc] initWithInputChannels:0 OutputChannels:2 blockSize:256 andSampleRate:44100.0];
       [pdAudio play];
       zgGraph = zg_new_empty_graph(pdAudio.zgContext);
       zg_attach_graph(pdAudio.zgContext, zgGraph);
