@@ -3,10 +3,11 @@
 
 @implementation PdAudio
 
-#define FRAMES_PER_BLOCK 256
-
 @synthesize zgContext;
+@synthesize numInputChannels;
 @synthesize numOutputChannels;
+@synthesize blockSize;
+
 
 void renderCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef inBuffer) {
   PdAudio *pdAudio = (PdAudio *) inUserData;
@@ -20,20 +21,18 @@ void renderCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef in
   inBuffer->mAudioDataByteSize = inBuffer->mAudioDataBytesCapacity; // entire buffer is filled
   int floatBufferLength = inBuffer->mAudioDataBytesCapacity / sizeof(short); // total samples
   float floatBuffer[floatBufferLength];
-  memset(floatBuffer, 0, floatBufferLength * sizeof(float)); // clear the floatBuffer for input
-  int numInputChannels = 0;
   
   // convert short to float, and uninterleave the samples into the float buffer
   // allow fallthrough in all cases
-  switch (numInputChannels) {
+  switch (pdAudio.numInputChannels) {
     default: { // input channels > 2
-      for (int i = 3; i < numInputChannels; ++i) {
-        vDSP_vflt16(shortBuffer+i-1, numInputChannels, floatBuffer+(i-1)*FRAMES_PER_BLOCK, 1, FRAMES_PER_BLOCK);
+      for (int i = 3; i < pdAudio.numInputChannels; ++i) {
+        vDSP_vflt16(shortBuffer+i-1, pdAudio.numInputChannels, floatBuffer+(i-1)*pdAudio.blockSize, 1, pdAudio.blockSize);
       }
     }
-    case 2: vDSP_vflt16(shortBuffer+1, numInputChannels, floatBuffer+FRAMES_PER_BLOCK, 1, FRAMES_PER_BLOCK);
-    case 1: vDSP_vflt16(shortBuffer, numInputChannels, floatBuffer, 1, FRAMES_PER_BLOCK);
-    case 0: break;
+    case 2: vDSP_vflt16(shortBuffer+1, pdAudio.numInputChannels, floatBuffer+pdAudio.blockSize, 1, pdAudio.blockSize);
+    case 1: vDSP_vflt16(shortBuffer, pdAudio.numInputChannels, floatBuffer, 1, pdAudio.blockSize); break;
+    case 0: memset(inBuffer->mAudioData, 0, inBuffer->mAudioDataBytesCapacity); break; // clear the floatBuffer for input
   }
   
   // convert samples to range of [-1,+1]
@@ -57,12 +56,12 @@ void renderCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef in
   switch (pdAudio.numOutputChannels) {
     default: { // output channels > 2
       for (int i = 3; i < pdAudio.numOutputChannels; ++i) {
-        vDSP_vfix16(floatBuffer+(i-1)*FRAMES_PER_BLOCK, pdAudio.numOutputChannels, shortBuffer+i-1, 1, FRAMES_PER_BLOCK);
+        vDSP_vfix16(floatBuffer+(i-1)*pdAudio.blockSize, pdAudio.numOutputChannels, shortBuffer+i-1, 1, pdAudio.blockSize);
       }
     }
-    case 2: vDSP_vfix16(floatBuffer+FRAMES_PER_BLOCK, 1, shortBuffer+1, pdAudio.numOutputChannels, FRAMES_PER_BLOCK);
-    case 1: vDSP_vfix16(floatBuffer, 1, shortBuffer, pdAudio.numOutputChannels, FRAMES_PER_BLOCK);
-    case 0: break;
+    case 2: vDSP_vfix16(floatBuffer+pdAudio.blockSize, 1, shortBuffer+1, pdAudio.numOutputChannels, pdAudio.blockSize);
+    case 1: vDSP_vfix16(floatBuffer, 1, shortBuffer, pdAudio.numOutputChannels, pdAudio.blockSize); break;
+    case 0: memset(inBuffer->mAudioData, 0, inBuffer->mAudioDataBytesCapacity); break; // clear the output
   }
 
   AudioQueueEnqueueBuffer(inAQ, inBuffer, 0, NULL);
@@ -71,15 +70,19 @@ void renderCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef in
 
 #pragma mark - PdAudio
 
-- (id)init {
+- (id)initWithInputChannels:(NSUInteger)inputChannels OutputChannels:(NSUInteger)outputChannels
+    blockSize:(NSUInteger)framesPerBlock andSampleRate:(Float64)sampleRate {
   self = [super init];
   if (self != nil) {
-    numOutputChannels = 2;
+    numInputChannels = inputChannels;
+    numOutputChannels = outputChannels;
+    blockSize = framesPerBlock;
     
-    // configure the output audio format to standard 44100Hz 16-bit stereo
-    outAsbd.mSampleRate = 44100.0;
+    // configure the output audio format to standard 16-bit stereo
+    AudioStreamBasicDescription outAsbd;
+    outAsbd.mSampleRate = sampleRate;
     outAsbd.mFormatID = kAudioFormatLinearPCM;
-    outAsbd.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked; // kAudioFormatFlagsCanonical;
+    outAsbd.mFormatFlags = kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
     outAsbd.mBytesPerPacket = 4;
     outAsbd.mFramesPerPacket = 1;
     outAsbd.mBytesPerFrame = 4;
@@ -93,12 +96,12 @@ void renderCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef in
     AudioQueueSetParameter(outAQ, kAudioQueueParam_Volume, 1.0f);
     
     // create the new context
-    zgContext = zg_new_context(2, 2, FRAMES_PER_BLOCK, 44100.0f, NULL, NULL);
+    zgContext = zg_new_context(2, 2, blockSize, 44100.0f, NULL, NULL);
     
     // create three audio buffers to go into the new queue and initialise them
     AudioQueueBufferRef outBuffer;
     for (int i = 0; i < 3; i++) {
-      err = AudioQueueAllocateBuffer(outAQ, outAsbd.mBytesPerFrame*FRAMES_PER_BLOCK, &outBuffer);
+      err = AudioQueueAllocateBuffer(outAQ, outAsbd.mBytesPerFrame*blockSize, &outBuffer);
       renderCallback(self, outAQ, outBuffer);
     }
     
