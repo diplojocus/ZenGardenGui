@@ -9,9 +9,6 @@
 #import "CanvasMainView.h"
 #import "ObjectView.h"
 
-#define OBJECT_FRAME_HEIGHT @"25"
-#define OBJECT_FRAME_WIDTH @"80"
-
 @implementation CanvasMainView
 
 // C function
@@ -40,40 +37,18 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
       
       pdAudio = [[PdAudio alloc] init];
       [pdAudio play];
-      zgGraph = zg_new_empty_graph(pdAudio.zgContext);
+      
+      zgGraph  = zg_new_empty_graph(pdAudio.zgContext);
       zg_attach_graph(pdAudio.zgContext, zgGraph);
       
-      
-      /* ZenGarden Stuff
-      zgContext = zg_new_context(0,
-                                 2,
-                                 64,
-                                 44100.0f,
-                                 zgCallbackFunction,
-                                 NULL);
-      
-      zgGraph = zg_new_empty_graph(zgContext);
-      
-      NSString *objectLabel = @"+";
-      ZGObject *object = zg_new_object(zgContext, zgGraph, [objectLabel cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-      zg_add_object(zgGraph, object, 0, 0);
-      
-      zgObject1 = @"osc~ 440";
-      zgObject2 = @"dac~";
-      
+      NSString *objectLabel = @"osc~";
+      ZGObject *zgObject1 = zg_new_object(pdAudio.zgContext, zgGraph, [objectLabel cStringUsingEncoding:NSASCIIStringEncoding], 440);
       zg_add_object(zgGraph, zgObject1, 10, 10);
-      zg_add_object(zgGraph, zgObject2, 10, 30);
+      
+      objectLabel = @"dac~";
+      ZGObject *zgObject2 = zg_new_object(pdAudio.zgContext, zgGraph, [objectLabel cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+      zg_add_object(zgGraph, zgObject2, 10, 50);
       zg_add_connection(zgGraph, zgObject1, 0, zgObject2, 0);
-      
-      zg_attach_graph(zgContext, zgGraph);
-      
-      float *inputBuffers = (float *) calloc(0 * 64, sizeof(float));
-      float *outputBuffers = (float *) calloc(2 * 64, sizeof(float));
-      
-      for (int i = 0; i < 9999985; i++) {
-        
-      zg_process(zgContext, inputBuffers, outputBuffers);
-      } */ 
        
       defaultFrameHeight = 20;
       defaultFrameWidth = 30;
@@ -200,6 +175,12 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   [self setNeedsDisplay:YES];
   firstPoint = [theEvent locationInWindow];
   secondPoint = [theEvent locationInWindow];
+}
+
+-(void)keyDown:(NSEvent *)theEvent {
+
+  NSLog(@"KEYDOWN: %@", [theEvent characters]);
+  
 }
 
 - (BOOL)isFlipped {

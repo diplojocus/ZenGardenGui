@@ -56,12 +56,6 @@
 
 -(void)drawInlet {
   
-  NSRect firstInlet = NSMakeRect([self frame].origin.x + 2,
-                                 ([super size].height - [self frame].origin.y),
-                                 5,
-                                 2);
-  NSFrameRect(firstInlet);
-  
 }
 
 -(void)drawOutlet {
@@ -79,7 +73,8 @@
   }
 }
 
-// mouse behaviour
+
+#pragma mark - Mouse Behaviour
 
 - (void)mouseDown:(NSEvent *)theEvent {
   
@@ -100,7 +95,7 @@
 }
 
 
-// text behaviour
+#pragma mark - Textfield Behaviour 
 
 - (void)controlTextDidBeginEditing:(NSNotification *)obj {
 

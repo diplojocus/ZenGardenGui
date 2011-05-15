@@ -27,9 +27,6 @@
   
   // ZenGarden
   ZGGraph *zgGraph;
-  ZGObject *zgObject1;
-  ZGObject *zgObject2;
-  
   PdAudio *pdAudio;
 }
 
