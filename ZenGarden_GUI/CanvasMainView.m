@@ -38,7 +38,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
     self = [super initWithFrame:frame];
     if (self) {
       
-      /* ZenGarden Stuff
+      /*
       zgContext = zg_new_context(0,
                                  2,
                                  64,
@@ -47,6 +47,10 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
                                  NULL);
       
       zgGraph = zg_new_empty_graph(zgContext);
+      
+      NSString *objectLabel = @"+";
+      ZGObject *object = zg_new_object(zgContext, zgGraph, [objectLabel cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+      zg_add_object(zgGraph, object, 0, 0);
       
       zgObject1 = @"osc~ 440";
       zgObject2 = @"dac~";
@@ -146,25 +150,40 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   // set inital selection marquee points
   selectionRect = NSMakeRect(0, 0, 0, 0);
   [self setNeedsDisplay:YES];
-  firstPoint = [self convertPoint:[theEvent locationInWindow] 
-                                  fromView:nil];
-  secondPoint.x = firstPoint.x;
-  secondPoint.y = firstPoint.y;
+  firstPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+  secondPoint = firstPoint;
+  
+  for (ObjectView *anObject in arrayOfObjects) {
+    
+    [(ObjectView *)anObject highlightObject:@"BLUE"];
+  }
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
   
+  NSString *highlightColour;
+  
   // set selection marquee points
-  secondPoint = NSMakePoint(([theEvent locationInWindow].x - firstPoint.x), 
-                            (([self frame].size.height + 3) - [theEvent locationInWindow].y - firstPoint.y));
-  selectionRect = NSMakeRect(firstPoint.x, 
-                             firstPoint.y, 
-                             secondPoint.x, 
-                             secondPoint.y);
+  secondPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+  
+  // draw selection rectangle 
+  selectionRect = [self rectFromTwoPoints:firstPoint secondPoint:secondPoint];
   
   // Calculates if object is selected (currently not working)
-  BOOL selectedObject = NSIntersectsRect(selectionRect, [newView frame]);
-  NSLog(@"Object Selected %d", selectedObject);
+  int selectedObjectsCount = 0;
+  for (ObjectView *anObject in arrayOfObjects) {
+    
+    if (NSIntersectsRect(selectionRect, [anObject frame])) {
+      
+      selectedObjectsCount++;
+      highlightColour = @"GREEN";
+    }
+    else {
+      
+      highlightColour = @"BLUE";
+    }
+    [(ObjectView *)anObject highlightObject:highlightColour];
+  }
   
   [self setNeedsDisplay:YES];
 }
@@ -192,14 +211,13 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 }
 
 
-@end
-
-/*
 // Given two corners, make an NSRect (C Function)
-NSRect rectFromTwoPoints(NSPoint p1, NSPoint p2) {
+-(NSRect)rectFromTwoPoints:(NSPoint)p1 secondPoint:(NSPoint)p2 {
   
   return NSMakeRect(MIN(p1.x, p2.x), 
                     MIN(p1.y, p2.y), 
                     fabs(p1.x - p2.x), 
                     fabs(p1.y - p2.y));
-} */
+} 
+
+@end

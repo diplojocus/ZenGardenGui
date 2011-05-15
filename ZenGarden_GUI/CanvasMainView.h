@@ -35,4 +35,6 @@
 
 -(void)setObjectFrameOrigin;
 
+-(NSRect)rectFromTwoPoints:(NSPoint)p1 secondPoint:(NSPoint)p2;
+
 @end
