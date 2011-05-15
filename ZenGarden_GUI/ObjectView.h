@@ -13,7 +13,6 @@
 @interface ObjectView : NSView <NSTextFieldDelegate> {
   
   NSTextField *textField;
-  int stringCharSize;
   
   int currentFrameWidth;
   int currentFrameHeight;
@@ -29,5 +28,7 @@
 
 -(void)drawInlet;
 -(void)drawOutlet;
+
+-(void)highlightObject;
 
 @end
