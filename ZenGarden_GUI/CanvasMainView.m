@@ -40,15 +40,6 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
       
       zgGraph  = zg_new_empty_graph(pdAudio.zgContext);
       zg_attach_graph(pdAudio.zgContext, zgGraph);
-      
-      NSString *objectLabel = @"osc~";
-      ZGObject *zgObject1 = zg_new_object(pdAudio.zgContext, zgGraph, [objectLabel cStringUsingEncoding:NSASCIIStringEncoding], 440);
-      zg_add_object(zgGraph, zgObject1, 10, 10);
-      
-      objectLabel = @"dac~";
-      ZGObject *zgObject2 = zg_new_object(pdAudio.zgContext, zgGraph, [objectLabel cStringUsingEncoding:NSASCIIStringEncoding], NULL);
-      zg_add_object(zgGraph, zgObject2, 10, 50);
-      zg_add_connection(zgGraph, zgObject1, 0, zgObject2, 0);
        
       defaultFrameHeight = 20;
       defaultFrameWidth = 30;
@@ -104,10 +95,30 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   [arrayOfObjects addObject:newView];
 }
 
+-(void)instantiateObject:(NSString *)objectString {
+  
+  NSArray *objectArgsArray = [objectString componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+  ZGObject *zgObject1 = zg_new_object(pdAudio.zgContext, zgGraph, [[objectArgsArray objectAtIndex:0] cStringUsingEncoding:NSASCIIStringEncoding], [objectArgsArray objectAtIndex:1]);
+  zg_add_object(zgGraph, zgObject1, 10, 10);
+  
+  NSString *objectLabel = @"dac~";
+  ZGObject *zgObject2 = zg_new_object(pdAudio.zgContext, zgGraph, [objectLabel cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+  zg_add_object(zgGraph, zgObject2, 10, 50);
+  zg_add_connection(zgGraph, zgObject1, 0, zgObject2, 0);
+  
+}
+
 -(void)setObjectFrameOrigin {
   
   newView = nil;
   NSLog(@"MOUSE DOWN");
+}
+
+-(void)deleteObject:(NSView *)objectView {
+  
+  NSLog(@"DELETE");
+  [objectView removeFromSuperview];
+  
 }
 
 -(void)awakeFromNib {
@@ -178,9 +189,24 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 }
 
 -(void)keyDown:(NSEvent *)theEvent {
-
-  NSLog(@"KEYDOWN: %@", [theEvent characters]);
   
+    NSString *characters = [theEvent characters];
+    if ([characters length]) {
+      
+      // Delete objects
+      switch ([characters characterAtIndex:0]) {
+        case NSDeleteCharacter:
+          if ([arrayOfObjects count] != 0) {
+            for (ObjectView *anObject in arrayOfObjects) {
+              if ([anObject isObjectHighlighted]) {
+                [arrayOfObjects removeObject:anObject];
+                [self deleteObject:anObject];
+              }
+            }
+          }
+        break;
+      }
+    }
 }
 
 - (BOOL)isFlipped {

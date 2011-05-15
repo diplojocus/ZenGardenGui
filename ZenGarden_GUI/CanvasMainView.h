@@ -31,9 +31,9 @@
 }
 
 -(IBAction)putObject:(id)sender;
-
 -(void)setObjectFrameOrigin;
-
+-(void)instantiateObject;
+-(void)deleteObject;
 -(NSRect)rectFromTwoPoints:(NSPoint)p1 secondPoint:(NSPoint)p2;
 
 @end

@@ -73,6 +73,17 @@
   }
 }
 
+-(BOOL)isObjectHighlighted {
+  
+  if (ObjectBackgroundState == [NSColor greenColor]) {
+    
+    return YES;
+  }
+  else {
+    return NO;
+  }
+}
+
 
 #pragma mark - Mouse Behaviour
 
@@ -107,7 +118,6 @@
 -(void)controlTextDidChange:(NSNotification *)obj {
   
   NSString *textFieldValue = [textField stringValue];
-  NSLog(@"string length %lu", [textFieldValue length]);
   
   if (textFieldValue > 0) {
     
@@ -138,7 +148,7 @@
     ObjectBackgroundState = [NSColor blueColor];
     isObjectInstantiated = YES;
     
-    [self drawInlet];
+    //[self drawInlet];
     
   }
   else {
@@ -147,9 +157,8 @@
     isObjectInstantiated = NO;
   }
   
-  // Output Text Field value
-  NSLog(@"%@", [textField stringValue]);
-  
+  // Create object in ZenGarden
+  [(CanvasMainView *)self.superview instantiateObject:[textField stringValue]];
 }
 
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {

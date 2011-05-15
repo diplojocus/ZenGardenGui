@@ -30,5 +30,6 @@
 -(void)drawOutlet;
 
 -(void)highlightObject;
+-(BOOL)isObjectHighlighted;
 
 @end
