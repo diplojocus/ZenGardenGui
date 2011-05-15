@@ -38,7 +38,13 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
     self = [super initWithFrame:frame];
     if (self) {
       
-      /*
+      pdAudio = [[PdAudio alloc] init];
+      [pdAudio play];
+      zgGraph = zg_new_empty_graph(pdAudio.zgContext);
+      zg_attach_graph(pdAudio.zgContext, zgGraph);
+      
+      
+      /* ZenGarden Stuff
       zgContext = zg_new_context(0,
                                  2,
                                  64,
@@ -204,9 +210,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 
 - (void)dealloc {
   
-  [arrayOfObjects release];
-  zg_delete_context(zgContext);
-  
+  [pdAudio release];
+  [arrayOfObjects release];  
   [super dealloc];
 }
 

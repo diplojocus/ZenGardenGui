@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "ObjectView.h"
 #import "ZenGarden.h"
+#import "PdAudio.h"
 
 @interface CanvasMainView : NSView {
 
@@ -25,10 +26,11 @@
   NSBezierPath *selectionPath;
   
   // ZenGarden
-  ZGContext *zgContext;
   ZGGraph *zgGraph;
   ZGObject *zgObject1;
   ZGObject *zgObject2;
+  
+  PdAudio *pdAudio;
 }
 
 -(IBAction)putObject:(id)sender;
