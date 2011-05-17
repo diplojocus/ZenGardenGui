@@ -15,20 +15,27 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code here.
+      NSLog(@"INLET");
     }
     
     return self;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     [super dealloc];
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    // Drawing code here.
+- (void)drawRect:(NSRect)dirtyRect {
+  
+  NSBezierPath * path = [NSBezierPath bezierPathWithRect:NSMakeRect(1, 0, 2, 2)];
+  
+  [path setLineWidth:4];
+  
+  [[NSColor blackColor] set];
+  [path fill];
+  
+  [[NSColor grayColor] set]; 
+  [path stroke];
 }
 
 @end
