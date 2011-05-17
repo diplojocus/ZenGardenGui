@@ -7,29 +7,35 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "InletView.h"
 #import "ZenGarden.h"
 
 
 @interface ObjectView : NSView <NSTextFieldDelegate> {
   
+   
+  ZGObject *zgObject;
   NSTextField *textField;
-  
-  int currentFrameWidth;
-  int currentFrameHeight;
-  int defaultFrameWidth;
-  int defaultFrameHeight;
-  
+
   NSPoint updatedFrameOrigin;
   
   BOOL isObjectInstantiated;
-  NSColor *ObjectBackgroundState;
+  NSColor *objectBackgroundColour;
   
 }
 
--(void)drawInlet;
--(void)drawOutlet;
+- (void)drawInlet:(NSRect)frame;
 
--(void)highlightObject;
--(BOOL)isObjectHighlighted;
+- (void)drawOutlet:(NSRect)frame;
+
+- (void)drawBackground:(NSRect)frame;
+
+- (void)drawTextField:(NSRect)frame;
+
+- (void)instantiateObject:(BOOL)selector;
+
+- (void)highlightObject;
+
+- (BOOL)isObjectHighlighted;
 
 @end

@@ -12,70 +12,73 @@
 @implementation ObjectView
 
 - (id)initWithFrame:(NSRect)frame {
-  
     self = [super initWithFrame:frame];
     if (self) {
-      // Initialization code here.
-      currentFrameWidth = frame.size.width;
-      currentFrameHeight = frame.size.height;
-      textField = [[NSTextField alloc] initWithFrame:NSMakeRect(2,
-                                                                2,
-                                                                (currentFrameWidth - 4),
-                                                                currentFrameHeight - 4)];
-      [textField setDelegate:self];
-      [textField setEditable:NO];
-      [textField setSelectable:NO];
-      [textField setBezeled:NO];
-      [textField setDrawsBackground:NO];
-      [self addSubview:textField]; 
-      [self drawOutlet];
-      
-      ObjectBackgroundState = [NSColor redColor];
-      isObjectInstantiated = NO;
+      [self drawTextField:NSMakeRect(2, 2, (frame.size.width - 4), frame.size.height - 4)];
+      [self drawInlet:NSMakeRect(2, 2, (frame.size.width - 4), frame.size.height - 4)];
+      [self drawOutlet:frame];
+      [self instantiateObject:NO];
     }
-    
     return self;
 }
 
-- (void)drawRect:(NSRect)rect {
-  
-  // Set default line join style
+- (void)drawRect:(NSRect)dirtyRect {
+  [self drawBackground:dirtyRect];
+  [self drawInlet:dirtyRect];
+}
+
+- (void)drawBackground:(NSRect)frame {
   [NSBezierPath setDefaultLineJoinStyle:NSRoundLineJoinStyle];
-  
-  // rounded corners
-  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:rect 
-                                                     xRadius:5
-                                                     yRadius:5];
-  
-  // background colour
-  [[ObjectBackgroundState colorWithAlphaComponent:0.15f]set];
+  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:frame xRadius:5 yRadius:5];
+  [[objectBackgroundColour colorWithAlphaComponent:0.15f]set];
   [path fill];
-
-
 }
 
--(void)drawInlet {
+- (void)drawTextField:(NSRect)frame {
+  textField = [[NSTextField alloc] initWithFrame:frame];
+  [textField setDelegate:self];
+  [textField setEditable:NO];
+  [textField setSelectable:NO];
+  [textField setBezeled:NO];
+  [textField setDrawsBackground:NO];
+  [self addSubview:textField]; 
+}
+
+- (void)drawInlet:(NSRect)frame {
+  InletView *inlet = [[NSView alloc] initWithFrame:frame];
+  [self addSubview:inlet];
+  [inlet release];
+}
+
+- (void)drawOutlet:(NSRect)frame {
   
 }
 
--(void)drawOutlet {
+- (void)instantiateObject:(BOOL)selector {
+  isObjectInstantiated = selector;
   
+  if (isObjectInstantiated) {
+    objectBackgroundColour = [NSColor blueColor];
+  }
+  else {
+    objectBackgroundColour = [NSColor redColor];
+  }
 }
 
--(void)highlightObject:(NSString *)colour {
+- (void)highlightObject:(NSString *)colour {
   
   if (colour == @"GREEN") {
-    ObjectBackgroundState = [NSColor greenColor];
+    objectBackgroundColour = [NSColor greenColor];
   }
   else {
     
-    ObjectBackgroundState = [NSColor blueColor];
+    objectBackgroundColour = [NSColor blueColor];
   }
 }
 
--(BOOL)isObjectHighlighted {
+- (BOOL)isObjectHighlighted {
   
-  if (ObjectBackgroundState == [NSColor greenColor]) {
+  if (objectBackgroundColour == [NSColor greenColor]) {
     
     return YES;
   }
@@ -110,26 +113,14 @@
 
 - (void)controlTextDidBeginEditing:(NSNotification *)obj {
 
-  ObjectBackgroundState = [NSColor redColor];
+  objectBackgroundColour = [NSColor redColor];
   isObjectInstantiated = NO;
   
 }
 
 -(void)controlTextDidChange:(NSNotification *)obj {
-  
   NSString *textFieldValue = [textField stringValue];
-  
-  if (textFieldValue > 0) {
-    
-    currentFrameWidth = (int) (([textFieldValue length] * 10) + 30); 
-  }
-  else {
-    
-    currentFrameWidth = 30;
-  }
-  
   [textField sizeToFit];
-  
   [self setFrame:NSMakeRect([self frame].origin.x,
                             [self frame].origin.y,
                             [textField frame].size.width + 4, 
@@ -142,10 +133,14 @@
   // release focus
   [[self window] makeFirstResponder:self];
   
+  zgObject = [((CanvasMainView *) self.superview) instantiateZgObject:[textField stringValue]
+      atLocation:[self frame].origin];
+  isObjectInstantiated = (zgObject != NULL);
+  
   // instantiate object
-  if (isObjectInstantiated == NO) {
+  if (isObjectInstantiated) {
     
-    ObjectBackgroundState = [NSColor blueColor];
+    objectBackgroundColour = [NSColor blueColor];
     isObjectInstantiated = YES;
     
     //[self drawInlet];
@@ -153,12 +148,12 @@
   }
   else {
     
-    ObjectBackgroundState = [NSColor redColor];
+    objectBackgroundColour = [NSColor redColor];
     isObjectInstantiated = NO;
   }
   
-  // Create object in ZenGarden
-  [(CanvasMainView *)self.superview instantiateObject:[textField stringValue]];
+
+  
 }
 
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
@@ -168,6 +163,10 @@
 
 - (BOOL)acceptsFirstResponder {
   
+  return YES;
+}
+
+- (BOOL)isFlipped {
   return YES;
 }
 

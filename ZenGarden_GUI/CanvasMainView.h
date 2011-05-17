@@ -12,11 +12,14 @@
 #import "PdAudio.h"
 
 @interface CanvasMainView : NSView {
-
+  
+  // Canvas
+  BOOL isEditModeOn;
+  
   // Objects
   int defaultFrameWidth;
   int defaultFrameHeight;
-  ObjectView *newView;
+  ObjectView *objectView;
   NSMutableArray *arrayOfObjects;
   
   // Selection Marquee
@@ -25,15 +28,26 @@
   NSRect selectionRect;
   NSBezierPath *selectionPath;
   
-  // ZenGarden
+  // ZenGarden/PdAudio
   ZGGraph *zgGraph;
   PdAudio *pdAudio;
 }
 
--(IBAction)putObject:(id)sender;
--(void)setObjectFrameOrigin;
--(void)instantiateObject;
--(void)deleteObject;
--(NSRect)rectFromTwoPoints:(NSPoint)p1 secondPoint:(NSPoint)p2;
+- (IBAction)putObject:(id)sender;
+
+- (IBAction)toggleEditMode:(id)sender;
+
+- (void)setObjectFrameOrigin;
+
+- (void)deleteObject;
+
+- (ZGObject *)instantiateZgObject:(NSString *)initString atLocation:(NSPoint)location;
+
+- (NSRect)rectFromTwoPoints:(NSPoint)p1 secondPoint:(NSPoint)p2;
+
+
+@property (nonatomic, readonly) ZGGraph *zgGraph;
+
+@property (nonatomic, readonly) BOOL isEditModeOn;
 
 @end
