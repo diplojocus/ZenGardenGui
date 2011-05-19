@@ -14,8 +14,9 @@
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+      inletArray = [[NSMutableArray alloc] init];
       [self drawTextField:NSMakeRect(2, 2, (frame.size.width - 4), frame.size.height - 4)];
-      [self drawInlet:NSMakeRect(2, 2, (frame.size.width - 4), frame.size.height - 4)];
+      [self drawInlet:NSMakeRect(3, 0, 50, 3)];
       [self drawOutlet:frame];
       [self instantiateObject:NO];
     }
@@ -24,7 +25,6 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
   [self drawBackground:dirtyRect];
-  [self drawInlet:dirtyRect];
 }
 
 - (void)drawBackground:(NSRect)frame {
@@ -45,8 +45,9 @@
 }
 
 - (void)drawInlet:(NSRect)frame {
-  InletView *inlet = [[NSView alloc] initWithFrame:frame];
+  InletView *inlet = [[InletView alloc] initWithFrame:frame];
   [self addSubview:inlet];
+  [inletArray addObject:inlet];
   [inlet release];
 }
 
@@ -157,12 +158,10 @@
 }
 
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
-  
   return YES;
 }
 
 - (BOOL)acceptsFirstResponder {
-  
   return YES;
 }
 

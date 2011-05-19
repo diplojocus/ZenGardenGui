@@ -16,6 +16,8 @@
    
   ZGObject *zgObject;
   NSTextField *textField;
+  NSMutableArray *inletArray;
+  NSMutableArray *outletArray;
 
   NSPoint updatedFrameOrigin;
   

@@ -10,7 +10,8 @@
 
 
 @interface InletView : NSView {
-@private
+
+  //TODO(joewhite4): add inlet connections array
     
 }
 

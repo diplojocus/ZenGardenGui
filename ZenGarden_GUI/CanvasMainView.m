@@ -88,6 +88,10 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 }
 
 - (IBAction)putObject:(id)sender {
+  if (!isEditModeOn) {
+    [self toggleEditMode:self];
+  }
+  
   NSPoint currentMouseLocation = [[self window] mouseLocationOutsideOfEventStream];
   // For some reason the coordinates are from lower-left instead of upper-left
   // Invert y coordinate and center frame with respect to mouse location 

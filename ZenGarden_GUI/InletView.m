@@ -38,4 +38,16 @@
   [path stroke];
 }
 
+-(void)mouseEntered:(NSEvent *)theEvent {
+  [[NSCursor closedHandCursor] set];
+}
+
+-(void)mouseExited:(NSEvent *)theEvent {
+  [[NSCursor arrowCursor] set];
+}
+
+- (BOOL)acceptsFirstResponder {
+  return YES;
+}
+
 @end
