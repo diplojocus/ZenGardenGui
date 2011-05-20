@@ -1,37 +1,40 @@
 //
-//  InletView.m
+//  OutletView.m
 //  ZenGarden_GUI
 //
-//  Created by Joe White on 17/05/2011.
+//  Created by Joe White on 19/05/2011.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "InletView.h"
+#import "OutletView.h"
 
 
-@implementation InletView
+@implementation OutletView
 
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-      
+        // Initialization code here.
     }
     
     return self;
 }
 
-- (void)dealloc {
+- (void)dealloc
+{
     [super dealloc];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
   
   NSBezierPath * path = [NSBezierPath bezierPathWithRect:NSMakeRect(super.frame.origin.x - 1, 
-                                                                    super.frame.origin.y + 1, 10, 3)];
-  
-  [[NSColor blackColor] set]; 
+                                                                    super.frame.origin.y, 6, 4)];
+  [path setLineWidth:1];
+  [[NSColor whiteColor] set];
   [path fill];
+  [[NSColor blackColor] set]; 
+  [path stroke];
 }
 
 - (BOOL)acceptsFirstResponder {

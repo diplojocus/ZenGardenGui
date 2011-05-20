@@ -11,17 +11,19 @@
 
 @implementation ObjectView
 
+@synthesize isObjectInstantiated;
+
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
       inletArray = [[NSMutableArray alloc] init];
-      [self drawTextField:NSMakeRect(2, 2, (frame.size.width - 4), frame.size.height - 4)];
-      [self drawInlet:NSMakeRect(3, 0, 50, 3)];
-      [self drawOutlet:frame];
-      [self instantiateObject:NO];
+      [self drawTextView:NSMakeRect(2, 2, (frame.size.width) - 4, frame.size.height - 4)];
+      [self instantiateObject:NULL];
     }
     return self;
 }
+
+#pragma mark - Drawing
 
 - (void)drawRect:(NSRect)dirtyRect {
   [self drawBackground:dirtyRect];
@@ -34,36 +36,49 @@
   [path fill];
 }
 
-- (void)drawTextField:(NSRect)frame {
-  textField = [[NSTextField alloc] initWithFrame:frame];
-  [textField setDelegate:self];
-  [textField setEditable:NO];
-  [textField setSelectable:NO];
-  [textField setBezeled:NO];
-  [textField setDrawsBackground:NO];
-  [self addSubview:textField]; 
+- (void)drawTextView:(NSRect)frame {
+  textView = [[TextView alloc] initWithFrame:frame];
+  [self addSubview:textView];
+  [textView setDelegate:self];
 }
 
 - (void)drawInlet:(NSRect)frame {
-  InletView *inlet = [[InletView alloc] initWithFrame:frame];
-  [self addSubview:inlet];
-  [inletArray addObject:inlet];
-  [inlet release];
+  inletView = [[InletView alloc] initWithFrame:frame];
+  [self addSubview:inletView];
+  [inletArray addObject:inletView];
+  [inletView release];
 }
 
 - (void)drawOutlet:(NSRect)frame {
-  
+  outletView = [[OutletView alloc] initWithFrame:frame];
+  [self addSubview:outletView];
+  [outletArray addObject:outletView];
+  [outletView release];
 }
 
-- (void)instantiateObject:(BOOL)selector {
-  isObjectInstantiated = selector;
-  
+- (void)instantiateObject:(ZGObject *)objectLabel {
+  isObjectInstantiated = (objectLabel != NULL);
   if (isObjectInstantiated) {
+    unsigned int numberOfInlets = zg_get_num_inlets(objectLabel);
+    unsigned int numberOfOutlets = zg_get_num_outlets(objectLabel);
+    NSLog(@"numOfInlets: %u", numberOfInlets);
+    NSLog(@"numOfOutlet: %u", numberOfOutlets);
+    for (int i = 1; i == numberOfInlets; i++) {
+      [self drawInlet:NSMakeRect((i * 20), 0, 5, 3)];
+    }
+    for (int i = 1; i == numberOfOutlets; i++) {
+      [self drawOutlet:NSMakeRect((i * 10), 25, 5, 3)];
+    }
+    [self drawInlet:NSMakeRect(3, 0, 50, 3)];
     objectBackgroundColour = [NSColor blueColor];
   }
   else {
     objectBackgroundColour = [NSColor redColor];
   }
+}
+
+- (BOOL)isObjectInstantiated {
+  return isObjectInstantiated;
 }
 
 - (void)highlightObject:(NSString *)colour {
@@ -93,73 +108,48 @@
 
 - (void)mouseDown:(NSEvent *)theEvent {
   
-  [(CanvasMainView *)self.superview setObjectFrameOrigin];
-  
-  // edit text field
-  [textField setEditable:YES];
-  [textField setSelectable:YES];
-  [textField selectText:self];
-}
-
--(void)mouseUp:(NSEvent *)theEvent {
-  
-}
-
-- (void)mouseDragged:(NSEvent *)theEvent {
+  if ([self.superview isEditModeOn]) {
     
+  }
+  
+  [self.superview setObjectFrameOrigin];
+  [textView setEditable:YES];
+  [textView setSelectable:YES];
+  [textView selectLine:self];
 }
 
 
 #pragma mark - Textfield Behaviour 
 
-- (void)controlTextDidBeginEditing:(NSNotification *)obj {
+- (void)textDidBeginEditing:(NSNotification *)obj {
 
-  objectBackgroundColour = [NSColor redColor];
-  isObjectInstantiated = NO;
+  //objectBackgroundColour = [NSColor redColor];
+  //isObjectInstantiated = NO;
   
 }
 
--(void)controlTextDidChange:(NSNotification *)obj {
-  NSString *textFieldValue = [textField stringValue];
-  [textField sizeToFit];
+- (void)textDidChange:(NSNotification *)aNotification {
+  [textView sizeToFit];
   [self setFrame:NSMakeRect([self frame].origin.x,
                             [self frame].origin.y,
-                            [textField frame].size.width + 4, 
-                            [textField frame].size.height + 4)];
-  
+                            [textView frame].size.width + 4, 
+                            self.frame.size.height)];
 }
 
-- (void) controlTextDidEndEditing:(NSNotification *)obj {
-
-  // release focus
-  [[self window] makeFirstResponder:self];
+- (void)textDidEndEditing:(NSNotification *)obj {
+  [[textView window] makeFirstResponder:[self superview]];
   
-  zgObject = [((CanvasMainView *) self.superview) instantiateZgObject:[textField stringValue]
+  zgObject = [self.superview instantiateZgObject:[textView string]
       atLocation:[self frame].origin];
-  isObjectInstantiated = (zgObject != NULL);
   
-  // instantiate object
-  if (isObjectInstantiated) {
-    
-    objectBackgroundColour = [NSColor blueColor];
-    isObjectInstantiated = YES;
-    
-    //[self drawInlet];
-    
-  }
-  else {
-    
-    objectBackgroundColour = [NSColor redColor];
-    isObjectInstantiated = NO;
-  }
-  
-
-  
+  [self instantiateObject:zgObject];
 }
 
 - (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
   return YES;
 }
+
+#pragma mark - Overrides
 
 - (BOOL)acceptsFirstResponder {
   return YES;
@@ -171,7 +161,7 @@
 
 - (void)dealloc {
   
-  [textField release];
+  [textView release];
   [super dealloc];
 }
 

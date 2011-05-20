@@ -44,7 +44,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
       zg_attach_graph(pdAudio.zgContext, zgGraph);
        
       defaultFrameHeight = 20;
-      defaultFrameWidth = 25;
+      defaultFrameWidth = 60;
       isEditModeOn = NO;
       arrayOfObjects = [[NSMutableArray alloc] init];
     }
@@ -88,13 +88,10 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 }
 
 - (IBAction)putObject:(id)sender {
-  if (!isEditModeOn) {
-    [self toggleEditMode:self];
-  }
   
   NSPoint currentMouseLocation = [[self window] mouseLocationOutsideOfEventStream];
   // For some reason the coordinates are from lower-left instead of upper-left
-  // Invert y coordinate and center frame with respect to mouse location 
+  // Invert y coordinate and center frame with respect to mouse location
   // (not sure why 3 has to be added)
   // Not sure why 3 has to be added to center it
   currentMouseLocation.y = ([self frame].size.height + 3) - currentMouseLocation.y - 
@@ -102,11 +99,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   currentMouseLocation.x -= (defaultFrameWidth/2);
   
   // Create new object at current mouse location
-  NSRect frame;
-  frame.origin = currentMouseLocation;
-  frame.size.width = defaultFrameWidth;
-  frame.size.height = defaultFrameHeight;
-  objectView = [[[ObjectView alloc] initWithFrame:frame] autorelease];
+  objectView = [[[ObjectView alloc] initWithFrame:NSMakeRect(currentMouseLocation.x, 
+          currentMouseLocation.y, defaultFrameWidth, defaultFrameHeight)] autorelease];
   [self addSubview:objectView];
   [objectView setFrameOrigin:currentMouseLocation];
   [arrayOfObjects addObject:objectView];
@@ -116,10 +110,10 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   NSArray *objectArgsArray = [initString componentsSeparatedByCharactersInSet:
       [NSCharacterSet whitespaceCharacterSet]];
   ZGObject *zgObject = zg_new_object(pdAudio.zgContext, zgGraph,
-      [[objectArgsArray objectAtIndex:0] cStringUsingEncoding:NSASCIIStringEncoding], NULL);
+      [[objectArgsArray objectAtIndex:0] cStringUsingEncoding:NSASCIIStringEncoding]);
   zg_add_object(zgGraph, zgObject, (unsigned int) location.x, (unsigned int) location.y);
-  return zgObject;
-}
+  NSLog(@"ZenGarden %p", zgObject);
+  return zgObject;  }
 
 - (void)setObjectFrameOrigin {
   objectView = nil;
@@ -196,6 +190,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
       // Delete objects
       switch ([characters characterAtIndex:0]) {
         case NSDeleteCharacter:
+          // TODO(joewhite4): deleting more than one object is broken
           if ([arrayOfObjects count] != 0) {
             for (ObjectView *anObject in arrayOfObjects) {
               if ([anObject isObjectHighlighted]) {

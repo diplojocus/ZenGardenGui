@@ -7,15 +7,20 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "InletView.h"
 #import "ZenGarden.h"
+#import "TextView.h"
+#import "InletView.h"
+#import "OutletView.h"
 
 
-@interface ObjectView : NSView <NSTextFieldDelegate> {
+@interface ObjectView : NSView <NSTextViewDelegate> {
   
    
   ZGObject *zgObject;
-  NSTextField *textField;
+  TextView *textView;
+  InletView *inletView;
+  OutletView *outletView;
+  
   NSMutableArray *inletArray;
   NSMutableArray *outletArray;
 
@@ -26,18 +31,20 @@
   
 }
 
+- (void)drawBackground:(NSRect)frame;
+
+- (void)drawTextView:(NSRect)frame;
+
 - (void)drawInlet:(NSRect)frame;
 
 - (void)drawOutlet:(NSRect)frame;
 
-- (void)drawBackground:(NSRect)frame;
-
-- (void)drawTextField:(NSRect)frame;
-
-- (void)instantiateObject:(BOOL)selector;
+- (void)instantiateObject:(ZGObject *)objectLabel;
 
 - (void)highlightObject;
 
 - (BOOL)isObjectHighlighted;
+
+@property (nonatomic, readonly) BOOL isObjectInstantiated;
 
 @end
