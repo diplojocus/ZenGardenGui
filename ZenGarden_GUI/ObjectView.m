@@ -1,193 +1,76 @@
 //
 //  ObjectView.m
-//  ZenGarden_GUI
+//  ObjectDrawing
 //
-//  Created by Joe White on 27/04/2011.
+//  Created by Joe White on 03/06/2011.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
 #import "ObjectView.h"
-#import "CanvasMainView.h"
+
 
 @implementation ObjectView
 
-@synthesize isObjectInstantiated;
-
-- (id)initWithFrame:(NSRect)frame {
+- (id)initWithFrame:(NSRect)frame
+{
     self = [super initWithFrame:frame];
     if (self) {
-      inletArray = [[NSMutableArray alloc] init];
-      [self drawTextView:NSMakeRect(2, 2, (frame.size.width) - 4, frame.size.height - 4)];
-      [self instantiateObject:NULL];
     }
+    
     return self;
 }
 
-#pragma mark - Drawing
-
-- (void)drawRect:(NSRect)dirtyRect {
-  [self drawBackground:dirtyRect];
+- (void)dealloc
+{
+    [super dealloc];
 }
 
-- (void)drawBackground:(NSRect)frame {
-  [NSBezierPath setDefaultLineJoinStyle:NSRoundLineJoinStyle];
-  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:frame xRadius:5 yRadius:5];
-  [[objectBackgroundColour colorWithAlphaComponent:0.15f]set];
+- (void)drawRect:(NSRect)dirtyRect {
+  
+  [self drawBackground:dirtyRect];
+  
+  [self drawLet:NSMakePoint(self.bounds.origin.x + 30 , 0)];
+  [self drawLet:NSMakePoint(self.bounds.origin.x + 100 , 0)];
+  [self drawLet:NSMakePoint(self.bounds.origin.x + 170 , 0)];
+  [self drawLet:NSMakePoint(self.bounds.origin.x + 240 , 0)];
+  [self drawLet:NSMakePoint(self.bounds.origin.x + 30 , self.bounds.size.height - 10)];
+}
+
+- (void)drawBackground:(NSRect)rect {
+  
+  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:
+                              NSMakeRect(rect.origin.x + 5,
+                                         rect.origin.y + 5,
+                                         rect.size.width - 10,
+                                         rect.size.height - 10) 
+                              xRadius:20 yRadius:20];
+  
+  [[[NSColor lightGrayColor] colorWithAlphaComponent:0.15f] setFill];
+  [path fill];
+  
+  [path setLineWidth:10];
+  [[NSColor lightGrayColor] setStroke];
+  [path stroke];
+}
+
+- (void)drawLet:(NSPoint)letOrigin { //inlet or outlet
+  
+  NSRect letRect = NSMakeRect(letOrigin.x, letOrigin.y, 30, 10);
+  
+  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:letRect xRadius:2 yRadius:2];
+  [[NSColor blackColor] setFill];
   [path fill];
 }
 
-- (void)drawTextView:(NSRect)frame {
-  textView = [[TextView alloc] initWithFrame:frame];
-  [self addSubview:textView];
-  [textView setDelegate:self];
-}
+- (BOOL)isFlipped { return YES; }
 
-- (void)drawInlet:(NSRect)frame {
-  inletView = [[InletView alloc] initWithFrame:frame];
-  [self addSubview:inletView];
-  [inletArray addObject:inletView];
-  [inletView setAcceptsTouchEvents:YES];
-  [inletView release];
-}
+- (BOOL)acceptsFirstResponder { return YES; }
 
-- (void)drawOutlet:(NSRect)frame {
-  outletView = [[OutletView alloc] initWithFrame:frame];
-  [self addSubview:outletView];
-  [outletArray addObject:outletView];
-  [outletView release];
-}
+- (BOOL)becomeFirstResponder { return YES; }
 
-- (void)instantiateObject:(ZGObject *)objectLabel {
-  isObjectInstantiated = (objectLabel != NULL);
-  if (isObjectInstantiated) {
-    unsigned int numberOfInlets = zg_get_num_inlets(objectLabel);
-    unsigned int numberOfOutlets = zg_get_num_outlets(objectLabel);
-    NSLog(@"numOfInlets: %u", numberOfInlets);
-    NSLog(@"numOfOutlet: %u", numberOfOutlets);
-    numberOfInlets = 2;
-    for (int i = 1; i == numberOfInlets; i++) {
-      [self drawInlet:NSMakeRect((i * 20), 0, 5, 3)];
-    }
-    for (int i = 1; i == numberOfOutlets; i++) {
-      [self drawOutlet:NSMakeRect((i * 10), 25, 5, 3)];
-    }
-    [self drawInlet:NSMakeRect(3, 0, 50, 3)];
-    objectBackgroundColour = [NSColor blueColor];
-  }
-  else {
-    objectBackgroundColour = [NSColor redColor];
-  }
-}
-
-- (BOOL)isObjectInstantiated {
-  return isObjectInstantiated;
-}
-
-- (void)isEditable:(BOOL)editState {
-  if (editState) {
-    [textView setEditable:YES];
-    [textView setSelectable:YES];
-  }
-  else {
-    [textView setEditable:NO];
-    [textView setSelectable:NO];
-  }
-}
-
-- (void)highlightObject:(NSString *)colour {
-  
-  if (colour == @"GREEN") {
-    objectBackgroundColour = [NSColor greenColor];
-  }
-  else {
-    
-    objectBackgroundColour = [NSColor blueColor];
-  }
-}
-
-- (BOOL)isObjectHighlighted {
-  
-  if (objectBackgroundColour == [NSColor greenColor]) {
-    
-    return YES;
-  }
-  else {
-    return NO;
-  }
-}
-
-
-#pragma mark - Mouse Behaviour
 
 - (void)mouseDown:(NSEvent *)theEvent {
-  
-  if ([self.superview isEditModeOn]) {
-    NSLog(@"MOUSE DOWN OBJECT");
-    
-  }
-  
-  [self.superview setObjectFrameOrigin];
-  [textView setEditable:YES];
-  [textView setSelectable:YES];
-  [textView selectLine:self];
+  NSLog(@"OBJECT MOUSE DOWN");
 }
-
-
-#pragma mark - Textfield Behaviour 
-
-- (void)textDidBeginEditing:(NSNotification *)obj {
-
-  //objectBackgroundColour = [NSColor redColor];
-  //isObjectInstantiated = NO;
-  NSLog(@"BEING EDITING");
-  
-}
-
-- (void)textDidChange:(NSNotification *)aNotification {
-  [textView sizeToFit];
-  [self setFrame:NSMakeRect([self frame].origin.x,
-                            [self frame].origin.y,
-                            [textView frame].size.width + 4, 
-                            self.frame.size.height)];
-}
-
-- (void)textDidEndEditing:(NSNotification *)obj {
-  [[textView window] makeFirstResponder:[self superview]];
-  
-  zgObject = [self.superview instantiateZgObject:[textView string]
-      atLocation:[self frame].origin];
-  
-  [self instantiateObject:zgObject];
-}
-
-- (void)showInletOutletCursor:(BOOL)isCursorAtInletOutlet {
-  if (isCursorAtInletOutlet) {
-    [(CanvasMainView *)self.superview setCursorState:[NSCursor crosshairCursor]];
-  }
-  else {
-    [(CanvasMainView *)self.superview setCursorState:[NSCursor arrowCursor]];
-  }
-}
-
-- (void)setConnectionStartPoint:(NSPoint)location {
-  [(CanvasMainView *)self.superview setInletOutletMouseDownOrigin:location];
-}
-
-#pragma mark - Overrides
-
-- (BOOL)acceptsFirstResponder {
-  return YES;
-}
-
-- (BOOL)isFlipped {
-  return YES;
-}
-
-- (void)dealloc {
-  
-  [textView release];
-  [super dealloc];
-}
-
 
 @end
