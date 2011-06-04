@@ -25,6 +25,7 @@
   NSMutableArray *outletArray;
 
   NSPoint updatedFrameOrigin;
+  NSPoint connectionStartPoint;
   
   BOOL isObjectInstantiated;
   NSColor *objectBackgroundColour;
@@ -41,9 +42,15 @@
 
 - (void)instantiateObject:(ZGObject *)objectLabel;
 
+- (void)isEditable:(BOOL)editState;
+
 - (void)highlightObject;
 
 - (BOOL)isObjectHighlighted;
+
+- (void)showInletOutletCursor:(BOOL)isCursorAtInletOutlet;
+
+- (void)setConnectionStartPoint:(NSPoint)location;
 
 @property (nonatomic, readonly) BOOL isObjectInstantiated;
 

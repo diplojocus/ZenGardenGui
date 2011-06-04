@@ -15,6 +15,8 @@
   
   // Canvas
   BOOL isEditModeOn;
+  NSCursor *currentCursorState;
+  NSPoint inletOutletMouseDownLocation;
   
   // Objects
   int defaultFrameWidth;
@@ -27,6 +29,7 @@
   NSPoint secondPoint;
   NSRect selectionRect;
   NSBezierPath *selectionPath;
+  NSBezierPath *connectionPath;
   
   // ZenGarden/PdAudio
   ZGGraph *zgGraph;
@@ -36,6 +39,10 @@
 - (IBAction)putObject:(id)sender;
 
 - (IBAction)toggleEditMode:(id)sender;
+
+- (void)setCursorState:(NSCursor *)cursorState;
+
+- (void)setInletOutletMouseDownOrigin:(NSPoint)location;
 
 - (void)setObjectFrameOrigin;
 

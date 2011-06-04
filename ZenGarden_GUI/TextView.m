@@ -14,15 +14,12 @@
 - (id)initWithFrame:(NSRect)frame {
   self = [super initWithFrame:frame];
   if (self != nil) {
-    [self setSelectable:NO];
-    [self setEditable:NO];
+    [self setSelectable:YES];
+    [self setEditable:YES];
     [self setHorizontallyResizable:YES];
     [self setVerticallyResizable:NO];
     [self setBackgroundColor:[NSColor clearColor]];
     [self setDrawsBackground:NO];
-    [[self enclosingScrollView] setDrawsBackground:NO];
-    [[[self enclosingScrollView] superview] setNeedsDisplay:NO];
-    [[self enclosingScrollView] setBackgroundColor:[NSColor clearColor]];
   }
   return self;
 }

@@ -46,6 +46,7 @@
   inletView = [[InletView alloc] initWithFrame:frame];
   [self addSubview:inletView];
   [inletArray addObject:inletView];
+  [inletView setAcceptsTouchEvents:YES];
   [inletView release];
 }
 
@@ -63,6 +64,7 @@
     unsigned int numberOfOutlets = zg_get_num_outlets(objectLabel);
     NSLog(@"numOfInlets: %u", numberOfInlets);
     NSLog(@"numOfOutlet: %u", numberOfOutlets);
+    numberOfInlets = 2;
     for (int i = 1; i == numberOfInlets; i++) {
       [self drawInlet:NSMakeRect((i * 20), 0, 5, 3)];
     }
@@ -79,6 +81,17 @@
 
 - (BOOL)isObjectInstantiated {
   return isObjectInstantiated;
+}
+
+- (void)isEditable:(BOOL)editState {
+  if (editState) {
+    [textView setEditable:YES];
+    [textView setSelectable:YES];
+  }
+  else {
+    [textView setEditable:NO];
+    [textView setSelectable:NO];
+  }
 }
 
 - (void)highlightObject:(NSString *)colour {
@@ -109,6 +122,7 @@
 - (void)mouseDown:(NSEvent *)theEvent {
   
   if ([self.superview isEditModeOn]) {
+    NSLog(@"MOUSE DOWN OBJECT");
     
   }
   
@@ -125,6 +139,7 @@
 
   //objectBackgroundColour = [NSColor redColor];
   //isObjectInstantiated = NO;
+  NSLog(@"BEING EDITING");
   
 }
 
@@ -145,8 +160,17 @@
   [self instantiateObject:zgObject];
 }
 
-- (BOOL)control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor {
-  return YES;
+- (void)showInletOutletCursor:(BOOL)isCursorAtInletOutlet {
+  if (isCursorAtInletOutlet) {
+    [(CanvasMainView *)self.superview setCursorState:[NSCursor crosshairCursor]];
+  }
+  else {
+    [(CanvasMainView *)self.superview setCursorState:[NSCursor arrowCursor]];
+  }
+}
+
+- (void)setConnectionStartPoint:(NSPoint)location {
+  [(CanvasMainView *)self.superview setInletOutletMouseDownOrigin:location];
 }
 
 #pragma mark - Overrides

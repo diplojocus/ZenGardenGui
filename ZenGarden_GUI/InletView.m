@@ -7,6 +7,7 @@
 //
 
 #import "InletView.h"
+#import "ObjectView.h"
 
 
 @implementation InletView
@@ -15,7 +16,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-      
+      [[self window] setAcceptsMouseMovedEvents:YES];
     }
     
     return self;
@@ -27,11 +28,36 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
   
-  NSBezierPath * path = [NSBezierPath bezierPathWithRect:NSMakeRect(super.frame.origin.x - 1, 
-                                                                    super.frame.origin.y + 1, 10, 3)];
+  NSBezierPath * path = [NSBezierPath bezierPathWithRect:NSMakeRect(self.frame.origin.x - 1, 
+      self.frame.origin.y + 1, 10, 3)];
   
   [[NSColor blackColor] set]; 
   [path fill];
+}
+
+- (void)viewDidMoveToWindow {
+  NSTrackingArea *inletTrackingArea = [[NSTrackingArea alloc] 
+      initWithRect:NSMakeRect(self.frame.origin.x - 5, self.frame.origin.y - 5, 
+      self.frame.size.width + 10, self.frame.size.height + 10) 
+      options:(NSTrackingMouseMoved | NSTrackingMouseEnteredAndExited | NSTrackingActiveInKeyWindow) 
+      owner:self userInfo:NULL];
+  [self addTrackingArea:inletTrackingArea];
+  [self becomeFirstResponder];
+}
+
+- (void)mouseEntered:(NSEvent *)theEvent {
+  [(ObjectView *)self.superview showInletOutletCursor:YES];
+}
+
+- (void)mouseExited:(NSEvent *)theEvent {
+  [(ObjectView *)self.superview showInletOutletCursor:NO];
+}
+
+- (void)mouseDown:(NSEvent *)theEvent {
+  [(ObjectView *)self.superview setConnectionStartPoint:[theEvent locationInWindow]];
+}
+
+- (void)mouseUp:(NSEvent *)theEvent {
 }
 
 - (BOOL)acceptsFirstResponder {

@@ -43,8 +43,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
       zgGraph  = zg_new_empty_graph(pdAudio.zgContext);
       zg_attach_graph(pdAudio.zgContext, zgGraph);
        
-      defaultFrameHeight = 20;
-      defaultFrameWidth = 60;
+      defaultFrameHeight = 50;
+      defaultFrameWidth = 300;
       isEditModeOn = NO;
       arrayOfObjects = [[NSMutableArray alloc] init];
     }
@@ -77,18 +77,27 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   isEditModeOn = !isEditModeOn;
   [sender setState:isEditModeOn ? NSOnState : NSOffState];
   
-  // change tooltip 
+  // change tooltip
   if (isEditModeOn) {
-    [[NSCursor pointingHandCursor] set];
+    [self setCursorState:[NSCursor pointingHandCursor]];
+     for (ObjectView *anObject in arrayOfObjects) {
+       [anObject isEditable:YES];
+     }
   }
   else {
-    [[NSCursor arrowCursor] set];
+    [self setCursorState:[NSCursor arrowCursor]];
+    for (ObjectView *anObject in arrayOfObjects) {
+      [anObject isEditable:NO];
+    }
   }
-  
+}
+
+- (void)setCursorState:(NSCursor *)cursorState {
+  currentCursorState = cursorState;
+  [currentCursorState set];
 }
 
 - (IBAction)putObject:(id)sender {
-  
   NSPoint currentMouseLocation = [[self window] mouseLocationOutsideOfEventStream];
   // For some reason the coordinates are from lower-left instead of upper-left
   // Invert y coordinate and center frame with respect to mouse location
@@ -141,40 +150,62 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   [[self window] makeFirstResponder:self];
   
   if (isEditModeOn) {
-    // set inital selection marquee points
-    selectionRect = NSMakeRect(0, 0, 0, 0);
-    [self setNeedsDisplay:YES];
-    firstPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    secondPoint = firstPoint;
-  
-    for (ObjectView *anObject in arrayOfObjects) {
-      [(ObjectView *)anObject highlightObject:@"BLUE"];
+    if (currentCursorState == [NSCursor pointingHandCursor]) {
+      // set inital selection marquee points
+      selectionRect = NSMakeRect(0, 0, 0, 0);
+      [self setNeedsDisplay:YES];
+      firstPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+      secondPoint = firstPoint;
+      
+      for (ObjectView *anObject in arrayOfObjects) {
+        [(ObjectView *)anObject highlightObject:@"BLUE"];
+      }
+    }
+    if (currentCursorState == [NSCursor crosshairCursor]) {
+      NSLog(@"SET CONNECTION START");
+      NSLog(@"%@", [theEvent locationInWindow]);
+      connectionPath = [NSBezierPath bezierPath];
+      [connectionPath moveToPoint:NSMakePoint(0, 0)];
     }
   }
+}
+
+- (void) setInletOutletMouseDownOrigin:(NSPoint)location {
+  inletOutletMouseDownLocation = location;
 }
 
 
 - (void)mouseDragged:(NSEvent *)theEvent {
   if (isEditModeOn) {
-    NSString *highlightColour;
-    // set selection marquee points
-    secondPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-    // draw selection rectangle 
-    selectionRect = [self rectFromTwoPoints:firstPoint secondPoint:secondPoint];
-    // Calculates if object is selected (currently not working)
-    int selectedObjectsCount = 0;
-    for (ObjectView *anObject in arrayOfObjects) {
-      if (NSIntersectsRect(selectionRect, [anObject frame])) {
-        selectedObjectsCount++;
-        highlightColour = @"GREEN";
+    if (currentCursorState == [NSCursor pointingHandCursor]) { 
+      NSLog(@"DRAW SELECTION MARQUEE");
+      // draw selection marquee
+      NSString *highlightColour;
+      secondPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+      selectionRect = [self rectFromTwoPoints:firstPoint secondPoint:secondPoint];
+      // TODO(joewhite4): Calculates if object is selected (currently not working)
+      int selectedObjectsCount = 0;
+      for (ObjectView *anObject in arrayOfObjects) {
+        if (NSIntersectsRect(selectionRect, [anObject frame])) {
+          selectedObjectsCount++;
+          highlightColour = @"GREEN";
+        }
+        else {
+          highlightColour = @"BLUE";
+        }
+        [(ObjectView *)anObject highlightObject:highlightColour];
+        [self setNeedsDisplay:YES];
       }
-      else {
-        highlightColour = @"BLUE";
-      }
-      [(ObjectView *)anObject highlightObject:highlightColour];
+    }
+    if (currentCursorState == [NSCursor crosshairCursor]) {
+      // draw connection
+      NSLog(@"DRAW CONNECTION");
+      [NSBezierPath strokeLineFromPoint:inletOutletMouseDownLocation toPoint:[theEvent locationInWindow]];
+      [self setNeedsDisplay:YES];
+    }
+    else {
     }
   }
-  [self setNeedsDisplay:YES];
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {

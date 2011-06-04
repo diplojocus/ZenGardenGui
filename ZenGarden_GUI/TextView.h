@@ -10,7 +10,6 @@
 
 
 @interface TextView : NSTextView {
-@private
     
 }
 
