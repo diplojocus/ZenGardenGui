@@ -17,8 +17,7 @@
 		D88EBE75137C0E1B00BEDEE1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */; };
 		D88EBE76137C0E1B00BEDEE1 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */; };
 		D8E6155F13858CD800481588 /* libzengarden.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E6155E13858CD800481588 /* libzengarden.a */; };
-		D8ECE9DD13832B9000C0E983 /* InletView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8ECE9DC13832B9000C0E983 /* InletView.m */; };
-		D8EE412C1385982A00581525 /* OutletView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8EE412B1385982A00581525 /* OutletView.m */; };
+		D8ECE9DD13832B9000C0E983 /* LetView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8ECE9DC13832B9000C0E983 /* LetView.m */; };
 		D8F92BB71368970F002174E6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F92BB61368970F002174E6 /* Cocoa.framework */; };
 		D8F92BC11368970F002174E6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8F92BBF1368970F002174E6 /* InfoPlist.strings */; };
 		D8F92BC41368970F002174E6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92BC31368970F002174E6 /* main.m */; };
@@ -61,10 +60,8 @@
 		D8E6155C13858C7700481588 /* ZenGarden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZenGarden.h; sourceTree = "<group>"; };
 		D8E6155D13858C7700481588 /* ZGCallbackFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCallbackFunction.h; sourceTree = "<group>"; };
 		D8E6155E13858CD800481588 /* libzengarden.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzengarden.a; sourceTree = "<group>"; };
-		D8ECE9DB13832B9000C0E983 /* InletView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InletView.h; sourceTree = "<group>"; };
-		D8ECE9DC13832B9000C0E983 /* InletView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InletView.m; sourceTree = "<group>"; };
-		D8EE412A1385982A00581525 /* OutletView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OutletView.h; sourceTree = "<group>"; };
-		D8EE412B1385982A00581525 /* OutletView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OutletView.m; sourceTree = "<group>"; };
+		D8ECE9DB13832B9000C0E983 /* LetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LetView.h; sourceTree = "<group>"; };
+		D8ECE9DC13832B9000C0E983 /* LetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LetView.m; sourceTree = "<group>"; };
 		D8F92BB21368970F002174E6 /* ZenGarden_GUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZenGarden_GUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8F92BB61368970F002174E6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D8F92BB91368970F002174E6 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -118,12 +115,6 @@
 		D8223858139ADD7300ECCB75 /* Old Code */ = {
 			isa = PBXGroup;
 			children = (
-				D86E273D1385C8270005306B /* TextView.h */,
-				D86E273E1385C8270005306B /* TextView.m */,
-				D8ECE9DB13832B9000C0E983 /* InletView.h */,
-				D8ECE9DC13832B9000C0E983 /* InletView.m */,
-				D8EE412A1385982A00581525 /* OutletView.h */,
-				D8EE412B1385982A00581525 /* OutletView.m */,
 				D8F92C361368B370002174E6 /* ObjectViewOld.h */,
 				D8F92C371368B370002174E6 /* ObjectViewOld.m */,
 				D8F92C1813689D78002174E6 /* CanvasMainViewOld.h */,
@@ -196,16 +187,20 @@
 		D8F92BBC1368970F002174E6 /* ZenGarden_GUI */ = {
 			isa = PBXGroup;
 			children = (
-				D8223855139ADD6300ECCB75 /* ObjectView.h */,
-				D8223856139ADD6300ECCB75 /* ObjectView.m */,
 				D8223852139ADD5900ECCB75 /* CanvasMainView.h */,
 				D8223853139ADD5900ECCB75 /* CanvasMainView.m */,
+				D8223855139ADD6300ECCB75 /* ObjectView.h */,
+				D8223856139ADD6300ECCB75 /* ObjectView.m */,
+				D8ECE9DB13832B9000C0E983 /* LetView.h */,
+				D8ECE9DC13832B9000C0E983 /* LetView.m */,
+				D86E273D1385C8270005306B /* TextView.h */,
+				D86E273E1385C8270005306B /* TextView.m */,
 				D8F92BC81368970F002174E6 /* ZenGarden_GUIAppDelegate.h */,
 				D8F92BC91368970F002174E6 /* ZenGarden_GUIAppDelegate.m */,
+				D8F92BCB1368970F002174E6 /* MainMenu.xib */,
 				D88EBE6F137C0DE700BEDEE1 /* PdAudio.h */,
 				D88EBE70137C0DE700BEDEE1 /* PdAudio.m */,
 				D84F0191138662F4003692F9 /* ZenGarden */,
-				D8F92BCB1368970F002174E6 /* MainMenu.xib */,
 				D8223858139ADD7300ECCB75 /* Old Code */,
 				D8F92BBD1368970F002174E6 /* Supporting Files */,
 			);
@@ -356,8 +351,7 @@
 				D8F92C1A13689D78002174E6 /* CanvasMainViewOld.m in Sources */,
 				D8F92C381368B370002174E6 /* ObjectViewOld.m in Sources */,
 				908346E6137F3A9C009B3A55 /* PdAudio.m in Sources */,
-				D8ECE9DD13832B9000C0E983 /* InletView.m in Sources */,
-				D8EE412C1385982A00581525 /* OutletView.m in Sources */,
+				D8ECE9DD13832B9000C0E983 /* LetView.m in Sources */,
 				D86E273F1385C8270005306B /* TextView.m in Sources */,
 				D8223854139ADD5A00ECCB75 /* CanvasMainView.m in Sources */,
 				D8223857139ADD6300ECCB75 /* ObjectView.m in Sources */,

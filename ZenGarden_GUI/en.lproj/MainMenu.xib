@@ -426,9 +426,9 @@
 									<reference key="NSOnImage" ref="35465992"/>
 									<reference key="NSMixedImage" ref="502551668"/>
 								</object>
-								<object class="NSMenuItem" id="501017765">
+								<object class="NSMenuItem" id="1073405781">
 									<reference key="NSMenu" ref="789758025"/>
-									<string key="NSTitle">Edit Mode</string>
+									<string key="NSTitle">Edit</string>
 									<string key="NSKeyEquiv">e</string>
 									<int key="NSKeyEquivModMask">1048576</int>
 									<int key="NSMnemonicLoc">2147483647</int>
@@ -1936,9 +1936,9 @@
 					<object class="IBActionConnection" key="connection">
 						<string key="label">toggleEditMode:</string>
 						<reference key="source" ref="470427682"/>
-						<reference key="destination" ref="501017765"/>
+						<reference key="destination" ref="1073405781"/>
 					</object>
-					<int key="connectionID">555</int>
+					<int key="connectionID">558</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1973,13 +1973,13 @@
 						<reference key="object" ref="649796088"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="713487014"/>
 							<reference ref="694149608"/>
 							<reference ref="952259628"/>
 							<reference ref="379814623"/>
 							<reference ref="448692316"/>
 							<reference ref="302598603"/>
 							<reference ref="92917764"/>
+							<reference ref="713487014"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -2129,8 +2129,8 @@
 							<reference ref="972420730"/>
 							<reference ref="507821607"/>
 							<reference ref="82994268"/>
-							<reference ref="501017765"/>
 							<reference ref="37215337"/>
+							<reference ref="1073405781"/>
 						</object>
 						<reference key="parent" ref="952259628"/>
 					</object>
@@ -2929,13 +2929,13 @@
 						<reference key="parent" ref="743371815"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">552</int>
-						<reference key="object" ref="501017765"/>
+						<int key="objectID">553</int>
+						<reference key="object" ref="37215337"/>
 						<reference key="parent" ref="789758025"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">553</int>
-						<reference key="object" ref="37215337"/>
+						<int key="objectID">557</int>
+						<reference key="object" ref="1073405781"/>
 						<reference key="parent" ref="789758025"/>
 					</object>
 				</object>
@@ -3147,8 +3147,8 @@
 					<string>543.IBPluginDependency</string>
 					<string>544.IBPluginDependency</string>
 					<string>545.IBPluginDependency</string>
-					<string>552.IBPluginDependency</string>
 					<string>553.IBPluginDependency</string>
+					<string>557.IBPluginDependency</string>
 					<string>56.IBPluginDependency</string>
 					<string>56.ImportedFromIB2</string>
 					<string>57.IBEditorWindowLastContentRect</string>
@@ -3439,7 +3439,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">555</int>
+			<int key="maxID">558</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

@@ -12,6 +12,8 @@
 
 @interface CanvasMainView : NSView {
 
+  BOOL isEditModeOn;
+  
   // Object
   ObjectView *objectView;
   NSMutableArray *arrayOfObjects;
@@ -20,5 +22,6 @@
 
 - (IBAction)toggleEditMode:(id)sender;
 - (IBAction)putObject:(id)sender;
+- (void)drawBackground:(NSRect)rect;
 
 @end

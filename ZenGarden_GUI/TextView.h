@@ -13,4 +13,8 @@
     
 }
 
+- (float)stringWidthForResizingView:(NSString *)string
+                           withFont:(NSFont *)font
+                 andContainerHeight:(float)height;
+
 @end

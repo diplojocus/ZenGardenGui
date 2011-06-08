@@ -14,30 +14,61 @@
 - (id)initWithFrame:(NSRect)frame {
   self = [super initWithFrame:frame];
   if (self != nil) {
+    [self setFont:[NSFont fontWithName:@"Helvetica" size:self.frame.size.height - 10]];
     [self setSelectable:YES];
     [self setEditable:YES];
+    [[self textContainer] setContainerSize:NSMakeSize(FLT_MAX, self.frame.size.height)];
     [self setHorizontallyResizable:YES];
     [self setVerticallyResizable:NO];
-    [self setBackgroundColor:[NSColor clearColor]];
-    [self setDrawsBackground:NO];
   }
   return self;
-}
-
--(void)mouseDown:(NSEvent *)theEvent {
-  [[self superview] mouseDown:theEvent];
 }
 
 - (void)dealloc {
   [super dealloc];
 }
 
-- (BOOL)acceptsFirstResponder {
-  return YES;
+- (void)didChangeText {
+  float newStringWidth =  [self stringWidthForResizingView:[self string]
+                                        withFont:[self font]
+                              andContainerHeight:[[self textContainer] containerSize].height];
+  NSLog(@"%f", newStringWidth);
+  [self setFrame:NSMakeRect(self.frame.origin.x, self.frame.origin.y, newStringWidth, self.frame.size.height)];
+  [self needsDisplay];
+  [self.superview needsDisplay];
 }
 
-- (BOOL)isFieldEditor {
-  return YES;
+- (float)stringWidthForResizingView:(NSString *)string
+                           withFont:(NSFont *)font
+                 andContainerHeight:(float)containerHeight {
+  
+/** Calculates textContainer size to resize view by
+ * http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html
+**/
+  
+  NSTextStorage *textStorage = [[[NSTextStorage alloc] initWithString:string] autorelease];
+  NSTextContainer *textContainer = [[[NSTextContainer alloc] initWithContainerSize: 
+                                     NSMakeSize(FLT_MAX, containerHeight)] autorelease];
+  NSLayoutManager *layoutManager = [[[NSLayoutManager alloc] init] autorelease];
+  [layoutManager addTextContainer:textContainer];
+  [textStorage addLayoutManager:layoutManager];
+  [textStorage addAttribute:NSFontAttributeName value:font
+                      range:NSMakeRange(0, [textStorage length])];
+  [textContainer setLineFragmentPadding:0.0];
+  
+  (void) [layoutManager glyphRangeForTextContainer:textContainer];
+  
+  return [layoutManager usedRectForTextContainer:textContainer].size.width;
+  
 }
+
+
+- (BOOL)isFieldEditor { return YES; }
+
+- (BOOL)acceptsFirstResponder { return YES; }
+
+- (BOOL)becomeFirstResponder { return YES; }
 
 @end
+//[[self layoutManager] glyphRangeForTextContainer:[self textContainer]];
+//NSRect rect = [[self layoutManager] usedRectForTextContainer:[self textContainer]];

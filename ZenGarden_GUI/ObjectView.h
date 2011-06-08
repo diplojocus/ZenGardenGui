@@ -7,15 +7,31 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "LetView.h"
+#import "TextView.h"
 
 
-@interface ObjectView : NSView {
+@interface ObjectView : NSView <NSTextViewDelegate> {
+  
+  float numberOfInlets;
+  float numberOfOutlets;
+  LetView *letView;
+  NSMutableArray *letArray;
+  
+  TextView *textView;
+  
+  NSRect objectResizeTrackingRect;
+  NSTrackingArea *objectResizeTrackingArea;
+  NSCursor *cursor;
+  
 @private
     
 }
 
 - (void)drawBackground:(NSRect)rect;
-
-- (void)drawLet:(NSPoint)inletOrigin;
+- (void)addTextView:(NSRect)rect;
+- (void)drawTextView:(NSRect)rect;
+- (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal;
+- (void)addObjectResizeTrackingRect:(NSRect)rect;
 
 @end
