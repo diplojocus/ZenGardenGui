@@ -28,6 +28,7 @@
                                                     NSTrackingCursorUpdate)
                                                     owner:self userInfo:nil];
       [self addTrackingArea:objectResizeTrackingArea];
+      backgroundColour = [NSColor blueColor];
     }
     
     return self;
@@ -66,6 +67,15 @@
   [path setLineWidth:10];
   [[NSColor lightGrayColor] setStroke];
   [path stroke];
+}
+
+- (void)isObjectHighlighted:(BOOL)state {
+  if (state) {
+    backgroundColour = [NSColor greenColor];
+  }
+  else {
+    backgroundColour = [NSColor blueColor];
+  }
 }
 
 - (void)addTextView:(NSRect)rect {
@@ -135,20 +145,14 @@
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-  NSLog(@"MOUSE DOWN");
-  NSPoint mousePoint = [self convertPoint: [theEvent locationInWindow] fromView: nil];
   if ([theEvent clickCount] > 1) {  
     NSLog(@"Start Editing");
-  } 
-  else {
-    while (theEvent = [[self window] nextEventMatchingMask:
-                       NSLeftMouseDraggedMask|NSLeftMouseUpMask]) {
-      if ([theEvent type] == NSLeftMouseDragged) {
-        [(CanvasMainView *)self.superview moveObject:self toLocation:mousePoint];
-      }
-      else break;
-    }
   }
+}
+
+- (void)mouseDragged:(NSEvent *)theEvent {
+  [(CanvasMainView *)self.superview moveObject:self];
+  [(CanvasMainView *)self.superview mouseDragged:theEvent];
 }
 
 

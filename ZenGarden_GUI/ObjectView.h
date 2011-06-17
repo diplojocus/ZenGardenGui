@@ -24,11 +24,14 @@
   NSTrackingArea *objectResizeTrackingArea;
   NSCursor *cursor;
   
+  NSColor *backgroundColour;
+  
 @private
     
 }
 
 - (void)drawBackground:(NSRect)rect;
+- (void)isObjectHighlighted:(BOOL)state;
 - (void)addTextView:(NSRect)rect;
 - (void)drawTextView:(NSRect)rect;
 - (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal;
