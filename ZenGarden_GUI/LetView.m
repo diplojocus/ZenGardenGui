@@ -77,7 +77,8 @@
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-  NSLog(@"INLET MOUSE DOWN");
+  NSPoint location = [theEvent locationInWindow];
+  [(ObjectView *)self.superview letMouseDown:location]; 
 }
 
 - (BOOL)isFlipped { return YES; }

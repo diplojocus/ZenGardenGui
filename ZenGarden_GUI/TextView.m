@@ -7,6 +7,7 @@
 //
 
 #import "TextView.h"
+#import "ObjectView.h"
 
 
 @implementation TextView
@@ -30,21 +31,24 @@
 
 - (void)didChangeText {
   float newStringWidth =  [self stringWidthForResizingView:[self string]
-                                        withFont:[self font]
-                              andContainerHeight:[[self textContainer] containerSize].height];
-  NSLog(@"%f", newStringWidth);
-  [self setFrame:NSMakeRect(self.frame.origin.x, self.frame.origin.y, newStringWidth, self.frame.size.height)];
+                                                  withFont:[self font]
+                                        andContainerHeight:[[self textContainer] 
+                                                            containerSize].height];
+  [self setFrame:NSMakeRect(self.frame.origin.x,
+                            self.frame.origin.y,
+                            newStringWidth,
+                            self.frame.size.height)];
   [self needsDisplay];
-  [self.superview needsDisplay];
+  [(ObjectView *)self.superview needsDisplay];
 }
 
 - (float)stringWidthForResizingView:(NSString *)string
                            withFont:(NSFont *)font
                  andContainerHeight:(float)containerHeight {
   
-/** Calculates textContainer size to resize view by
- * http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html
-**/
+  /** Calculates textContainer size to resize view by
+   * http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/TextLayout/Tasks/StringHeight.html
+   **/
   
   NSTextStorage *textStorage = [[[NSTextStorage alloc] initWithString:string] autorelease];
   NSTextContainer *textContainer = [[[NSTextContainer alloc] initWithContainerSize: 
@@ -57,11 +61,8 @@
   [textContainer setLineFragmentPadding:0.0];
   
   (void) [layoutManager glyphRangeForTextContainer:textContainer];
-  
   return [layoutManager usedRectForTextContainer:textContainer].size.width;
-  
 }
-
 
 - (BOOL)isFieldEditor { return YES; }
 
@@ -70,5 +71,3 @@
 - (BOOL)becomeFirstResponder { return YES; }
 
 @end
-//[[self layoutManager] glyphRangeForTextContainer:[self textContainer]];
-//NSRect rect = [[self layoutManager] usedRectForTextContainer:[self textContainer]];

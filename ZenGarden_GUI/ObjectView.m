@@ -7,6 +7,7 @@
 //
 
 #import "ObjectView.h"
+#import "CanvasMainView.h"
 
 
 @implementation ObjectView
@@ -96,6 +97,10 @@
   [letView release];
 }
 
+- (void)letMouseDown:(NSPoint)location {
+  [(CanvasMainView *)self.superview startConnectionDrawing:location];
+}
+
 - (void)addObjectResizeTrackingRect:(NSRect)rect {
   objectResizeTrackingRect = NSMakeRect(self.frame.size.width - 10, 20,
                                                 10, self.frame.size.height - 40);
@@ -109,7 +114,8 @@
   [objectResizeTrackingArea release];
   objectResizeTrackingArea = [[NSTrackingArea alloc] 
                                       initWithRect:objectResizeTrackingRect
-                                      options: (NSTrackingMouseEnteredAndExited | 
+                                      options: (NSTrackingMouseEnteredAndExited |
+                                                NSTrackingMouseMoved |
                                                 NSTrackingActiveInKeyWindow | 
                                                 NSTrackingCursorUpdate)
                                                 owner:self userInfo:nil];
@@ -129,8 +135,22 @@
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-  NSLog(@"OBJECT MOUSE DOWN");
+  NSLog(@"MOUSE DOWN");
+  NSPoint mousePoint = [self convertPoint: [theEvent locationInWindow] fromView: nil];
+  if ([theEvent clickCount] > 1) {  
+    NSLog(@"Start Editing");
+  } 
+  else {
+    while (theEvent = [[self window] nextEventMatchingMask:
+                       NSLeftMouseDraggedMask|NSLeftMouseUpMask]) {
+      if ([theEvent type] == NSLeftMouseDragged) {
+        [(CanvasMainView *)self.superview moveObject:self toLocation:mousePoint];
+      }
+      else break;
+    }
+  }
 }
+
 
 - (BOOL)isFlipped { return YES; }
 

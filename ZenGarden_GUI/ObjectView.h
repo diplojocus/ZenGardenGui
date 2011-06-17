@@ -32,6 +32,7 @@
 - (void)addTextView:(NSRect)rect;
 - (void)drawTextView:(NSRect)rect;
 - (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal;
+- (void)letMouseDown:(NSPoint)location;
 - (void)addObjectResizeTrackingRect:(NSRect)rect;
 
 @end

@@ -16,7 +16,6 @@
 		D86E273F1385C8270005306B /* TextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D86E273E1385C8270005306B /* TextView.m */; };
 		D88EBE75137C0E1B00BEDEE1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */; };
 		D88EBE76137C0E1B00BEDEE1 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */; };
-		D8E6155F13858CD800481588 /* libzengarden.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E6155E13858CD800481588 /* libzengarden.a */; };
 		D8ECE9DD13832B9000C0E983 /* LetView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8ECE9DC13832B9000C0E983 /* LetView.m */; };
 		D8F92BB71368970F002174E6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F92BB61368970F002174E6 /* Cocoa.framework */; };
 		D8F92BC11368970F002174E6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8F92BBF1368970F002174E6 /* InfoPlist.strings */; };
@@ -30,6 +29,7 @@
 		D8F92BE11368970F002174E6 /* ZenGarden_GUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92BE01368970F002174E6 /* ZenGarden_GUITests.m */; };
 		D8F92C1A13689D78002174E6 /* CanvasMainViewOld.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92C1913689D78002174E6 /* CanvasMainViewOld.m */; };
 		D8F92C381368B370002174E6 /* ObjectViewOld.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92C371368B370002174E6 /* ObjectViewOld.m */; };
+		D8F97A9013A037FD00442774 /* libzengarden.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F97A8F13A037FD00442774 /* libzengarden.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +43,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D805DA7F139FEEB100102C5C /* ZenGarden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZenGarden.h; sourceTree = "<group>"; };
+		D805DA80139FEEB100102C5C /* ZGCallbackFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCallbackFunction.h; sourceTree = "<group>"; };
+		D805DA81139FEEBD00102C5C /* ConnectionType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionType.h; sourceTree = "<group>"; };
 		D8196228137290CB00E6B775 /* osc.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = osc.icns; sourceTree = "<group>"; };
 		D8223852139ADD5900ECCB75 /* CanvasMainView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasMainView.h; sourceTree = "<group>"; };
 		D8223853139ADD5900ECCB75 /* CanvasMainView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasMainView.m; sourceTree = "<group>"; };
@@ -50,16 +53,12 @@
 		D8223856139ADD6300ECCB75 /* ObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectView.m; sourceTree = "<group>"; };
 		D832DFE01379B9DA0065A9D0 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D832DFE21379BA120065A9D0 /* libsndfile.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsndfile.dylib; path = usr/local/lib/libsndfile.dylib; sourceTree = SDKROOT; };
-		D84F0190138662EB003692F9 /* ConnectionType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionType.h; sourceTree = "<group>"; };
 		D86E273D1385C8270005306B /* TextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextView.h; sourceTree = "<group>"; };
 		D86E273E1385C8270005306B /* TextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextView.m; sourceTree = "<group>"; };
 		D88EBE6F137C0DE700BEDEE1 /* PdAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PdAudio.h; sourceTree = "<group>"; };
 		D88EBE70137C0DE700BEDEE1 /* PdAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PdAudio.m; sourceTree = "<group>"; };
 		D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
-		D8E6155C13858C7700481588 /* ZenGarden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZenGarden.h; sourceTree = "<group>"; };
-		D8E6155D13858C7700481588 /* ZGCallbackFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCallbackFunction.h; sourceTree = "<group>"; };
-		D8E6155E13858CD800481588 /* libzengarden.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzengarden.a; sourceTree = "<group>"; };
 		D8ECE9DB13832B9000C0E983 /* LetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LetView.h; sourceTree = "<group>"; };
 		D8ECE9DC13832B9000C0E983 /* LetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LetView.m; sourceTree = "<group>"; };
 		D8F92BB21368970F002174E6 /* ZenGarden_GUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZenGarden_GUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +84,7 @@
 		D8F92C1913689D78002174E6 /* CanvasMainViewOld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasMainViewOld.m; sourceTree = "<group>"; };
 		D8F92C361368B370002174E6 /* ObjectViewOld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectViewOld.h; sourceTree = "<group>"; };
 		D8F92C371368B370002174E6 /* ObjectViewOld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectViewOld.m; sourceTree = "<group>"; };
+		D8F97A8F13A037FD00442774 /* libzengarden.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzengarden.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +97,7 @@
 				D832DFE11379B9DA0065A9D0 /* Accelerate.framework in Frameworks */,
 				D8F92BB71368970F002174E6 /* Cocoa.framework in Frameworks */,
 				D832DFE31379BA120065A9D0 /* libsndfile.dylib in Frameworks */,
-				D8E6155F13858CD800481588 /* libzengarden.a in Frameworks */,
+				D8F97A9013A037FD00442774 /* libzengarden.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,9 +126,9 @@
 		D84F0191138662F4003692F9 /* ZenGarden */ = {
 			isa = PBXGroup;
 			children = (
-				D8E6155C13858C7700481588 /* ZenGarden.h */,
-				D8E6155D13858C7700481588 /* ZGCallbackFunction.h */,
-				D84F0190138662EB003692F9 /* ConnectionType.h */,
+				D805DA7F139FEEB100102C5C /* ZenGarden.h */,
+				D805DA80139FEEB100102C5C /* ZGCallbackFunction.h */,
+				D805DA81139FEEBD00102C5C /* ConnectionType.h */,
 			);
 			name = ZenGarden;
 			sourceTree = "<group>";
@@ -136,7 +136,7 @@
 		D8C24BDA1379F1CF00363F38 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				D8E6155E13858CD800481588 /* libzengarden.a */,
+				D8F97A8F13A037FD00442774 /* libzengarden.a */,
 				D832DFE21379BA120065A9D0 /* libsndfile.dylib */,
 			);
 			name = Libraries;
