@@ -28,7 +28,7 @@
                                                     NSTrackingCursorUpdate)
                                                     owner:self userInfo:nil];
       [self addTrackingArea:objectResizeTrackingArea];
-      backgroundColour = [NSColor blueColor];
+      [self isObjectHighlighted:NO];
     }
     
     return self;
@@ -61,7 +61,7 @@
                                          rect.size.height - 10) 
                               xRadius:20 yRadius:20];
   
-  [[NSColor blueColor] setFill];
+  [backgroundColour setFill];
   [path fill];
   
   [path setLineWidth:10];

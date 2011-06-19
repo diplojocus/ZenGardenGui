@@ -34,16 +34,12 @@
 - (void)drawRect:(NSRect)dirtyRect {
   [self drawBackground:dirtyRect];
   
-  
-  NSArray *selectionDashArray;
   selectionPath = [NSBezierPath bezierPathWithRect:selectionRect];
-  //selectionDashArray[0] = 5.0; //segment painted with stroke color
-  //selectionDashArray[1] = 2.0; //segment not painted with a color
-  
-  //[path setLineDash: array count: 2 phase: 0.0];
-  //NSColor *theSelectionColor = [NSColor blackColor];
-  //[theSelectionColor set];
-  //[selectionPath fill];
+  NSColor *theSelectionColor = [NSColor blackColor];
+  CGFloat selectionDashArray[2] = { 5.0, 2.0 };
+  [selectionPath setLineDash: selectionDashArray count: 2 phase: 0.0];
+  [theSelectionColor setStroke];
+  [selectionPath stroke];
 }
 
 - (void)awakeFromNib {
@@ -71,6 +67,7 @@
 
 - (void)mouseDown:(NSEvent *)theEvent {
   if (isEditModeOn) {
+    drawSelectionRectangle = YES;
     selectionStartPoint = [self invertYAxis:[theEvent locationInWindow]];
   }
 }
@@ -81,18 +78,17 @@
   connectionStartPoint = zeroPoint;
   connectionEndPoint = zeroPoint;
   selectionStartPoint = zeroPoint;
+  selectionRect = [self rectFromTwoPoints:selectionStartPoint toLocation:NSMakePoint(0, 0)];
+  [self setNeedsDisplay:YES];
 
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
-  NSLog(@"DRAGGED");
   NSPoint mousePoint = [self invertYAxis:[theEvent locationInWindow]];
-  drawSelectionRectangle = YES;
   if (isEditModeOn) {
     if (drawConnection) {
       NSLog(@"Draw Connection");
       connectionEndPoint = mousePoint;
-      //connectionEndPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
       [self drawConnection:connectionStartPoint toLocation:connectionEndPoint];
       return;
     }
@@ -105,7 +101,7 @@
       return;
     }
     else if (drawSelectionRectangle) {
-      [self drawSelectionRectangle:selectionStartPoint toLocation:mousePoint];
+      selectionRect = [self rectFromTwoPoints:selectionStartPoint toLocation:mousePoint];
       int selectedObjectsCount = 0;
       for (ObjectView *anObject in arrayOfObjects) {
         if (NSIntersectsRect(selectionRect, [anObject frame])) {
