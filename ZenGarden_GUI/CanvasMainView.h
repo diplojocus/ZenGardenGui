@@ -21,6 +21,7 @@
   // Object
   ObjectView *objectView;
   ObjectView *objectToMove;
+  NSPoint mousePositionInsideObject;
   NSMutableArray *arrayOfObjects;
   BOOL resizeObject;
   BOOL moveObject;
@@ -30,21 +31,23 @@
   NSRect selectionRect;
   NSBezierPath *selectionPath;
   BOOL drawSelectionRectangle;
+  int selectedObjectsCount;
   
   // Connections
-  NSPoint connectionStartPoint;
-  NSPoint connectionEndPoint;
+  NSPoint newConnectionStartPoint;
+  NSPoint newConnectionEndPoint;
   BOOL drawConnection;
   
 }
 
 - (IBAction)toggleEditMode:(id)sender;
+- (BOOL)isEditModeOn;
 - (IBAction)putObject:(id)sender;
+- (IBAction)removeObject:(id)sender;
 - (NSPoint)invertYAxis:(NSPoint)point;
 - (void)resetDrawingSelectors;
-- (void)moveObject:(ObjectView *)object;
+- (void)moveObject:(ObjectView *)object with:(NSPoint)adjustedMousePosition;
 - (void)startConnectionDrawing:(NSPoint)point;
-- (void)drawConnection:(NSPoint)startPoint toLocation:(NSPoint)endPoint;
 - (void)drawBackground:(NSRect)rect;
 - (void)drawSelectionRectangle:(NSPoint)startPoint toLocation:(NSPoint)endPoint;
 - (NSRect)rectFromTwoPoints:(NSPoint)firstPoint toLocation:(NSPoint)secondPoint;

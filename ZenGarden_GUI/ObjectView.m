@@ -12,12 +12,16 @@
 
 @implementation ObjectView
 
+@synthesize letArray;
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
       
-      [self addTextView:frame];
+      // adding NSTextField instead of NSTextView for now
+      //[self addTextView:frame];
+      [self addTextField:frame];
       
       [self addObjectResizeTrackingRect:frame];
       objectResizeTrackingArea = [[NSTrackingArea alloc] 
@@ -28,7 +32,7 @@
                                                     NSTrackingCursorUpdate)
                                                     owner:self userInfo:nil];
       [self addTrackingArea:objectResizeTrackingArea];
-      [self isObjectHighlighted:NO];
+      [self highlightObject:NO];
     }
     
     return self;
@@ -48,7 +52,7 @@
   [self addLet:NSMakePoint(self.bounds.origin.x + 30 , self.bounds.size.height - 10)
        isInlet:NO isSignal:YES];
   
-  [self drawTextView:dirtyRect];
+  //[self drawTextView:dirtyRect];
 
 }
 
@@ -69,11 +73,14 @@
   [path stroke];
 }
 
-- (void)isObjectHighlighted:(BOOL)state {
+// TODO(joewhite4): Find out why object is highlighted on mouseUp rather than mouseDown
+- (void)highlightObject:(BOOL)state {
   if (state) {
+    isHighlighted = YES;
     backgroundColour = [NSColor greenColor];
   }
   else {
+    isHighlighted = NO;
     backgroundColour = [NSColor blueColor];
   }
 }
@@ -86,7 +93,7 @@
   textView = [[TextView alloc] initWithFrame:textViewRect];
   [self addSubview:textView];
   [textView setRichText:NO];
-  [textView setDelegate:self];
+//  [textView setDelegate:self];
   [[textView textContainer] setContainerSize:NSMakeSize(10, 30)];
 }
 
@@ -95,6 +102,19 @@
                                 rect.origin.y + 30,
                                 rect.size.width - 60,
                                 rect.size.height - 60)];
+}
+       
+- (void)addTextField:(NSRect)rect {
+  NSRect textFieldRect = NSMakeRect(rect.origin.x + 30,
+                                   rect.origin.y + 30,
+                                   30,
+                                   rect.size.height - 60);
+  NSTextField *textField = [[NSTextField alloc] initWithFrame:textFieldRect];
+  [self addSubview:textField];
+  [textField setDelegate:self];
+  [textField setSelectable:YES];
+  [textField setEditable:YES];
+//  [[textView textContainer] setContainerSize:NSMakeSize(10, 30)];
 }
 
 - (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal {
@@ -145,14 +165,26 @@
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-  if ([theEvent clickCount] > 1) {  
-    NSLog(@"Start Editing");
+  NSPoint adjustedMousePosition = [self positionInsideObject:[theEvent locationInWindow]];
+  [(CanvasMainView *)self.superview moveObject:self with:adjustedMousePosition];
+  if ([(CanvasMainView *)self.superview isEditModeOn]) {
+    [self highlightObject:YES];
+    if ([theEvent clickCount] > 1) {
+      NSLog(@"Start Editing");
+    }
   }
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
-  [(CanvasMainView *)self.superview moveObject:self];
+
   [(CanvasMainView *)self.superview mouseDragged:theEvent];
+}
+
+- (NSPoint)positionInsideObject:(NSPoint)fromEventPosition {
+  NSPoint convertedPoint = NSMakePoint(fromEventPosition.x - self.frame.origin.x,
+                                       [(CanvasMainView *)self.superview frame].size.height - 
+                                       fromEventPosition.y - self.frame.origin.y);
+  return convertedPoint;
 }
 
 

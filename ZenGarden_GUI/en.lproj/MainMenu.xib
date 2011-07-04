@@ -1257,7 +1257,7 @@
 			<object class="NSWindowTemplate" id="972006081">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{335, 390}, {480, 360}}</string>
+				<string key="NSWindowRect">{{335, 390}, {700, 500}}</string>
 				<int key="NSWTFlags">1954021376</int>
 				<string key="NSWindowTitle">ZenGarden_GUI</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -1271,14 +1271,14 @@
 						<object class="NSCustomView" id="470427682">
 							<reference key="NSNextResponder" ref="439893737"/>
 							<int key="NSvFlags">274</int>
-							<string key="NSFrameSize">{480, 360}</string>
+							<string key="NSFrameSize">{700, 500}</string>
 							<reference key="NSSuperview" ref="439893737"/>
 							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView"/>
 							<string key="NSClassName">CanvasMainView</string>
 						</object>
 					</object>
-					<string key="NSFrame">{{7, 11}, {480, 360}}</string>
+					<string key="NSFrame">{{7, 11}, {700, 500}}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="470427682"/>
@@ -3452,10 +3452,12 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>putObject:</string>
+							<string>removeObject:</string>
 							<string>toggleEditMode:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 						</object>
@@ -3465,12 +3467,17 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>putObject:</string>
+							<string>removeObject:</string>
 							<string>toggleEditMode:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
 								<string key="name">putObject:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">removeObject:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">

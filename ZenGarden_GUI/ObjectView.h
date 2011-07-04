@@ -11,7 +11,7 @@
 #import "TextView.h"
 
 
-@interface ObjectView : NSView <NSTextViewDelegate> {
+@interface ObjectView : NSView <NSTextFieldDelegate> {
   
   float numberOfInlets;
   float numberOfOutlets;
@@ -25,17 +25,22 @@
   NSCursor *cursor;
   
   NSColor *backgroundColour;
+  BOOL isHighlighted;
   
 @private
     
 }
 
+@property (nonatomic, readonly) NSMutableArray *letArray;
+
 - (void)drawBackground:(NSRect)rect;
-- (void)isObjectHighlighted:(BOOL)state;
+- (void)highlightObject:(BOOL)state;
 - (void)addTextView:(NSRect)rect;
 - (void)drawTextView:(NSRect)rect;
+- (void)addTextField:(NSRect)rect;
 - (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal;
 - (void)letMouseDown:(NSPoint)location;
 - (void)addObjectResizeTrackingRect:(NSRect)rect;
+- (NSPoint)positionInsideObject:(NSPoint)fromEventPosition;
 
 @end

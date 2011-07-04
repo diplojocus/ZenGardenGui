@@ -21,8 +21,8 @@
       arrayOfObjects = [[NSMutableArray alloc] init];
       isEditModeOn = NO;
       [self resetDrawingSelectors];
-      connectionStartPoint = NSMakePoint(0, 0);
-      connectionEndPoint = NSMakePoint(0, 0);
+      newConnectionStartPoint = NSMakePoint(0, 0);
+      newConnectionEndPoint = NSMakePoint(0, 0);
     }
     return self;
 }
@@ -40,6 +40,27 @@
   [selectionPath setLineDash: selectionDashArray count: 2 phase: 0.0];
   [theSelectionColor setStroke];
   [selectionPath stroke];
+  
+  [[NSColor blackColor] setStroke];
+  [NSBezierPath strokeLineFromPoint:newConnectionStartPoint
+                            toPoint:newConnectionEndPoint];
+  
+  
+  
+
+  /*
+  for (ObjectView *objectView in arrayOfObjects) {
+    for (LetView *outletView in objectView.letArray) {
+      if (!outletView.isInlet) { // only consider outlets
+        for (LetView *inletView in outletView.connections) {
+          NSPoint startPoint = NSMakePoint(NSMidX(outletView.frame), outletView.frame.origin.y + outletView.frame.size.height);
+          NSPoint endPoint = NSMakePoint(NSMidX(inletView.frame), inletView.frame.origin.y);
+          // draw a line from startPoint to endPoint
+        }
+      }
+    }
+  } */
+  
 }
 
 - (void)awakeFromNib {
@@ -63,9 +84,24 @@
   [self needsDisplay];
 }
 
+- (BOOL)isEditModeOn {
+  return isEditModeOn;
+}
+
+#pragma mark - Key Events
+
+- (void)keyDown:(NSEvent *)theEvent {
+  
+}
+
 #pragma mark - Mouse Events
 
 - (void)mouseDown:(NSEvent *)theEvent {
+  selectedObjectsCount = 0;
+  for (ObjectView *anObject in arrayOfObjects) {
+    selectedObjectsCount++;
+    [(ObjectView *)anObject highlightObject:NO];
+  }
   if (isEditModeOn) {
     drawSelectionRectangle = YES;
     selectionStartPoint = [self invertYAxis:[theEvent locationInWindow]];
@@ -75,8 +111,8 @@
 - (void)mouseUp:(NSEvent *)theEvent {
   [self resetDrawingSelectors];
   NSPoint zeroPoint = NSMakePoint(0, 0);
-  connectionStartPoint = zeroPoint;
-  connectionEndPoint = zeroPoint;
+  newConnectionStartPoint = zeroPoint;
+  newConnectionEndPoint = zeroPoint;
   selectionStartPoint = zeroPoint;
   selectionRect = [self rectFromTwoPoints:selectionStartPoint toLocation:NSMakePoint(0, 0)];
   [self setNeedsDisplay:YES];
@@ -87,13 +123,12 @@
   NSPoint mousePoint = [self invertYAxis:[theEvent locationInWindow]];
   if (isEditModeOn) {
     if (drawConnection) {
-      NSLog(@"Draw Connection");
-      connectionEndPoint = mousePoint;
-      [self drawConnection:connectionStartPoint toLocation:connectionEndPoint];
+      newConnectionEndPoint = mousePoint;
       return;
     }
     else if (moveObject) {
-      [objectToMove setFrameOrigin:mousePoint]; 
+      [objectToMove setFrameOrigin:NSMakePoint(mousePoint.x - mousePositionInsideObject.x,
+                                               mousePoint.y - mousePositionInsideObject.y)]; 
       return;
     }
     else if (resizeObject) {
@@ -102,14 +137,14 @@
     }
     else if (drawSelectionRectangle) {
       selectionRect = [self rectFromTwoPoints:selectionStartPoint toLocation:mousePoint];
-      int selectedObjectsCount = 0;
+      selectedObjectsCount = 0;
       for (ObjectView *anObject in arrayOfObjects) {
         if (NSIntersectsRect(selectionRect, [anObject frame])) {
           selectedObjectsCount++;
-          [(ObjectView *)anObject isObjectHighlighted:YES];
+          [(ObjectView *)anObject highlightObject:YES];
         }
         else {
-          [(ObjectView *)anObject isObjectHighlighted:NO];
+          [(ObjectView *)anObject highlightObject:NO];
         }
         [self setNeedsDisplay:YES];
       }
@@ -135,7 +170,7 @@
 
 - (void)drawBackground:(NSRect)rect {
   if (isEditModeOn) {
-    [[[NSColor blueColor] colorWithAlphaComponent:0.4f] setFill];
+    [[[NSColor blueColor] colorWithAlphaComponent:0.2f] setFill];
     [NSBezierPath fillRect:rect];
   }
   else {
@@ -170,9 +205,14 @@
   [arrayOfObjects addObject:objectView];
 }
 
-- (void)moveObject:(ObjectView *)object {
+- (IBAction)removeObject:(id)sender {
+  
+}
+
+- (void)moveObject:(ObjectView *)object with:(NSPoint)adjustedMousePosition {
   moveObject = YES;
   objectToMove = object;
+  mousePositionInsideObject = adjustedMousePosition;
 }
 
 
@@ -180,15 +220,7 @@
 
 - (void)startConnectionDrawing:(NSPoint)point {
   drawConnection = YES;
-  connectionStartPoint = [self invertYAxis:point];
-}
-
-- (void)drawConnection:(NSPoint)startPoint toLocation:(NSPoint)endPoint {
-  [self becomeFirstResponder];
-  [[NSColor blackColor] setStroke];
-  [NSBezierPath strokeLineFromPoint:startPoint toPoint:endPoint];
-  [self setNeedsDisplay:YES];
-  [self needsDisplay];
+  newConnectionStartPoint = [self invertYAxis:point];
 }
 
 @end
