@@ -13,15 +13,15 @@
 @implementation ObjectView
 
 @synthesize letArray;
+@synthesize isHighlighted;
 
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
       
-      // adding NSTextField instead of NSTextView for now
-      //[self addTextView:frame];
       [self addTextField:frame];
+      
       
       [self addObjectResizeTrackingRect:frame];
       objectResizeTrackingArea = [[NSTrackingArea alloc] 
@@ -33,6 +33,12 @@
                                                     owner:self userInfo:nil];
       [self addTrackingArea:objectResizeTrackingArea];
       [self highlightObject:NO];
+      
+      [self addLet:NSMakePoint(self.bounds.origin.x + 30 , 0) isInlet:YES isSignal:YES];
+      [self addLet:NSMakePoint(self.bounds.origin.x + 100 , 0) isInlet:YES isSignal:YES];
+      [self addLet:NSMakePoint(self.bounds.origin.x + 170 , 0) isInlet:YES isSignal:YES];
+      [self addLet:NSMakePoint(self.bounds.origin.x + 30 , self.bounds.size.height - 10)
+           isInlet:NO isSignal:YES];
     }
     
     return self;
@@ -40,20 +46,18 @@
 
 - (void)dealloc {
   [letView release];
-  [textView release];
+  [textField release];
   [super dealloc];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-  [self drawBackground:dirtyRect];
-  [self addLet:NSMakePoint(self.bounds.origin.x + 30 , 0) isInlet:YES isSignal:YES];
-  [self addLet:NSMakePoint(self.bounds.origin.x + 100 , 0) isInlet:YES isSignal:YES];
-  [self addLet:NSMakePoint(self.bounds.origin.x + 170 , 0) isInlet:YES isSignal:YES];
-  [self addLet:NSMakePoint(self.bounds.origin.x + 30 , self.bounds.size.height - 10)
-       isInlet:NO isSignal:YES];
   
-  //[self drawTextView:dirtyRect];
+  [textField setFrame:NSMakeRect(dirtyRect.origin.x + 30,
+                                 dirtyRect.origin.y + 30,
+                                 dirtyRect.size.width - 60,
+                                 dirtyRect.size.height - 60)];
 
+  [self drawBackground:dirtyRect];
 }
 
 - (void)drawBackground:(NSRect)rect {
@@ -73,7 +77,6 @@
   [path stroke];
 }
 
-// TODO(joewhite4): Find out why object is highlighted on mouseUp rather than mouseDown
 - (void)highlightObject:(BOOL)state {
   if (state) {
     isHighlighted = YES;
@@ -85,36 +88,13 @@
   }
 }
 
-- (void)addTextView:(NSRect)rect {
-  NSRect textViewRect = NSMakeRect(rect.origin.x + 30,
-                                   rect.origin.y + 30,
-                                   30,
-                                   rect.size.height - 60);
-  textView = [[TextView alloc] initWithFrame:textViewRect];
-  [self addSubview:textView];
-  [textView setRichText:NO];
-//  [textView setDelegate:self];
-  [[textView textContainer] setContainerSize:NSMakeSize(10, 30)];
-}
-
-- (void)drawTextView:(NSRect)rect {
-  [textView setFrame:NSMakeRect(rect.origin.x + 30,
-                                rect.origin.y + 30,
-                                rect.size.width - 60,
-                                rect.size.height - 60)];
-}
-       
 - (void)addTextField:(NSRect)rect {
-  NSRect textFieldRect = NSMakeRect(rect.origin.x + 30,
-                                   rect.origin.y + 30,
-                                   30,
-                                   rect.size.height - 60);
-  NSTextField *textField = [[NSTextField alloc] initWithFrame:textFieldRect];
+  textField = [[NSTextField alloc] initWithFrame:NSMakeRect(rect.origin.x + 30,
+                                                            rect.origin.y + 30,
+                                                            30,
+                                                            rect.size.height - 60)];
   [self addSubview:textField];
   [textField setDelegate:self];
-  [textField setSelectable:YES];
-  [textField setEditable:YES];
-//  [[textView textContainer] setContainerSize:NSMakeSize(10, 30)];
 }
 
 - (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal {
@@ -165,6 +145,9 @@
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
+  
+  [self setNeedsDisplay:YES];
+  
   NSPoint adjustedMousePosition = [self positionInsideObject:[theEvent locationInWindow]];
   [(CanvasMainView *)self.superview moveObject:self with:adjustedMousePosition];
   if ([(CanvasMainView *)self.superview isEditModeOn]) {

@@ -8,7 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 #import "LetView.h"
-#import "TextView.h"
 
 
 @interface ObjectView : NSView <NSTextFieldDelegate> {
@@ -18,7 +17,7 @@
   LetView *letView;
   NSMutableArray *letArray;
   
-  TextView *textView;
+  NSTextField *textField;
   
   NSRect objectResizeTrackingRect;
   NSTrackingArea *objectResizeTrackingArea;
@@ -32,11 +31,10 @@
 }
 
 @property (nonatomic, readonly) NSMutableArray *letArray;
+@property (nonatomic, readonly) BOOL isHighlighted;
 
 - (void)drawBackground:(NSRect)rect;
 - (void)highlightObject:(BOOL)state;
-- (void)addTextView:(NSRect)rect;
-- (void)drawTextView:(NSRect)rect;
 - (void)addTextField:(NSRect)rect;
 - (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal;
 - (void)letMouseDown:(NSPoint)location;
