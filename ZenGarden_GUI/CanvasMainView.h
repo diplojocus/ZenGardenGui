@@ -41,6 +41,7 @@
 }
 
 - (IBAction)toggleEditMode:(id)sender;
+- (IBAction)removeObject:(id)sender;
 - (BOOL)isEditModeOn;
 - (IBAction)putObject:(id)sender;
 - (IBAction)removeObject:(id)sender;

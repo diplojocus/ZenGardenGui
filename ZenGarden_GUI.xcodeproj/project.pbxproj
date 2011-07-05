@@ -13,7 +13,6 @@
 		D8223857139ADD6300ECCB75 /* ObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8223856139ADD6300ECCB75 /* ObjectView.m */; };
 		D832DFE11379B9DA0065A9D0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832DFE01379B9DA0065A9D0 /* Accelerate.framework */; };
 		D832DFE31379BA120065A9D0 /* libsndfile.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D832DFE21379BA120065A9D0 /* libsndfile.dylib */; };
-		D86E273F1385C8270005306B /* TextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D86E273E1385C8270005306B /* TextView.m */; };
 		D88EBE75137C0E1B00BEDEE1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */; };
 		D88EBE76137C0E1B00BEDEE1 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */; };
 		D8ECE9DD13832B9000C0E983 /* LetView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8ECE9DC13832B9000C0E983 /* LetView.m */; };
@@ -53,8 +52,6 @@
 		D8223856139ADD6300ECCB75 /* ObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectView.m; sourceTree = "<group>"; };
 		D832DFE01379B9DA0065A9D0 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D832DFE21379BA120065A9D0 /* libsndfile.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsndfile.dylib; path = usr/local/lib/libsndfile.dylib; sourceTree = SDKROOT; };
-		D86E273D1385C8270005306B /* TextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextView.h; sourceTree = "<group>"; };
-		D86E273E1385C8270005306B /* TextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextView.m; sourceTree = "<group>"; };
 		D88EBE6F137C0DE700BEDEE1 /* PdAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PdAudio.h; sourceTree = "<group>"; };
 		D88EBE70137C0DE700BEDEE1 /* PdAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PdAudio.m; sourceTree = "<group>"; };
 		D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -193,8 +190,6 @@
 				D8223856139ADD6300ECCB75 /* ObjectView.m */,
 				D8ECE9DB13832B9000C0E983 /* LetView.h */,
 				D8ECE9DC13832B9000C0E983 /* LetView.m */,
-				D86E273D1385C8270005306B /* TextView.h */,
-				D86E273E1385C8270005306B /* TextView.m */,
 				D8F92BC81368970F002174E6 /* ZenGarden_GUIAppDelegate.h */,
 				D8F92BC91368970F002174E6 /* ZenGarden_GUIAppDelegate.m */,
 				D8F92BCB1368970F002174E6 /* MainMenu.xib */,
@@ -352,7 +347,6 @@
 				D8F92C381368B370002174E6 /* ObjectViewOld.m in Sources */,
 				908346E6137F3A9C009B3A55 /* PdAudio.m in Sources */,
 				D8ECE9DD13832B9000C0E983 /* LetView.m in Sources */,
-				D86E273F1385C8270005306B /* TextView.m in Sources */,
 				D8223854139ADD5A00ECCB75 /* CanvasMainView.m in Sources */,
 				D8223857139ADD6300ECCB75 /* ObjectView.m in Sources */,
 			);

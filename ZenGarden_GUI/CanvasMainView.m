@@ -8,8 +8,8 @@
 
 #import "CanvasMainView.h"
 
-#define OBJECT_ORIGIN_X 100.0
-#define OBJECT_ORIGIN_Y 100.0
+#define DEFAULT_OBJECT_ORIGIN_X 100.0
+#define DEFAULT_OBJECT_ORIGIN_Y 100.0
 #define DEFAULT_OBJECT_HEIGHT 100.0
 #define DEFAULT_OBJECT_WIDTH 300.0
 
@@ -29,6 +29,7 @@
 
 - (void)dealloc {
   [super dealloc];
+  [objectView dealloc];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -48,7 +49,7 @@
   
   
 
-  /*
+  /* DRAWS EXISTING CONNECTIONS
   for (ObjectView *objectView in arrayOfObjects) {
     for (LetView *outletView in objectView.letArray) {
       if (!outletView.isInlet) { // only consider outlets
@@ -92,6 +93,17 @@
 
 - (void)keyDown:(NSEvent *)theEvent {
   
+  // Grabbing backspace and delete key presses seems like a bitch
+  // http://www.cocoadev.com/index.pl?TrappingTheDeleteKey
+  //
+  unichar key = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+	
+	if (key == NSDeleteCharacter || key == NSBackspaceCharacter)
+	{
+    [self removeObject:self];
+    return;
+  }
+  [super keyDown:theEvent];
 }
 
 #pragma mark - Mouse Events
@@ -197,17 +209,42 @@
 #pragma mark - Object Drawing
 
 -(IBAction)putObject:(id)sender {
-  NSLog(@"Add Object");
-  objectView = [[[ObjectView alloc] 
-      initWithFrame:NSMakeRect(OBJECT_ORIGIN_X, OBJECT_ORIGIN_Y,
-                               DEFAULT_OBJECT_WIDTH, DEFAULT_OBJECT_HEIGHT)] autorelease];
-  [self addSubview:objectView];
-  [arrayOfObjects addObject:objectView];
+  
+  // Convert mouse location to view coordinates
+  NSPoint mouseLocation = [[self window] convertScreenToBase:[NSEvent mouseLocation]];
+  NSPoint viewLocation = [self convertPoint:mouseLocation fromView:nil];
+  
+  // If inside canvas view add object at mouse location
+  if (NSPointInRect(viewLocation, [self bounds])) {
+    objectView = [[[ObjectView alloc] 
+                   initWithFrame:NSMakeRect(viewLocation.x - (DEFAULT_OBJECT_WIDTH / 2),
+                                            viewLocation.y - (DEFAULT_OBJECT_HEIGHT / 2),
+                                            DEFAULT_OBJECT_WIDTH,
+                                            DEFAULT_OBJECT_HEIGHT)] autorelease];
+    [self addSubview:objectView];
+    [arrayOfObjects addObject:objectView];
+  }
+  
+  // If outside canvas view add object at default location
+  else {
+    objectView = [[[ObjectView alloc] 
+                   initWithFrame:NSMakeRect(DEFAULT_OBJECT_ORIGIN_X,
+                                            DEFAULT_OBJECT_ORIGIN_Y,
+                                            DEFAULT_OBJECT_WIDTH,
+                                            DEFAULT_OBJECT_HEIGHT)] autorelease];
+    [self addSubview:objectView];
+    [arrayOfObjects addObject:objectView];
+  }
 }
 
-- (IBAction)removeObject:(id)sender {
-  
-}
+- (IBAction)removeObject:(id)sender { 
+  NSLog(@"Remove Object(s)");
+  for (ObjectView *object in arrayOfObjects) {
+    if ([object isHighlighted]) {
+      [object removeFromSuperview];
+    }
+  }
+} 
 
 - (void)moveObject:(ObjectView *)object with:(NSPoint)adjustedMousePosition {
   moveObject = YES;
