@@ -52,13 +52,22 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
   
-  [textField setFrame:NSMakeRect(dirtyRect.origin.x + 30,
-                                 dirtyRect.origin.y + 30,
-                                 dirtyRect.size.width - 60,
-                                 dirtyRect.size.height - 60)];
+  [textField setFrame:NSMakeRect(self.bounds.origin.x + 30,
+                                 self.bounds.origin.y + 30,
+                                 self.bounds.size.width - 60,
+                                 self.bounds.size.height - 60)];
 
-  [self drawBackground:dirtyRect];
+  [self drawBackground:self.bounds];
 }
+
+- (BOOL)isFlipped { return YES; }
+
+- (BOOL)acceptsFirstResponder { return YES; }
+
+- (BOOL)becomeFirstResponder { return YES; }
+
+
+#pragma mark - Background Drawing
 
 - (void)drawBackground:(NSRect)rect {
   
@@ -86,16 +95,12 @@
     isHighlighted = NO;
     backgroundColour = [NSColor blueColor];
   }
+  [self setNeedsDisplay:YES];
+  [self needsDisplay];
 }
 
-- (void)addTextField:(NSRect)rect {
-  textField = [[NSTextField alloc] initWithFrame:NSMakeRect(rect.origin.x + 30,
-                                                            rect.origin.y + 30,
-                                                            30,
-                                                            rect.size.height - 60)];
-  [self addSubview:textField];
-  [textField setDelegate:self];
-}
+
+#pragma mark - Let drawing
 
 - (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal {
   
@@ -107,13 +112,36 @@
   [letView release];
 }
 
-- (void)letMouseDown:(NSPoint)location {
-  [(CanvasMainView *)self.superview startConnectionDrawing:location];
+
+#pragma mark - TextField & Events
+
+- (void)addTextField:(NSRect)rect {
+  textField = [[NSTextField alloc] initWithFrame:NSMakeRect(rect.origin.x + 30,
+                                                            rect.origin.y + 30,
+                                                            30,
+                                                            rect.size.height - 60)];
+  [self addSubview:textField];
+  [textField setDelegate:self];
 }
+
+- (void)controlTextDidBeginEditing:(NSNotification *)obj {
+  NSLog(@"TEXT BEGIN EDITING");
+}
+
+- (void)controlTextDidChange:(NSNotification *)obj {
+  NSLog(@"TEXT CHANGE");
+}
+
+- (void)controlTextDidEndEditing:(NSNotification *)obj {
+  NSLog(@"TEXT END EDITING");
+}
+
+
+#pragma mark - Mouse events
 
 - (void)addObjectResizeTrackingRect:(NSRect)rect {
   objectResizeTrackingRect = NSMakeRect(self.frame.size.width - 10, 20,
-                                                10, self.frame.size.height - 40);
+                                        10, self.frame.size.height - 40);
 }
 
 - (void)updateTrackingAreas {
@@ -123,12 +151,12 @@
   [self removeTrackingArea:objectResizeTrackingArea];
   [objectResizeTrackingArea release];
   objectResizeTrackingArea = [[NSTrackingArea alloc] 
-                                      initWithRect:objectResizeTrackingRect
-                                      options: (NSTrackingMouseEnteredAndExited |
-                                                NSTrackingMouseMoved |
-                                                NSTrackingActiveInKeyWindow | 
-                                                NSTrackingCursorUpdate)
-                                                owner:self userInfo:nil];
+                              initWithRect:objectResizeTrackingRect
+                              options: (NSTrackingMouseEnteredAndExited |
+                                        NSTrackingMouseMoved |
+                                        NSTrackingActiveInKeyWindow | 
+                                        NSTrackingCursorUpdate)
+                              owner:self userInfo:nil];
   [self addTrackingArea:objectResizeTrackingArea];
 }
 
@@ -147,6 +175,7 @@
 - (void)mouseDown:(NSEvent *)theEvent {
   
   [self setNeedsDisplay:YES];
+  [self needsDisplay];
   
   NSPoint adjustedMousePosition = [self positionInsideObject:[theEvent locationInWindow]];
   [(CanvasMainView *)self.superview moveObject:self with:adjustedMousePosition];
@@ -156,6 +185,10 @@
       NSLog(@"Start Editing");
     }
   }
+}
+
+- (void)letMouseDown:(NSPoint)location {
+  [(CanvasMainView *)self.superview startConnectionDrawing:location];
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
@@ -169,12 +202,5 @@
                                        fromEventPosition.y - self.frame.origin.y);
   return convertedPoint;
 }
-
-
-- (BOOL)isFlipped { return YES; }
-
-- (BOOL)acceptsFirstResponder { return YES; }
-
-- (BOOL)becomeFirstResponder { return YES; }
 
 @end

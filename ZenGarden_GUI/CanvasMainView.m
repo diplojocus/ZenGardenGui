@@ -33,8 +33,10 @@
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
-  [self drawBackground:dirtyRect];
   
+  [self drawBackground:self.bounds];
+  
+  // draw selection path
   selectionPath = [NSBezierPath bezierPathWithRect:selectionRect];
   NSColor *theSelectionColor = [NSColor blackColor];
   CGFloat selectionDashArray[2] = { 5.0, 2.0 };
@@ -42,14 +44,13 @@
   [theSelectionColor setStroke];
   [selectionPath stroke];
   
+  // draw connection path
   [[NSColor blackColor] setStroke];
   [NSBezierPath strokeLineFromPoint:newConnectionStartPoint
                             toPoint:newConnectionEndPoint];
-  
-  
-  
 
-  /* DRAWS EXISTING CONNECTIONS
+  // draw existing connections
+  /*
   for (ObjectView *objectView in arrayOfObjects) {
     for (LetView *outletView in objectView.letArray) {
       if (!outletView.isInlet) { // only consider outlets
@@ -93,10 +94,11 @@
 
 - (void)keyDown:(NSEvent *)theEvent {
   
-  // Grabbing backspace and delete key presses seems like a bitch
+  // Grabbing backspace AND delete key presses seems like a be-ach
   // http://www.cocoadev.com/index.pl?TrappingTheDeleteKey
   //
-  unichar key = [[theEvent charactersIgnoringModifiers] characterAtIndex:0];
+  // currently using just backspace and cmd+x (Cut menu item)
+  unichar key = [[theEvent characters] characterAtIndex:0];
 	
 	if (key == NSDeleteCharacter || key == NSBackspaceCharacter)
 	{
@@ -139,6 +141,7 @@
       return;
     }
     else if (moveObject) {
+      // move object
       [objectToMove setFrameOrigin:NSMakePoint(mousePoint.x - mousePositionInsideObject.x,
                                                mousePoint.y - mousePositionInsideObject.y)]; 
       return;
@@ -238,13 +241,20 @@
 }
 
 - (IBAction)removeObject:(id)sender { 
-  NSLog(@"Remove Object(s)");
+  // Removes all highlighted objects
   for (ObjectView *object in arrayOfObjects) {
     if ([object isHighlighted]) {
       [object removeFromSuperview];
     }
   }
 } 
+
+- (IBAction)selectAll:(id)sender {
+  // Highlights all objects
+  for (ObjectView *object in arrayOfObjects) {
+    [object highlightObject:YES];
+  }
+}
 
 - (void)moveObject:(ObjectView *)object with:(NSPoint)adjustedMousePosition {
   moveObject = YES;
