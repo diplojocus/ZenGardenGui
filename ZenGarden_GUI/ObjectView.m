@@ -120,8 +120,9 @@
                                                             rect.origin.y + 30,
                                                             30,
                                                             rect.size.height - 60)];
-  [textField setEditable:[(CanvasMainView *)self.superview isEditModeOn]];
-  [textField setSelectable:[(CanvasMainView *)self.superview isEditModeOn]];
+  
+  [textField setEditable:YES];
+  [textField setSelectable:YES];
   [textField setBezeled:NO];
   [self addSubview:textField];
   [textField setDelegate:self];
@@ -130,6 +131,8 @@
 - (void)setTextFieldEditable:(BOOL)state {
   [textField setEditable:state];
   [textField setSelectable:state];
+  NSLog(@"%d", state);
+  
 }
 
 - (void)controlTextDidBeginEditing:(NSNotification *)obj {

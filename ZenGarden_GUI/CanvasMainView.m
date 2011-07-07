@@ -223,6 +223,15 @@
 
 -(IBAction)putObject:(id)sender {
   
+  // make sure edit mode is on 
+  if (!isEditModeOn) {
+    [self toggleEditMode:[self menu]];
+    NSInteger editMenuIndex = [[[self window] menu] indexOfItemWithTitle:@"Edit"];
+    NSMenuItem *editSubmenu = [[[self window] menu] itemAtIndex:editMenuIndex];
+    NSMenuItem *editItem = [[editSubmenu submenu] itemWithTitle:@"Edit"]; 
+    [editItem setState:NSOnState];
+  }
+  
   // Convert mouse location to view coordinates
   NSPoint mouseLocation = [[self window] convertScreenToBase:[NSEvent mouseLocation]];
   NSPoint viewLocation = [self convertPoint:mouseLocation fromView:nil];
