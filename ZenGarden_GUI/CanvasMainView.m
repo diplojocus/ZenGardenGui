@@ -15,6 +15,8 @@
 
 @implementation CanvasMainView
 
+@synthesize isEditModeOn;
+
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
@@ -78,9 +80,15 @@
   [sender setState:isEditModeOn ? NSOnState : NSOffState];
   if (isEditModeOn) {
     NSLog(@"Edit Mode");
+    for (ObjectView *object in arrayOfObjects) {
+      [object setTextFieldEditable:YES];
+    }
   }
   else {
     NSLog(@"View Mode");
+    for (ObjectView *object in arrayOfObjects) {
+      [object setTextFieldEditable:NO];
+    }
   }
   [self setNeedsDisplay:YES];
   [self needsDisplay];
@@ -137,7 +145,9 @@
   NSPoint mousePoint = [self invertYAxis:[theEvent locationInWindow]];
   if (isEditModeOn) {
     if (drawConnection) {
+      // draw connection 
       newConnectionEndPoint = mousePoint;
+      NSLog(@"Draw Connection");
       return;
     }
     else if (moveObject) {

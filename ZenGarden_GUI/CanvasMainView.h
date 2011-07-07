@@ -8,8 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import "ObjectView.h"
-#import "ZenGarden.h"
-#import "PdAudio.h"
+//#import "ZenGarden.h"
+//#import "PdAudio.h"
 
 
 @interface CanvasMainView : NSView {
@@ -39,6 +39,8 @@
   BOOL drawConnection;
   
 }
+
+@property (nonatomic, readonly) BOOL isEditModeOn;
 
 - (IBAction)toggleEditMode:(id)sender;
 - (IBAction)removeObject:(id)sender;

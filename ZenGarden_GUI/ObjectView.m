@@ -120,20 +120,34 @@
                                                             rect.origin.y + 30,
                                                             30,
                                                             rect.size.height - 60)];
+  [textField setEditable:[(CanvasMainView *)self.superview isEditModeOn]];
+  [textField setSelectable:[(CanvasMainView *)self.superview isEditModeOn]];
+  [textField setBezeled:NO];
   [self addSubview:textField];
   [textField setDelegate:self];
 }
 
+- (void)setTextFieldEditable:(BOOL)state {
+  [textField setEditable:state];
+  [textField setSelectable:state];
+}
+
 - (void)controlTextDidBeginEditing:(NSNotification *)obj {
   NSLog(@"TEXT BEGIN EDITING");
+  [self highlightObject:YES];
 }
 
 - (void)controlTextDidChange:(NSNotification *)obj {
   NSLog(@"TEXT CHANGE");
+  [textField sizeToFit];
 }
 
 - (void)controlTextDidEndEditing:(NSNotification *)obj {
   NSLog(@"TEXT END EDITING");
+  NSString *textValue = [textField stringValue];
+  NSLog(@"%@", textValue);
+  
+  [self highlightObject:NO];
 }
 
 

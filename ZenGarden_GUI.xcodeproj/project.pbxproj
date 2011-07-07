@@ -7,12 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		908346E6137F3A9C009B3A55 /* PdAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = D88EBE70137C0DE700BEDEE1 /* PdAudio.m */; };
 		D8196229137290CB00E6B775 /* osc.icns in Resources */ = {isa = PBXBuildFile; fileRef = D8196228137290CB00E6B775 /* osc.icns */; };
 		D8223854139ADD5A00ECCB75 /* CanvasMainView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8223853139ADD5900ECCB75 /* CanvasMainView.m */; };
 		D8223857139ADD6300ECCB75 /* ObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8223856139ADD6300ECCB75 /* ObjectView.m */; };
 		D832DFE11379B9DA0065A9D0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D832DFE01379B9DA0065A9D0 /* Accelerate.framework */; };
-		D832DFE31379BA120065A9D0 /* libsndfile.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D832DFE21379BA120065A9D0 /* libsndfile.dylib */; };
 		D88EBE75137C0E1B00BEDEE1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */; };
 		D88EBE76137C0E1B00BEDEE1 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */; };
 		D8ECE9DD13832B9000C0E983 /* LetView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8ECE9DC13832B9000C0E983 /* LetView.m */; };
@@ -28,7 +26,6 @@
 		D8F92BE11368970F002174E6 /* ZenGarden_GUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92BE01368970F002174E6 /* ZenGarden_GUITests.m */; };
 		D8F92C1A13689D78002174E6 /* CanvasMainViewOld.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92C1913689D78002174E6 /* CanvasMainViewOld.m */; };
 		D8F92C381368B370002174E6 /* ObjectViewOld.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92C371368B370002174E6 /* ObjectViewOld.m */; };
-		D8F97A9013A037FD00442774 /* libzengarden.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F97A8F13A037FD00442774 /* libzengarden.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,8 +90,6 @@
 				D88EBE76137C0E1B00BEDEE1 /* AudioUnit.framework in Frameworks */,
 				D832DFE11379B9DA0065A9D0 /* Accelerate.framework in Frameworks */,
 				D8F92BB71368970F002174E6 /* Cocoa.framework in Frameworks */,
-				D832DFE31379BA120065A9D0 /* libsndfile.dylib in Frameworks */,
-				D8F97A9013A037FD00442774 /* libzengarden.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -345,7 +340,6 @@
 				D8F92BCA1368970F002174E6 /* ZenGarden_GUIAppDelegate.m in Sources */,
 				D8F92C1A13689D78002174E6 /* CanvasMainViewOld.m in Sources */,
 				D8F92C381368B370002174E6 /* ObjectViewOld.m in Sources */,
-				908346E6137F3A9C009B3A55 /* PdAudio.m in Sources */,
 				D8ECE9DD13832B9000C0E983 /* LetView.m in Sources */,
 				D8223854139ADD5A00ECCB75 /* CanvasMainView.m in Sources */,
 				D8223857139ADD6300ECCB75 /* ObjectView.m in Sources */,

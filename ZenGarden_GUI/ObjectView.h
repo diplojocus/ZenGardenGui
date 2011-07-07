@@ -36,6 +36,7 @@
 - (void)drawBackground:(NSRect)rect;
 - (void)highlightObject:(BOOL)state;
 - (void)addTextField:(NSRect)rect;
+- (void)setTextFieldEditable:(BOOL)state;
 - (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal;
 - (void)letMouseDown:(NSPoint)location;
 - (void)addObjectResizeTrackingRect:(NSRect)rect;
