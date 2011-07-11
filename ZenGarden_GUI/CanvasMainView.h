@@ -14,10 +14,6 @@
 
 @interface CanvasMainView : NSView {
 
-  // Canvas
-  BOOL isEditModeOn;
-  // NSCursor *currentCursorState;
-
   // Object
   ObjectView *objectView;
   ObjectView *objectToMove;
@@ -38,8 +34,10 @@
   NSPoint newConnectionEndPoint;
   BOOL drawConnection;
   
+  NSMenuItem *editToggleMenuItem;
 }
 
+@property (nonatomic, readonly) IBOutlet NSMenuItem *editToggleMenuItem;
 @property (nonatomic, readonly) BOOL isEditModeOn;
 
 - (IBAction)toggleEditMode:(id)sender;

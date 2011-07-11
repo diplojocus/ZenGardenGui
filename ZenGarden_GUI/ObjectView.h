@@ -15,7 +15,7 @@
   float numberOfInlets;
   float numberOfOutlets;
   LetView *letView;
-  NSMutableArray *letArray;
+  LetView *letMouseDown;
   
   NSTextField *textField;
   
@@ -24,7 +24,6 @@
   NSCursor *cursor;
   
   NSColor *backgroundColour;
-  BOOL isHighlighted;
   
 @private
     
@@ -32,13 +31,14 @@
 
 @property (nonatomic, readonly) NSMutableArray *letArray;
 @property (nonatomic, readonly) BOOL isHighlighted;
+@property (nonatomic, readonly) BOOL isLetMouseDown;
 
 - (void)drawBackground:(NSRect)rect;
 - (void)highlightObject:(BOOL)state;
 - (void)addTextField:(NSRect)rect;
 - (void)setTextFieldEditable:(BOOL)state;
 - (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal;
-- (void)letMouseDown:(NSPoint)location;
+- (void)setLetMouseDown:(LetView *)let withState:(BOOL)state;
 - (void)addObjectResizeTrackingRect:(NSRect)rect;
 - (NSPoint)positionInsideObject:(NSPoint)fromEventPosition;
 

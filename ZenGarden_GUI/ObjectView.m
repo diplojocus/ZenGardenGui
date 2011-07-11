@@ -13,10 +13,10 @@
 @implementation ObjectView
 
 @synthesize letArray;
+@synthesize isLetMouseDown;
 @synthesize isHighlighted;
 
-- (id)initWithFrame:(NSRect)frame
-{
+- (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
       
@@ -112,6 +112,10 @@
   [letView release];
 }
 
+- (void)setLetMouseDown:(LetView *)let withState:(BOOL)state {
+  letMouseDown = let;
+  isLetMouseDown = state;
+}
 
 #pragma mark - TextField & Events
 
@@ -132,7 +136,6 @@
   [textField setEditable:state];
   [textField setSelectable:state];
   NSLog(@"%d", state);
-  
 }
 
 - (void)controlTextDidBeginEditing:(NSNotification *)obj {
@@ -190,27 +193,29 @@
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-  
-  [self setNeedsDisplay:YES];
-  [self needsDisplay];
-  
-  NSPoint adjustedMousePosition = [self positionInsideObject:[theEvent locationInWindow]];
-  [(CanvasMainView *)self.superview moveObject:self with:adjustedMousePosition];
-  if ([(CanvasMainView *)self.superview isEditModeOn]) {
-    [self highlightObject:YES];
-    if ([theEvent clickCount] > 1) {
-      NSLog(@"Start Editing");
+  if (isLetMouseDown) {
+    NSPoint letOriginInCanvas = NSMakePoint(self.frame.origin.x + letMouseDown.frame.origin.x + NSMidX(letMouseDown.bounds),
+                                             self.frame.origin.y + letMouseDown.frame.origin.y + NSMidY(letMouseDown.bounds));
+    [(CanvasMainView *)self.superview startConnectionDrawing:letOriginInCanvas];
+  }
+  else {
+    NSLog(@"Object Mouse Down");
+    NSPoint adjustedMousePosition = [self positionInsideObject:[theEvent locationInWindow]];
+    [(CanvasMainView *)self.superview moveObject:self with:adjustedMousePosition];
+    if ([(CanvasMainView *)self.superview isEditModeOn]) {
+      [self highlightObject:YES];
+      if ([theEvent clickCount] > 1) {
+        NSLog(@"Start Editing");
+      }
     }
   }
 }
 
-- (void)letMouseDown:(NSPoint)location {
-  [(CanvasMainView *)self.superview startConnectionDrawing:location];
-}
 
 - (void)mouseDragged:(NSEvent *)theEvent {
-
-  [(CanvasMainView *)self.superview mouseDragged:theEvent];
+  
+  // call CanvasMainView mouse dragged event
+  [super mouseDragged:theEvent];
 }
 
 - (NSPoint)positionInsideObject:(NSPoint)fromEventPosition {

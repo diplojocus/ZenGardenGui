@@ -77,8 +77,14 @@
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-  NSPoint location = [theEvent locationInWindow];
-  [(ObjectView *)self.superview letMouseDown:location]; 
+  NSLog(@"LET MOUSE DOWN %@", self);
+  [(ObjectView *)self.superview setLetMouseDown:self withState:YES];
+  [super mouseDown:theEvent];
+}
+
+- (void)mouseUp:(NSEvent *)theEvent {
+  NSLog(@"LET MOUSE UP %@", self);
+
 }
 
 - (BOOL)isFlipped { return YES; }

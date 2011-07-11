@@ -15,6 +15,7 @@
 
 @implementation CanvasMainView
 
+@synthesize editToggleMenuItem;
 @synthesize isEditModeOn;
 
 - (id)initWithFrame:(NSRect)frame {
@@ -51,6 +52,13 @@
   [NSBezierPath strokeLineFromPoint:newConnectionStartPoint
                             toPoint:newConnectionEndPoint];
 
+  
+  /* draw connection path
+  [[NSColor blackColor] setStroke];
+  [NSBezierPath strokeLineFromPoint:newConnectionStartPoint
+                            toPoint:newConnectionEndPoint];
+  */
+  
   // draw existing connections
   /*
   for (ObjectView *objectView in arrayOfObjects) {
@@ -78,18 +86,11 @@
 - (void)toggleEditMode:(id)sender {
   isEditModeOn = !isEditModeOn;
   [sender setState:isEditModeOn ? NSOnState : NSOffState];
-  if (isEditModeOn) {
-    NSLog(@"Edit Mode");
-    for (ObjectView *object in arrayOfObjects) {
-      [object setTextFieldEditable:YES];
-    }
+  
+  for (ObjectView *object in arrayOfObjects) {
+    [object setTextFieldEditable:isEditModeOn];
   }
-  else {
-    NSLog(@"View Mode");
-    for (ObjectView *object in arrayOfObjects) {
-      [object setTextFieldEditable:NO];
-    }
-  }
+  
   [self setNeedsDisplay:YES];
   [self needsDisplay];
 }
@@ -131,6 +132,14 @@
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
+  
+  NSLog(@"MOUSE UP");
+  /* reset let mouse down selector
+  for (ObjectView *object in arrayOfObjects) {
+    [object setLetMouseDown:NO];
+  }
+  */
+  
   [self resetDrawingSelectors];
   NSPoint zeroPoint = NSMakePoint(0, 0);
   newConnectionStartPoint = zeroPoint;
@@ -138,6 +147,7 @@
   selectionStartPoint = zeroPoint;
   selectionRect = [self rectFromTwoPoints:selectionStartPoint toLocation:NSMakePoint(0, 0)];
   [self setNeedsDisplay:YES];
+  [self needsDisplay];
 
 }
 
@@ -145,9 +155,10 @@
   NSPoint mousePoint = [self invertYAxis:[theEvent locationInWindow]];
   if (isEditModeOn) {
     if (drawConnection) {
-      // draw connection 
+      // draw connection
       newConnectionEndPoint = mousePoint;
-      NSLog(@"Draw Connection");
+      [self setNeedsDisplay:YES];
+      [self needsDisplay];
       return;
     }
     else if (moveObject) {
@@ -161,6 +172,7 @@
       return;
     }
     else if (drawSelectionRectangle) {
+      NSLog(@"SELECTION");
       selectionRect = [self rectFromTwoPoints:selectionStartPoint toLocation:mousePoint];
       selectedObjectsCount = 0;
       for (ObjectView *anObject in arrayOfObjects) {
@@ -226,10 +238,7 @@
   // make sure edit mode is on 
   if (!isEditModeOn) {
     [self toggleEditMode:[self menu]];
-    NSInteger editMenuIndex = [[[self window] menu] indexOfItemWithTitle:@"Edit"];
-    NSMenuItem *editSubmenu = [[[self window] menu] itemAtIndex:editMenuIndex];
-    NSMenuItem *editItem = [[editSubmenu submenu] itemWithTitle:@"Edit"]; 
-    [editItem setState:NSOnState];
+    [editToggleMenuItem setState:NSOnState];
   }
   
   // Convert mouse location to view coordinates
@@ -249,11 +258,10 @@
   
   // If outside canvas view add object at default location
   else {
-    objectView = [[[ObjectView alloc] 
-                   initWithFrame:NSMakeRect(DEFAULT_OBJECT_ORIGIN_X,
-                                            DEFAULT_OBJECT_ORIGIN_Y,
-                                            DEFAULT_OBJECT_WIDTH,
-                                            DEFAULT_OBJECT_HEIGHT)] autorelease];
+    objectView = [[[ObjectView alloc] initWithFrame:NSMakeRect(DEFAULT_OBJECT_ORIGIN_X,
+                                                                       DEFAULT_OBJECT_ORIGIN_Y,
+                                                                       DEFAULT_OBJECT_WIDTH,
+                                                                       DEFAULT_OBJECT_HEIGHT)] autorelease];
     [self addSubview:objectView];
     [arrayOfObjects addObject:objectView];
   }
@@ -286,7 +294,7 @@
 
 - (void)startConnectionDrawing:(NSPoint)point {
   drawConnection = YES;
-  newConnectionStartPoint = [self invertYAxis:point];
+  newConnectionStartPoint = point;
 }
 
 @end
