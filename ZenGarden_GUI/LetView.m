@@ -12,20 +12,20 @@
 
 @implementation LetView
 
-- (id)initWithFrame:(NSRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-      
-      [self resetTrackingArea];
-      [[self window] setAcceptsMouseMovedEvents:YES];
-    }
-    
-    return self;
+- (id)initWithFrame:(NSRect)frame delegate:(NSObject<LetViewDelegate> *)aDelegate {
+  self = [super initWithFrame:frame];
+  if (self) {
+    delegate = [aDelegate retain];
+    [self resetTrackingArea];
+    [[self window] setAcceptsMouseMovedEvents:YES];
+  }
+  
+  return self;
 }
 
 - (void)dealloc {
-    [super dealloc];
+  [delegate dealloc];
+  [super dealloc];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -63,6 +63,14 @@
   [self addTrackingArea:letTrackingArea];
 }
 
+- (void)mouseDown:(NSEvent *)theEvent {
+  [delegate mouseDownOfLet:self];
+}
+
+- (void)mouseUp:(NSEvent *)theEvent {
+  [delegate mouseUpOfLet:self];
+}
+
 - (void)mouseEntered:(NSEvent *)theEvent {
   cursor = [NSCursor crosshairCursor];
 }
@@ -76,21 +84,10 @@
   [cursor set];
 }
 
-- (void)mouseDown:(NSEvent *)theEvent {
-  NSLog(@"LET MOUSE DOWN %@", self);
-  [(ObjectView *)self.superview setLetMouseDown:self withState:YES];
-  [super mouseDown:theEvent];
-}
-
-- (void)mouseUp:(NSEvent *)theEvent {
-  NSLog(@"LET MOUSE UP %@", self);
-
-}
-
 - (BOOL)isFlipped { return YES; }
 
 - (BOOL)acceptsFirstResponder { return YES; }
 
-- (BOOL)becomeFirstResponder { return YES; }
+//- (BOOL)becomeFirstResponder { return YES; }
 
 @end

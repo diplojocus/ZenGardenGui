@@ -12,7 +12,7 @@
 //#import "PdAudio.h"
 
 
-@interface CanvasMainView : NSView {
+@interface CanvasMainView : NSView <ObjectViewDelegate> {
 
   // Object
   ObjectView *objectView;
@@ -40,17 +40,28 @@
 @property (nonatomic, readonly) IBOutlet NSMenuItem *editToggleMenuItem;
 @property (nonatomic, readonly) BOOL isEditModeOn;
 
-- (IBAction)toggleEditMode:(id)sender;
-- (IBAction)removeObject:(id)sender;
 - (BOOL)isEditModeOn;
-- (IBAction)putObject:(id)sender;
+
+- (IBAction)toggleEditMode:(id)sender;
+
 - (IBAction)removeObject:(id)sender;
-- (NSPoint)invertYAxis:(NSPoint)point;
+
+- (IBAction)putObject:(id)sender;
+
+- (IBAction)removeObject:(id)sender;
+
 - (void)resetDrawingSelectors;
+
 - (void)moveObject:(ObjectView *)object with:(NSPoint)adjustedMousePosition;
+
 - (void)startConnectionDrawing:(NSPoint)point;
+
 - (void)drawBackground:(NSRect)rect;
+
 - (void)drawSelectionRectangle:(NSPoint)startPoint toLocation:(NSPoint)endPoint;
+
 - (NSRect)rectFromTwoPoints:(NSPoint)firstPoint toLocation:(NSPoint)secondPoint;
+
+- (NSPoint)invertYAxis:(NSPoint)point;
 
 @end

@@ -230,6 +230,9 @@
                     fabs(firstPoint.y - secondPoint.y));
 } 
 
+- (void)test {
+  NSLog(@"TEST");
+}
 
 #pragma mark - Object Drawing
 
@@ -247,21 +250,21 @@
   
   // If inside canvas view add object at mouse location
   if (NSPointInRect(viewLocation, [self bounds])) {
-    objectView = [[[ObjectView alloc] 
+    objectView = [[ObjectView alloc] 
                    initWithFrame:NSMakeRect(viewLocation.x - (DEFAULT_OBJECT_WIDTH / 2),
                                             viewLocation.y - (DEFAULT_OBJECT_HEIGHT / 2),
                                             DEFAULT_OBJECT_WIDTH,
-                                            DEFAULT_OBJECT_HEIGHT)] autorelease];
+                                            DEFAULT_OBJECT_HEIGHT) delegate:self];
     [self addSubview:objectView];
     [arrayOfObjects addObject:objectView];
   }
   
   // If outside canvas view add object at default location
   else {
-    objectView = [[[ObjectView alloc] initWithFrame:NSMakeRect(DEFAULT_OBJECT_ORIGIN_X,
+    objectView = [[ObjectView alloc] initWithFrame:NSMakeRect(DEFAULT_OBJECT_ORIGIN_X,
                                                                        DEFAULT_OBJECT_ORIGIN_Y,
                                                                        DEFAULT_OBJECT_WIDTH,
-                                                                       DEFAULT_OBJECT_HEIGHT)] autorelease];
+                                                                       DEFAULT_OBJECT_HEIGHT) delegate:self];
     [self addSubview:objectView];
     [arrayOfObjects addObject:objectView];
   }

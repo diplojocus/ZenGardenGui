@@ -8,19 +8,27 @@
 
 #import <Cocoa/Cocoa.h>
 
+@protocol LetViewDelegate
+
+- (void)mouseDownOfLet:(id)aLetView;
+- (void)mouseUpOfLet:(id)aLetView;
+
+@end
 
 @interface LetView : NSView {
-
+  
+  NSObject <LetViewDelegate> *delegate;
+  
   NSCursor *cursor;
   NSTrackingArea *letTrackingArea;
   NSMutableArray *connectionsArray;
   
   BOOL isSignal; // YES is Signal, NO is Message
   BOOL isInlet; // YES is Inlet, NO is Outlet
-    
 }
 
 - (void)drawBackground;
+
 - (void)resetTrackingArea;
 
 @end

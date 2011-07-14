@@ -16,35 +16,34 @@
 @synthesize isLetMouseDown;
 @synthesize isHighlighted;
 
-- (id)initWithFrame:(NSRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-      
-      [self addTextField:frame];
-      
-      
-      [self addObjectResizeTrackingRect:frame];
-      objectResizeTrackingArea = [[NSTrackingArea alloc] 
-                                          initWithRect:objectResizeTrackingRect
-                                          options: (NSTrackingMouseEnteredAndExited | 
-                                                    NSTrackingMouseMoved | 
-                                                    NSTrackingActiveInKeyWindow|
-                                                    NSTrackingCursorUpdate)
-                                                    owner:self userInfo:nil];
-      [self addTrackingArea:objectResizeTrackingArea];
-      [self highlightObject:NO];
-      
-      [self addLet:NSMakePoint(self.bounds.origin.x + 30 , 0) isInlet:YES isSignal:YES];
-      [self addLet:NSMakePoint(self.bounds.origin.x + 100 , 0) isInlet:YES isSignal:YES];
-      [self addLet:NSMakePoint(self.bounds.origin.x + 170 , 0) isInlet:YES isSignal:YES];
-      [self addLet:NSMakePoint(self.bounds.origin.x + 30 , self.bounds.size.height - 10)
-           isInlet:NO isSignal:YES];
-    }
+- (id)initWithFrame:(NSRect)frame delegate:(NSObject<ObjectViewDelegate> *)aDelegate {
+  self = [super initWithFrame:frame];
+  if (self) {
+    delegate = [aDelegate retain];
+    [self addTextField:frame];
+    [self addObjectResizeTrackingRect:frame];
+    objectResizeTrackingArea = [[NSTrackingArea alloc] 
+                                initWithRect:objectResizeTrackingRect
+                                options: (NSTrackingMouseEnteredAndExited | 
+                                          NSTrackingMouseMoved | 
+                                          NSTrackingActiveInKeyWindow|
+                                          NSTrackingCursorUpdate)
+                                owner:self userInfo:nil];
+    [self addTrackingArea:objectResizeTrackingArea];
+    [self highlightObject:NO];
     
-    return self;
+    // TODO(joewhite4): create lets dynamically based on ZenGarden callback
+    [self addLet:NSMakePoint(self.bounds.origin.x + 30 , 0) isInlet:YES isSignal:YES];
+    [self addLet:NSMakePoint(self.bounds.origin.x + 100 , 0) isInlet:YES isSignal:YES];
+    [self addLet:NSMakePoint(self.bounds.origin.x + 170 , 0) isInlet:YES isSignal:YES];
+    [self addLet:NSMakePoint(self.bounds.origin.x + 30 , self.bounds.size.height - 10)
+         isInlet:NO isSignal:YES];
+  }
+  return self;
 }
 
 - (void)dealloc {
+  [delegate release];
   [letView release];
   [textField release];
   [super dealloc];
@@ -64,7 +63,7 @@
 
 - (BOOL)acceptsFirstResponder { return YES; }
 
-- (BOOL)becomeFirstResponder { return YES; }
+//- (BOOL)becomeFirstResponder { return YES; }
 
 
 #pragma mark - Background Drawing
@@ -106,7 +105,7 @@
   
   NSRect letRect = NSMakeRect(letOrigin.x, letOrigin.y, 30, 10);
   
-  letView = [[LetView alloc] initWithFrame:letRect];
+  letView = [[LetView alloc] initWithFrame:letRect delegate:self];
   [self addSubview:letView];
   [letArray addObject:letView];
   [letView release];
@@ -117,6 +116,14 @@
   isLetMouseDown = state;
 }
 
+- (void)mouseDownOfLet:(id)aLetView {
+  NSLog(@"Let Mouse Down: %@", aLetView);
+}
+
+- (void)mouseUpOfLet:(id)aLetView {
+  NSLog(@"Let Mouse Up: %@", aLetView);
+}
+
 #pragma mark - TextField & Events
 
 - (void)addTextField:(NSRect)rect {
@@ -124,7 +131,6 @@
                                                             rect.origin.y + 30,
                                                             30,
                                                             rect.size.height - 60)];
-  
   [textField setEditable:YES];
   [textField setSelectable:YES];
   [textField setBezeled:NO];
