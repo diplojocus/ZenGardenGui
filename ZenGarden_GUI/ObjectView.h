@@ -8,8 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "LetView.h"
+#import "ZenGarden.h"
+
+//@class ZGObject;
 
 @protocol ObjectViewDelegate
+
+- (ZGObject *)addNewObjectToGraphWithInitString:(NSString *)initString withLocation:(NSPoint)location;
 
 @end
 
@@ -38,6 +43,9 @@
   // Background
   BOOL isHighlighted;
   NSColor *backgroundColour;
+  
+  // ZenGarden
+  ZGObject *zgObject;
 }
 
 @property (nonatomic, readonly) NSMutableArray *letArray;

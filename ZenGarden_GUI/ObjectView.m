@@ -32,12 +32,7 @@
     [self addTrackingArea:objectResizeTrackingArea];
     [self highlightObject:NO];
     
-    // TODO(joewhite4): create lets dynamically based on ZenGarden callback
-    [self addLet:NSMakePoint(self.bounds.origin.x + 30 , 0) isInlet:YES isSignal:YES];
-    [self addLet:NSMakePoint(self.bounds.origin.x + 100 , 0) isInlet:YES isSignal:YES];
-    [self addLet:NSMakePoint(self.bounds.origin.x + 170 , 0) isInlet:YES isSignal:YES];
-    [self addLet:NSMakePoint(self.bounds.origin.x + 30 , self.bounds.size.height - 10)
-         isInlet:NO isSignal:YES];
+    zgObject = NULL;
   }
   return self;
 }
@@ -62,8 +57,6 @@
 - (BOOL)isFlipped { return YES; }
 
 - (BOOL)acceptsFirstResponder { return YES; }
-
-//- (BOOL)becomeFirstResponder { return YES; }
 
 
 #pragma mark - Background Drawing
@@ -155,9 +148,29 @@
 }
 
 - (void)controlTextDidEndEditing:(NSNotification *)obj {
-  NSLog(@"TEXT END EDITING");
-  NSString *textValue = [textField stringValue];
-  NSLog(@"%@", textValue);
+  NSLog(@"TEXT END EDITING"); 
+  
+  // remove letViews
+  // remove Object
+  
+  // instantiate zgObject
+  zgObject = [delegate addNewObjectToGraphWithInitString:[textField stringValue]
+                                                          withLocation:self.frame.origin];
+  if (zgObject == NULL) {
+    NSLog(@"zgObject could not be created.");
+  } else {
+    NSLog(@"good to go.");
+    
+    // create inlets
+    for (int i = 0; i < zg_get_num_inlets(zgObject); i++) {
+      [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, 0) isInlet:YES isSignal:YES];
+    }
+    // create outlets
+    for (int i = 0; i < zg_get_num_outlets(zgObject); i++) {
+      [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, self.bounds.size.height - 10) isInlet:NO isSignal:YES];
+    }
+ 
+  }
   
   [self highlightObject:NO];
 }
