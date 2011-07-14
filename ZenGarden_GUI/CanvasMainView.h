@@ -8,8 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import "ObjectView.h"
-//#import "ZenGarden.h"
-//#import "PdAudio.h"
+#import "ZenGarden.h"
+#import "PdAudio.h"
 
 
 @interface CanvasMainView : NSView <ObjectViewDelegate> {
@@ -35,10 +35,16 @@
   BOOL drawConnection;
   
   NSMenuItem *editToggleMenuItem;
+  
+  // ZenGarden/PdAudio
+  ZGGraph *zgGraph;
+  PdAudio *pdAudio;
 }
 
 @property (nonatomic, readonly) IBOutlet NSMenuItem *editToggleMenuItem;
 @property (nonatomic, readonly) BOOL isEditModeOn;
+@property (nonatomic, readonly) ZGGraph *zgGraph;
+@property (nonatomic, readonly) ZGContext *zgContext;
 
 - (BOOL)isEditModeOn;
 

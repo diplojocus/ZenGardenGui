@@ -17,10 +17,38 @@
 
 @synthesize editToggleMenuItem;
 @synthesize isEditModeOn;
+@synthesize zgGraph;
+@synthesize zgContext;
+
+// C function
+void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) {
+  switch (function) {
+    case ZG_PRINT_STD: {
+      NSLog(@"%s", ptr);
+      break;
+    }
+    case ZG_PRINT_ERR: {
+      NSLog(@"ERROR: %s", ptr);
+      break;
+    }
+    default: {
+      NSLog(@"unknown ZGCallbackFunction received: %i", function);
+      break;
+    }
+  }
+}
 
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+      pdAudio = [[PdAudio alloc] initWithInputChannels:0 OutputChannels:2 blockSize:256
+                                         andSampleRate:44100.0];
+      [pdAudio play];
+      
+      zgGraph  = zg_new_empty_graph(pdAudio.zgContext);
+      zg_attach_graph(pdAudio.zgContext, zgGraph);
+
+      
       arrayOfObjects = [[NSMutableArray alloc] init];
       isEditModeOn = NO;
       [self resetDrawingSelectors];
@@ -73,6 +101,18 @@
     }
   } */
   
+}
+
+- (ZGContext *)zgContext {
+  return pdAudio.zgContext;
+}
+
+- (ZGObject *)addNewObjectToGraphWithInitString:(NSString *)initString withLocation:(NSPoint)location {
+  ZGObject *zgObject = zg_new_object(pdAudio.zgContext, zgGraph, (char *) [initString cStringUsingEncoding:NSASCIIStringEncoding]);
+  if (zgObject != NULL) {
+    zg_add_object(zgGraph, zgObject, (int) location.x, (int) location.y);
+  }
+  return zgObject;
 }
 
 - (void)awakeFromNib {
