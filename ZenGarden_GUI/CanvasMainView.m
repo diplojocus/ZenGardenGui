@@ -314,6 +314,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   // Removes all highlighted objects
   for (ObjectView *object in arrayOfObjects) {
     if ([object isHighlighted]) {
+      [object removeZGObjectFromZGGraph:zgGraph];
       [object removeFromSuperview];
     }
   }

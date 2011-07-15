@@ -26,7 +26,7 @@
   // Lets
   float numberOfInlets;
   float numberOfOutlets;
-  LetView *letView;
+  //LetView *letView;
   LetView *letMouseDown;
   NSMutableArray *letArray;
   
@@ -34,6 +34,8 @@
   
   // Textfield
   NSTextField *textField;
+  BOOL didTextChange;
+  BOOL isObjectNew;
   
   // Tracking Rectangles
   NSRect objectResizeTrackingRect;
@@ -69,5 +71,7 @@
 - (void)addObjectResizeTrackingRect:(NSRect)rect;
 
 - (NSPoint)positionInsideObject:(NSPoint)fromEventPosition;
+
+- (void)removeZGObjectFromZGGraph:(ZGGraph *)graph;
 
 @end

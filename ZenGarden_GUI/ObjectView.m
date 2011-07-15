@@ -20,6 +20,7 @@
   self = [super initWithFrame:frame];
   if (self) {
     delegate = [aDelegate retain];
+    letArray = [[NSMutableArray alloc] init];
     [self addTextField:frame];
     [self addObjectResizeTrackingRect:frame];
     objectResizeTrackingArea = [[NSTrackingArea alloc] 
@@ -32,6 +33,8 @@
     [self addTrackingArea:objectResizeTrackingArea];
     [self highlightObject:NO];
     
+    isObjectNew = YES;
+    didTextChange = NO;
     zgObject = NULL;
   }
   return self;
@@ -39,7 +42,7 @@
 
 - (void)dealloc {
   [delegate release];
-  [letView release];
+  [LetView release];
   [textField release];
   [super dealloc];
 }
@@ -98,10 +101,9 @@
   
   NSRect letRect = NSMakeRect(letOrigin.x, letOrigin.y, 30, 10);
   
-  letView = [[LetView alloc] initWithFrame:letRect delegate:self];
-  [self addSubview:letView];
-  [letArray addObject:letView];
-  [letView release];
+  LetView *aLetView = [[LetView alloc] initWithFrame:letRect delegate:self];
+  [self addSubview:aLetView];
+  [letArray addObject:aLetView];
 }
 
 - (void)setLetMouseDown:(LetView *)let withState:(BOOL)state {
@@ -134,7 +136,6 @@
 - (void)setTextFieldEditable:(BOOL)state {
   [textField setEditable:state];
   [textField setSelectable:state];
-  NSLog(@"%d", state);
 }
 
 - (void)controlTextDidBeginEditing:(NSNotification *)obj {
@@ -143,36 +144,42 @@
 }
 
 - (void)controlTextDidChange:(NSNotification *)obj {
-  NSLog(@"TEXT CHANGE");
+  
+  if (!isObjectNew) {
+    didTextChange = YES;
+  }
   [textField sizeToFit];
 }
 
 - (void)controlTextDidEndEditing:(NSNotification *)obj {
-  NSLog(@"TEXT END EDITING"); 
   
-  // remove letViews
-  // remove Object
-  
-  // instantiate zgObject
+  // if textfield changes reinstantiate object 
+  if (didTextChange) {
+    [self removeZGObjectFromZGGraph:[(CanvasMainView *)self.superview zgGraph]];
+    for (LetView *aLetView in letArray) {
+      [aLetView removeFromSuperview];
+    }
+    [letArray removeAllObjects];
+    didTextChange = NO;
+  }
+  // Add zgObject
   zgObject = [delegate addNewObjectToGraphWithInitString:[textField stringValue]
-                                                          withLocation:self.frame.origin];
+                                            withLocation:self.frame.origin];
   if (zgObject == NULL) {
     NSLog(@"zgObject could not be created.");
   } else {
-    NSLog(@"good to go.");
-    
-    // create inlets
+    // Add inlets
     for (int i = 0; i < zg_get_num_inlets(zgObject); i++) {
       [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, 0) isInlet:YES isSignal:YES];
     }
-    // create outlets
+    // Add outlets
     for (int i = 0; i < zg_get_num_outlets(zgObject); i++) {
       [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, self.bounds.size.height - 10) isInlet:NO isSignal:YES];
     }
- 
   }
-  
+  isObjectNew = NO;
   [self highlightObject:NO];
+  
 }
 
 
@@ -218,13 +225,13 @@
     [(CanvasMainView *)self.superview startConnectionDrawing:letOriginInCanvas];
   }
   else {
+    // (joewhite4) Not totally sure if this is needed anymore
     NSLog(@"Object Mouse Down");
     NSPoint adjustedMousePosition = [self positionInsideObject:[theEvent locationInWindow]];
     [(CanvasMainView *)self.superview moveObject:self with:adjustedMousePosition];
     if ([(CanvasMainView *)self.superview isEditModeOn]) {
       [self highlightObject:YES];
       if ([theEvent clickCount] > 1) {
-        NSLog(@"Start Editing");
       }
     }
   }
@@ -232,7 +239,6 @@
 
 
 - (void)mouseDragged:(NSEvent *)theEvent {
-  
   // call CanvasMainView mouse dragged event
   [super mouseDragged:theEvent];
 }
@@ -242,6 +248,17 @@
                                        [(CanvasMainView *)self.superview frame].size.height - 
                                        fromEventPosition.y - self.frame.origin.y);
   return convertedPoint;
+}
+
+#pragma mark - ZenGarden Objects
+
+- (void)removeZGObjectFromZGGraph:(ZGGraph *)graph {
+  if (zgObject != NULL) {
+    //zg_remove_object(graph, zgObject);
+  }
+  else {
+    NSLog(@"No ZGObject to remove");
+  }
 }
 
 @end

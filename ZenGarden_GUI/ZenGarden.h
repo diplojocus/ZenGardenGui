@@ -44,11 +44,6 @@ extern "C" {
   typedef void ZGObject;
 #endif
   
-typedef struct ObjectLetPair {
-  ZGObject *object;
-  unsigned int index;
-} ObjectLetPair;
-  
   
 #pragma mark - New Context/Graph/Object
   
@@ -120,11 +115,6 @@ typedef struct ObjectLetPair {
   
   /** Returns the ConnectionType of the outlet of the given object. */
   ConnectionType zg_get_connection_type(ZGObject *object, unsigned int outletIndex);
-  
-  /**
-   *
-   */
-  ObjectLetPair *zg_get_connected_objects_from_outlet(ZGObject *object, unsigned int outletIndex, unsigned int *n);
   
   unsigned int zg_get_num_inlets(ZGObject *object);
   
