@@ -12,15 +12,18 @@
 
 @implementation ObjectView
 
-@synthesize letArray;
+@synthesize inletArray;
+@synthesize outletArray;
 @synthesize isLetMouseDown;
 @synthesize isHighlighted;
+@synthesize zgObject;
 
 - (id)initWithFrame:(NSRect)frame delegate:(NSObject<ObjectViewDelegate> *)aDelegate {
   self = [super initWithFrame:frame];
   if (self) {
     delegate = [aDelegate retain];
-    letArray = [[NSMutableArray alloc] init];
+    inletArray = [[NSMutableArray alloc] init];
+    outletArray = [[NSMutableArray alloc] init];    
     [self addTextField:frame];
     [self addObjectResizeTrackingRect:frame];
     objectResizeTrackingArea = [[NSTrackingArea alloc] 
@@ -53,7 +56,7 @@
                                  self.bounds.origin.y + 30,
                                  self.bounds.size.width - 60,
                                  self.bounds.size.height - 60)];
-
+  
   [self drawBackground:self.bounds];
 }
 
@@ -97,26 +100,20 @@
 
 #pragma mark - Let drawing
 
-- (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal {
+- (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet {
   
   NSRect letRect = NSMakeRect(letOrigin.x, letOrigin.y, 30, 10);
   
   LetView *aLetView = [[LetView alloc] initWithFrame:letRect delegate:self];
   [self addSubview:aLetView];
-  [letArray addObject:aLetView];
-}
-
-- (void)setLetMouseDown:(LetView *)let withState:(BOOL)state {
-  letMouseDown = let;
-  isLetMouseDown = state;
-}
-
-- (void)mouseDownOfLet:(id)aLetView {
-  NSLog(@"Let Mouse Down: %@", aLetView);
-}
-
-- (void)mouseUpOfLet:(id)aLetView {
-  NSLog(@"Let Mouse Up: %@", aLetView);
+  
+  aLetView.isInlet = isInlet;
+  if (isInlet) {
+    [inletArray addObject:aLetView]; 
+  }
+  else {
+    [outletArray addObject:aLetView];
+  }
 }
 
 #pragma mark - TextField & Events
@@ -156,10 +153,14 @@
   // if textfield changes reinstantiate object 
   if (didTextChange) {
     [self removeZGObjectFromZGGraph:[(CanvasMainView *)self.superview zgGraph]];
-    for (LetView *aLetView in letArray) {
+    for (LetView *aLetView in inletArray) {
       [aLetView removeFromSuperview];
     }
-    [letArray removeAllObjects];
+    for (LetView *aLetView in outletArray) {
+      [aLetView removeFromSuperview];
+    }
+    [inletArray removeAllObjects];
+    [outletArray removeAllObjects];
     didTextChange = NO;
   }
   // Add zgObject
@@ -170,20 +171,26 @@
   } else {
     // Add inlets
     for (int i = 0; i < zg_get_num_inlets(zgObject); i++) {
-      [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, 0) isInlet:YES isSignal:YES];
+      [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, 0) isInlet:YES];
     }
     // Add outlets
     for (int i = 0; i < zg_get_num_outlets(zgObject); i++) {
-      [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, self.bounds.size.height - 10) isInlet:NO isSignal:YES];
+      [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, self.bounds.size.height - 10) isInlet:NO];
     }
   }
   isObjectNew = NO;
   [self highlightObject:NO];
-  
 }
 
 
 #pragma mark - Mouse events
+
+- (NSPoint)positionInsideObject:(NSPoint)fromEventPosition {
+  NSPoint convertedPoint = NSMakePoint(fromEventPosition.x - self.frame.origin.x,
+                                       [(CanvasMainView *)self.superview frame].size.height - 
+                                       fromEventPosition.y - self.frame.origin.y);
+  return convertedPoint;
+}
 
 - (void)addObjectResizeTrackingRect:(NSRect)rect {
   objectResizeTrackingRect = NSMakeRect(self.frame.size.width - 10, 20,
@@ -219,40 +226,40 @@
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-  if (isLetMouseDown) {
-    NSPoint letOriginInCanvas = NSMakePoint(self.frame.origin.x + letMouseDown.frame.origin.x + NSMidX(letMouseDown.bounds),
-                                             self.frame.origin.y + letMouseDown.frame.origin.y + NSMidY(letMouseDown.bounds));
-    [(CanvasMainView *)self.superview startConnectionDrawing:letOriginInCanvas];
+  // Only works in edit mode
+  if ([(CanvasMainView *)self.superview isEditModeOn]) {
+    // Highlight object
+    [self highlightObject:YES];
   }
-  else {
-    // (joewhite4) Not totally sure if this is needed anymore
-    NSLog(@"Object Mouse Down");
-    NSPoint adjustedMousePosition = [self positionInsideObject:[theEvent locationInWindow]];
-    [(CanvasMainView *)self.superview moveObject:self with:adjustedMousePosition];
-    if ([(CanvasMainView *)self.superview isEditModeOn]) {
-      [self highlightObject:YES];
-      if ([theEvent clickCount] > 1) {
-      }
-    }
-  }
+  // Adjust mouse position when dragging to keep it in place relative to the object
+  NSPoint adjustedMousePosition = [self positionInsideObject:[theEvent locationInWindow]];
+  [(CanvasMainView *)self.superview moveObject:self with:adjustedMousePosition];
 }
 
-
 - (void)mouseDragged:(NSEvent *)theEvent {
-  // call CanvasMainView mouse dragged event
+  // Call CanvasMainView mouse dragged event
   [super mouseDragged:theEvent];
 }
 
-- (NSPoint)positionInsideObject:(NSPoint)fromEventPosition {
-  NSPoint convertedPoint = NSMakePoint(fromEventPosition.x - self.frame.origin.x,
-                                       [(CanvasMainView *)self.superview frame].size.height - 
-                                       fromEventPosition.y - self.frame.origin.y);
-  return convertedPoint;
+
+#pragma mark - Let Events
+
+- (void)mouseDownOfLet:(id)aLetView {
+  [delegate startNewConnectionDrawingFromLet:aLetView];
+}
+
+- (void)mouseDraggedOfLetWithEvent:(NSEvent *)theEvent {
+  [delegate setNewConnectionEndPointFromEvent:theEvent];
+}
+
+- (void)mouseUpOfLet:(id)aLetView withEvent:(NSEvent *)theEvent {
+  [delegate endNewConnectionDrawingFromLet:aLetView withEvent:theEvent];
 }
 
 #pragma mark - ZenGarden Objects
 
 - (void)removeZGObjectFromZGGraph:(ZGGraph *)graph {
+  // TODO(joewhite4): Make sure ZenGarden is properly deleting objects
   if (zgObject != NULL) {
     //zg_remove_object(graph, zgObject);
   }

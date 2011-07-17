@@ -47,13 +47,11 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
       
       zgGraph  = zg_new_empty_graph(pdAudio.zgContext);
       zg_attach_graph(pdAudio.zgContext, zgGraph);
-
       
       arrayOfObjects = [[NSMutableArray alloc] init];
       isEditModeOn = NO;
       [self resetDrawingSelectors];
-      newConnectionStartPoint = NSMakePoint(0, 0);
-      newConnectionEndPoint = NSMakePoint(0, 0);
+      [self resetNewConnection];
     }
     return self;
 }
@@ -71,21 +69,18 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   selectionPath = [NSBezierPath bezierPathWithRect:selectionRect];
   NSColor *theSelectionColor = [NSColor blackColor];
   CGFloat selectionDashArray[2] = { 5.0, 2.0 };
+  [selectionPath setLineWidth:1];
   [selectionPath setLineDash: selectionDashArray count: 2 phase: 0.0];
   [theSelectionColor setStroke];
   [selectionPath stroke];
   
   // draw connection path
-  [[NSColor blackColor] setStroke];
-  [NSBezierPath strokeLineFromPoint:newConnectionStartPoint
-                            toPoint:newConnectionEndPoint];
-
-  
-  /* draw connection path
-  [[NSColor blackColor] setStroke];
-  [NSBezierPath strokeLineFromPoint:newConnectionStartPoint
-                            toPoint:newConnectionEndPoint];
-  */
+  if (drawNewConnection) {
+    [[NSColor blackColor] setStroke];
+    [NSBezierPath setDefaultLineWidth:newConnectionLineWidth];
+    [NSBezierPath strokeLineFromPoint:newConnectionStartPoint
+                              toPoint:newConnectionEndPoint];
+  }
   
   // draw existing connections
   /*
@@ -130,7 +125,6 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   for (ObjectView *object in arrayOfObjects) {
     [object setTextFieldEditable:isEditModeOn];
   }
-  
   [self setNeedsDisplay:YES];
   [self needsDisplay];
 }
@@ -181,10 +175,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   */
   
   [self resetDrawingSelectors];
-  NSPoint zeroPoint = NSMakePoint(0, 0);
-  newConnectionStartPoint = zeroPoint;
-  newConnectionEndPoint = zeroPoint;
-  selectionStartPoint = zeroPoint;
+  selectionStartPoint = NSMakePoint(0, 0);
   selectionRect = [self rectFromTwoPoints:selectionStartPoint toLocation:NSMakePoint(0, 0)];
   [self setNeedsDisplay:YES];
   [self needsDisplay];
@@ -192,17 +183,10 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent {
+  NSLog(@"Canvas Mouse Dragged");
   NSPoint mousePoint = [self invertYAxis:[theEvent locationInWindow]];
   if (isEditModeOn) {
-    if (drawConnection) {
-      // draw connection
-      newConnectionEndPoint = mousePoint;
-      [self setNeedsDisplay:YES];
-      [self needsDisplay];
-      return;
-    }
-    else if (moveObject) {
-      // move object
+    if (moveObject) {
       [objectToMove setFrameOrigin:NSMakePoint(mousePoint.x - mousePositionInsideObject.x,
                                                mousePoint.y - mousePositionInsideObject.y)]; 
       return;
@@ -212,7 +196,6 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
       return;
     }
     else if (drawSelectionRectangle) {
-      NSLog(@"SELECTION");
       selectionRect = [self rectFromTwoPoints:selectionStartPoint toLocation:mousePoint];
       selectedObjectsCount = 0;
       for (ObjectView *anObject in arrayOfObjects) {
@@ -223,15 +206,14 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
         else {
           [(ObjectView *)anObject highlightObject:NO];
         }
-        [self setNeedsDisplay:YES];
       }
+      [self setNeedsDisplay:YES];
       return;
     }
   }
 }
 
 - (void)resetDrawingSelectors {
-  drawConnection = NO;
   drawSelectionRectangle = NO;
   resizeObject = NO;
   moveObject = NO;
@@ -270,20 +252,15 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
                     fabs(firstPoint.y - secondPoint.y));
 } 
 
-- (void)test {
-  NSLog(@"TEST");
-}
 
 #pragma mark - Object Drawing
 
 -(IBAction)putObject:(id)sender {
-  
   // make sure edit mode is on 
   if (!isEditModeOn) {
     [self toggleEditMode:[self menu]];
     [editToggleMenuItem setState:NSOnState];
   }
-  
   // Convert mouse location to view coordinates
   NSPoint mouseLocation = [[self window] convertScreenToBase:[NSEvent mouseLocation]];
   NSPoint viewLocation = [self convertPoint:mouseLocation fromView:nil];
@@ -298,7 +275,6 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
     [self addSubview:objectView];
     [arrayOfObjects addObject:objectView];
   }
-  
   // If outside canvas view add object at default location
   else {
     objectView = [[ObjectView alloc] initWithFrame:NSMakeRect(DEFAULT_OBJECT_ORIGIN_X,
@@ -336,9 +312,93 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 
 #pragma mark - Connection Drawing
 
-- (void)startConnectionDrawing:(NSPoint)point {
-  drawConnection = YES;
-  newConnectionStartPoint = point;
+- (void)startNewConnectionDrawingFromLet:(LetView *)aLetView {
+  
+  ObjectView *fromObject = (ObjectView *)aLetView.superview;
+  
+  // Set a thicker line for signal connections
+  if (zg_get_connection_type([fromObject zgObject], (unsigned int) [[fromObject outletArray] indexOfObject:aLetView]) == DSP) {
+    newConnectionLineWidth = 3;
+  }
+  else {
+    newConnectionLineWidth = 1;
+  }
+
+  // Start connection drawing from mid point of let view
+  newConnectionStartPoint = NSMakePoint([fromObject frame].origin.x + [aLetView frame].origin.x + NSMidX([aLetView bounds]),
+                                        [fromObject frame].origin.y + [aLetView frame].origin.y + NSMidY([aLetView bounds]));
+  drawNewConnection = YES;
+}
+
+- (void)setNewConnectionEndPointFromEvent:(NSEvent *)theEvent {
+  
+  newConnectionEndPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+  for (ObjectView *anObject in arrayOfObjects) {
+    for (LetView *aLetView in anObject.inletArray) {
+      if (NSPointInRect(newConnectionEndPoint, [self convertRect:[aLetView bounds] fromView:aLetView])) {
+        // Inlet!
+        newConnectionEndPoint = NSMakePoint([anObject frame].origin.x + [aLetView frame].origin.x + NSMidX([aLetView bounds]),
+                                              [anObject frame].origin.y + [aLetView frame].origin.y + NSMidY([aLetView bounds]));
+      }
+      else {
+        // Not an inlet     
+      }
+    }
+  }
+  [self setNeedsDisplay:YES];
+  [self needsDisplay];
+}
+
+- (void)endNewConnectionDrawingFromLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent {
+  
+  ObjectView *fromObject = (ObjectView *)aLetView.superview;
+  ObjectView *toObject = nil;
+  LetView *toLetView = nil;
+  
+  newConnectionEndPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+  for (ObjectView *anObject in arrayOfObjects) {
+    for (LetView *aLetView in anObject.inletArray) {
+      if (NSPointInRect(newConnectionEndPoint, [self convertRect:[aLetView bounds] fromView:aLetView])) {
+        // Inlet!
+        NSLog(@"Inlet!");
+        toObject = anObject;
+        toLetView = aLetView;
+        newConnectionEndPoint = NSMakePoint([anObject frame].origin.x + [aLetView frame].origin.x + NSMidX([aLetView bounds]),
+                                            [anObject frame].origin.y + [aLetView frame].origin.y + NSMidY([aLetView bounds]));
+      }
+      else {
+        // Not an inlet
+        NSLog(@"Not an inlet!");        
+      }
+    }
+  }
+  if (toLetView != nil) { 
+    /*
+    Bad access on zgObjects?
+     
+    NSLog(@"Add Connection");
+    NSLog(@"fromObject %@", [fromObject zgObject]);
+    NSLog(@"fromOutletIndex %u", (unsigned int) [[fromObject outletArray] indexOfObject:aLetView]);
+    NSLog(@"toObject %@", [toObject zgObject]);
+    NSLog(@"toOutletIndex %@", (unsigned int) [[toObject outletArray] indexOfObject:toLetView]);
+    
+    zg_add_connection(zgGraph,
+                      [fromObject zgObject], (unsigned int) [[fromObject outletArray] indexOfObject:aLetView],
+                      [toObject zgObject], (unsigned int) [[toObject outletArray] indexOfObject:toLetView]);
+     */
+  }
+  else {
+    [self resetNewConnection];
+  }
+  [self setNeedsDisplay:YES];
+  [self needsDisplay];
+}
+
+- (void)resetNewConnection { 
+  drawNewConnection = NO;
+  newConnectionEndPoint = NSMakePoint(0, 0);
+  newConnectionStartPoint = NSMakePoint(0 , 0);
+  newConnectionLineWidth = 1;
 }
 
 @end

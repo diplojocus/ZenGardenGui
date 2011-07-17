@@ -10,11 +10,16 @@
 #import "LetView.h"
 #import "ZenGarden.h"
 
-//@class ZGObject;
 
 @protocol ObjectViewDelegate
 
 - (ZGObject *)addNewObjectToGraphWithInitString:(NSString *)initString withLocation:(NSPoint)location;
+
+- (void)startNewConnectionDrawingFromLet:(LetView *)aLetView;;
+
+- (void)setNewConnectionEndPointFromEvent:(NSEvent *)theEvent;
+
+- (void)endNewConnectionDrawingFromLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent;
 
 @end
 
@@ -26,9 +31,8 @@
   // Lets
   float numberOfInlets;
   float numberOfOutlets;
-  //LetView *letView;
-  LetView *letMouseDown;
-  NSMutableArray *letArray;
+  NSMutableArray *inletArray;
+  NSMutableArray *outletArray;
   
   BOOL isLetMouseDown;
   
@@ -50,9 +54,11 @@
   ZGObject *zgObject;
 }
 
-@property (nonatomic, readonly) NSMutableArray *letArray;
+@property (nonatomic, readonly) NSMutableArray *inletArray;
+@property (nonatomic, readonly) NSMutableArray *outletArray;
 @property (nonatomic, readonly) BOOL isHighlighted;
 @property (nonatomic, readonly) BOOL isLetMouseDown;
+@property (nonatomic, readonly) ZGObject *zgObject;
 
 - (id)initWithFrame:(NSRect)frame delegate:(NSObject<ObjectViewDelegate> *)aDelegate;
 
@@ -64,9 +70,7 @@
 
 - (void)setTextFieldEditable:(BOOL)state;
 
-- (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet isSignal:(BOOL)isSignal;
-
-- (void)setLetMouseDown:(LetView *)let withState:(BOOL)state;
+- (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet;
 
 - (void)addObjectResizeTrackingRect:(NSRect)rect;
 

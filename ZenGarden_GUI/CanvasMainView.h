@@ -30,9 +30,10 @@
   int selectedObjectsCount;
   
   // Connections
+  float newConnectionLineWidth;
   NSPoint newConnectionStartPoint;
   NSPoint newConnectionEndPoint;
-  BOOL drawConnection;
+  BOOL drawNewConnection;
   
   NSMenuItem *editToggleMenuItem;
   
@@ -60,8 +61,6 @@
 
 - (void)moveObject:(ObjectView *)object with:(NSPoint)adjustedMousePosition;
 
-- (void)startConnectionDrawing:(NSPoint)point;
-
 - (void)drawBackground:(NSRect)rect;
 
 - (void)drawSelectionRectangle:(NSPoint)startPoint toLocation:(NSPoint)endPoint;
@@ -69,5 +68,7 @@
 - (NSRect)rectFromTwoPoints:(NSPoint)firstPoint toLocation:(NSPoint)secondPoint;
 
 - (NSPoint)invertYAxis:(NSPoint)point;
+
+- (void)resetNewConnection;
 
 @end

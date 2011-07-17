@@ -9,8 +9,9 @@
 #import "LetView.h"
 #import "ObjectView.h"
 
-
 @implementation LetView
+
+@synthesize isInlet;
 
 - (id)initWithFrame:(NSRect)frame delegate:(NSObject<LetViewDelegate> *)aDelegate {
   self = [super initWithFrame:frame];
@@ -33,6 +34,8 @@
   [self drawBackground];
 
 }
+
+- (BOOL)isFlipped { return YES; }
 
 - (void)drawBackground {
   
@@ -64,11 +67,21 @@
 }
 
 - (void)mouseDown:(NSEvent *)theEvent {
-  [delegate mouseDownOfLet:self];
+  if (!isInlet) {
+    [delegate mouseDownOfLet:self];
+  }
+}
+
+- (void)mouseDragged:(NSEvent *)theEvent {
+  if (!isInlet) {
+    [delegate mouseDraggedOfLetWithEvent:theEvent];
+  }
 }
 
 - (void)mouseUp:(NSEvent *)theEvent {
-  [delegate mouseUpOfLet:self];
+  if (!isInlet) {
+    [delegate mouseUpOfLet:self withEvent:theEvent];
+  }
 }
 
 - (void)mouseEntered:(NSEvent *)theEvent {
@@ -83,9 +96,5 @@
 - (void)cursorUpdate:(NSEvent *)event {
   [cursor set];
 }
-
-- (BOOL)isFlipped { return YES; }
-
-- (BOOL)acceptsFirstResponder { return YES; }
 
 @end
