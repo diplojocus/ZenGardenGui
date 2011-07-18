@@ -12,11 +12,13 @@
 @implementation LetView
 
 @synthesize isInlet;
+@synthesize isHighlighted;
 
 - (id)initWithFrame:(NSRect)frame delegate:(NSObject<LetViewDelegate> *)aDelegate {
   self = [super initWithFrame:frame];
   if (self) {
     delegate = [aDelegate retain];
+    isHighlighted = NO;
     [self resetTrackingArea];
     [[self window] setAcceptsMouseMovedEvents:YES];
   }
@@ -42,7 +44,13 @@
   NSRect letRect = NSMakeRect(self.bounds.origin.x, self.bounds.origin.y, 30, 10);
   
   NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:letRect xRadius:2 yRadius:2];
-  [[NSColor blackColor] setFill];
+  
+  if (isHighlighted) {
+    [[NSColor redColor] setFill];
+  }
+  else {
+    [[NSColor blackColor] setFill];
+  }
   [path fill];
 }
 
@@ -74,7 +82,7 @@
 
 - (void)mouseDragged:(NSEvent *)theEvent {
   if (!isInlet) {
-    [delegate mouseDraggedOfLetWithEvent:theEvent];
+    [delegate mouseDraggedOfLet:self withEvent:theEvent];
   }
 }
 
