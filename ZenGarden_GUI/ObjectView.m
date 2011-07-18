@@ -24,10 +24,6 @@
     delegate = [aDelegate retain];
     inletArray = [[NSMutableArray alloc] init];
     outletArray = [[NSMutableArray alloc] init];    
-    isObjectNew = YES;
-    didTextChange = NO;
-    zgObject = NULL;
-    
     [self addTextField:frame];
     [self addObjectResizeTrackingRect:frame];
     objectResizeTrackingArea = [[NSTrackingArea alloc] 
@@ -39,6 +35,10 @@
                                 owner:self userInfo:nil];
     [self addTrackingArea:objectResizeTrackingArea];
     [self highlightObject:NO];
+    
+    isObjectNew = YES;
+    didTextChange = NO;
+    zgObject = NULL;
   }
   return self;
 }
@@ -136,6 +136,7 @@
 }
 
 - (void)controlTextDidBeginEditing:(NSNotification *)obj {
+  NSLog(@"TEXT BEGIN EDITING");
   [self highlightObject:YES];
 }
 
@@ -168,6 +169,7 @@
   if (zgObject == NULL) {
     NSLog(@"zgObject could not be created.");
   } else {
+    NSLog(@"Add lets");
     // Add inlets
     for (int i = 0; i < zg_get_num_inlets(zgObject); i++) {
       [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, 0) isInlet:YES];
@@ -249,8 +251,8 @@
   [delegate startNewConnectionDrawingFromLet:aLetView];
 }
 
-- (void)mouseDraggedOfLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent {
-  [delegate setNewConnectionEndPointFromLet:aLetView withEvent:theEvent];
+- (void)mouseDraggedOfLetWithEvent:(NSEvent *)theEvent {
+  [delegate setNewConnectionEndPointFromEvent:theEvent];
 }
 
 - (void)mouseUpOfLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent {

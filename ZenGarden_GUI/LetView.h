@@ -14,7 +14,7 @@
 @protocol LetViewDelegate
 
 - (void)mouseDownOfLet:(LetView *)aLetView;
-- (void)mouseDraggedOfLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent;
+- (void)mouseDraggedOfLetWithEvent:(NSEvent *)theEvent;
 - (void)mouseUpOfLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent;
 
 @end
@@ -22,15 +22,16 @@
 @interface LetView : NSView {
   
   NSObject <LetViewDelegate> *delegate;
+  
   NSCursor *cursor;
   NSTrackingArea *letTrackingArea;
-  BOOL isInlet; // YES is Inlet, NO is Outlet
+  NSMutableArray *connectionsArray;
   
-  BOOL isHighlighted;
+  BOOL isInlet; // YES is Inlet, NO is Outlet
+
 }
 
 @property (nonatomic, readwrite) BOOL isInlet;
-@property (nonatomic, readwrite) BOOL isHighlighted;
 
 - (void)drawBackground;
 

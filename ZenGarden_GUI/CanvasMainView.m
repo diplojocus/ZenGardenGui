@@ -95,6 +95,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
       }
     }
   } */
+  
 }
 
 - (ZGContext *)zgContext {
@@ -316,8 +317,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   ObjectView *fromObject = (ObjectView *)aLetView.superview;
   
   // Set a thicker line for signal connections
-  if (zg_get_connection_type([fromObject zgObject],
-                             (unsigned int) [[fromObject outletArray] indexOfObject:aLetView]) == DSP) {
+  if (zg_get_connection_type([fromObject zgObject], (unsigned int) [[fromObject outletArray] indexOfObject:aLetView]) == DSP) {
     newConnectionLineWidth = 3;
   }
   else {
@@ -325,40 +325,23 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   }
 
   // Start connection drawing from mid point of let view
-  newConnectionStartPoint = NSMakePoint([fromObject frame].origin.x +
-                                        [aLetView frame].origin.x + NSMidX([aLetView bounds]),
-                                        [fromObject frame].origin.y +
-                                        [aLetView frame].origin.y + NSMidY([aLetView bounds]));
+  newConnectionStartPoint = NSMakePoint([fromObject frame].origin.x + [aLetView frame].origin.x + NSMidX([aLetView bounds]),
+                                        [fromObject frame].origin.y + [aLetView frame].origin.y + NSMidY([aLetView bounds]));
   drawNewConnection = YES;
 }
 
-- (void)setNewConnectionEndPointFromLet:(LetView *)fromLetView withEvent:(NSEvent *)theEvent {
-  
-  ObjectView *fromObject = (ObjectView *)fromLetView.superview;
+- (void)setNewConnectionEndPointFromEvent:(NSEvent *)theEvent {
   
   newConnectionEndPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-  for (ObjectView *toObject in arrayOfObjects) {
-    for (LetView *toLetView in toObject.inletArray) {
-      if (NSPointInRect(newConnectionEndPoint, [self convertRect:[toLetView bounds] fromView:toLetView])) {
-        if (fromObject != toObject) {
-          // Snap to inlet
-          newConnectionEndPoint = NSMakePoint([toObject frame].origin.x +
-                                              [toLetView frame].origin.x + NSMidX([toLetView bounds]),
-                                              [toObject frame].origin.y +
-                                              [toLetView frame].origin.y + NSMidY([toLetView bounds]));
-          [self setNeedsDisplay:YES];
-          [self needsDisplay];
-          toLetView.isHighlighted = YES;
-          [toLetView setNeedsDisplay:YES];
-          [toLetView needsDisplay];
-          return;
-        }
+  for (ObjectView *anObject in arrayOfObjects) {
+    for (LetView *aLetView in anObject.inletArray) {
+      if (NSPointInRect(newConnectionEndPoint, [self convertRect:[aLetView bounds] fromView:aLetView])) {
+        // Inlet!
+        newConnectionEndPoint = NSMakePoint([anObject frame].origin.x + [aLetView frame].origin.x + NSMidX([aLetView bounds]),
+                                              [anObject frame].origin.y + [aLetView frame].origin.y + NSMidY([aLetView bounds]));
       }
       else {
-        // Not an inlet   
-        toLetView.isHighlighted = NO;
-        [toLetView setNeedsDisplay:YES];
-        [toLetView needsDisplay];
+        // Not an inlet     
       }
     }
   }
@@ -367,33 +350,30 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 }
 
 - (void)endNewConnectionDrawingFromLet:(LetView *)fromLetView withEvent:(NSEvent *)theEvent {
-  
-  ObjectView *fromObject = (ObjectView *)fromLetView.superview;
 
+  ObjectView *fromObject = (ObjectView *)fromLetView.superview;
+  ObjectView *toObject = nil;
+  LetView *toLetView = nil;
+  
   newConnectionEndPoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-  for (ObjectView *toObject in arrayOfObjects) {
-    for (LetView *toLetView in toObject.inletArray) {
-      if (NSPointInRect(newConnectionEndPoint, [self convertRect:[toLetView bounds]
-                                                        fromView:toLetView])) {
-        if (fromObject != toObject) {
-          // Is a valid inlet - add connection
-          newConnectionEndPoint = NSMakePoint([toObject frame].origin.x +
-                                              [toLetView frame].origin.x + NSMidX([toLetView bounds]),
-                                              [toObject frame].origin.y +
-                                              [toLetView frame].origin.y + NSMidY([toLetView bounds]));
-          zg_add_connection(zgGraph,
-                            [fromObject zgObject],
-                            (unsigned int) [[fromObject outletArray] indexOfObject:fromLetView],
-                            [toObject zgObject],
-                            (unsigned int) [[toObject inletArray] indexOfObject:toLetView]);
-          
-          [self setNeedsDisplay:YES];
-          [self needsDisplay];
-          toLetView.isHighlighted = NO;
-          [toLetView setNeedsDisplay:YES];
-          [toLetView needsDisplay];
-          return;
-        }
+  for (ObjectView *anObject in arrayOfObjects) {
+    for (LetView *aLetView in anObject.inletArray) {
+      if (NSPointInRect(newConnectionEndPoint, [self convertRect:[aLetView bounds] fromView:aLetView])) {
+        // Is a valid inlet
+        toObject = anObject;
+        toLetView = aLetView;
+        newConnectionEndPoint = NSMakePoint([anObject frame].origin.x + [aLetView frame].origin.x + NSMidX([aLetView bounds]),
+                                            [anObject frame].origin.y + [aLetView frame].origin.y + NSMidY([aLetView bounds]));
+        zg_add_connection(zgGraph,
+                          [fromObject zgObject], (unsigned int) [[fromObject outletArray] indexOfObject:fromLetView],
+                          [toObject zgObject], (unsigned int) [[toObject inletArray] indexOfObject:toLetView]);
+  
+        [self setNeedsDisplay:YES];
+        [self needsDisplay];
+        return;
+      }
+      else {
+        // Not an inlet     
       }
     }
   }

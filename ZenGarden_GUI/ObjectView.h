@@ -17,7 +17,7 @@
 
 - (void)startNewConnectionDrawingFromLet:(LetView *)aLetView;;
 
-- (void)setNewConnectionEndPointFromLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent;
+- (void)setNewConnectionEndPointFromEvent:(NSEvent *)theEvent;
 
 - (void)endNewConnectionDrawingFromLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent;
 
@@ -33,6 +33,8 @@
   float numberOfOutlets;
   NSMutableArray *inletArray;
   NSMutableArray *outletArray;
+  
+  BOOL isLetMouseDown;
   
   // Textfield
   NSTextField *textField;
