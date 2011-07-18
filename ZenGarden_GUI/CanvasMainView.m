@@ -349,9 +349,9 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   [self needsDisplay];
 }
 
-- (void)endNewConnectionDrawingFromLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent {
-  
-  ObjectView *fromObject = (ObjectView *)aLetView.superview;
+- (void)endNewConnectionDrawingFromLet:(LetView *)fromLetView withEvent:(NSEvent *)theEvent {
+
+  ObjectView *fromObject = (ObjectView *)fromLetView.superview;
   ObjectView *toObject = nil;
   LetView *toLetView = nil;
   
@@ -359,37 +359,25 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   for (ObjectView *anObject in arrayOfObjects) {
     for (LetView *aLetView in anObject.inletArray) {
       if (NSPointInRect(newConnectionEndPoint, [self convertRect:[aLetView bounds] fromView:aLetView])) {
-        // Inlet!
-        NSLog(@"Inlet!");
+        // Is a valid inlet
         toObject = anObject;
         toLetView = aLetView;
         newConnectionEndPoint = NSMakePoint([anObject frame].origin.x + [aLetView frame].origin.x + NSMidX([aLetView bounds]),
                                             [anObject frame].origin.y + [aLetView frame].origin.y + NSMidY([aLetView bounds]));
+        zg_add_connection(zgGraph,
+                          [fromObject zgObject], (unsigned int) [[fromObject outletArray] indexOfObject:fromLetView],
+                          [toObject zgObject], (unsigned int) [[toObject inletArray] indexOfObject:toLetView]);
+  
+        [self setNeedsDisplay:YES];
+        [self needsDisplay];
+        return;
       }
       else {
-        // Not an inlet
-        NSLog(@"Not an inlet!");        
+        // Not an inlet     
       }
     }
   }
-  if (toLetView != nil) { 
-    /*
-    Bad access on zgObjects?
-     
-    NSLog(@"Add Connection");
-    NSLog(@"fromObject %@", [fromObject zgObject]);
-    NSLog(@"fromOutletIndex %u", (unsigned int) [[fromObject outletArray] indexOfObject:aLetView]);
-    NSLog(@"toObject %@", [toObject zgObject]);
-    NSLog(@"toOutletIndex %@", (unsigned int) [[toObject outletArray] indexOfObject:toLetView]);
-    
-    zg_add_connection(zgGraph,
-                      [fromObject zgObject], (unsigned int) [[fromObject outletArray] indexOfObject:aLetView],
-                      [toObject zgObject], (unsigned int) [[toObject outletArray] indexOfObject:toLetView]);
-     */
-  }
-  else {
-    [self resetNewConnection];
-  }
+  [self resetNewConnection];
   [self setNeedsDisplay:YES];
   [self needsDisplay];
 }

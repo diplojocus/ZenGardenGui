@@ -169,6 +169,7 @@
   if (zgObject == NULL) {
     NSLog(@"zgObject could not be created.");
   } else {
+    NSLog(@"Add lets");
     // Add inlets
     for (int i = 0; i < zg_get_num_inlets(zgObject); i++) {
       [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, 0) isInlet:YES];
@@ -180,6 +181,8 @@
   }
   isObjectNew = NO;
   [self highlightObject:NO];
+  [[textField window] endEditingFor: nil];
+  [[textField window] makeFirstResponder: nil];
 }
 
 
@@ -244,7 +247,7 @@
 
 #pragma mark - Let Events
 
-- (void)mouseDownOfLet:(id)aLetView {
+- (void)mouseDownOfLet:(LetView *)aLetView {
   [delegate startNewConnectionDrawingFromLet:aLetView];
 }
 
@@ -252,7 +255,7 @@
   [delegate setNewConnectionEndPointFromEvent:theEvent];
 }
 
-- (void)mouseUpOfLet:(id)aLetView withEvent:(NSEvent *)theEvent {
+- (void)mouseUpOfLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent {
   [delegate endNewConnectionDrawingFromLet:aLetView withEvent:theEvent];
 }
 

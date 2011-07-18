@@ -9,11 +9,13 @@
 #import <Cocoa/Cocoa.h>
 
 
+@class LetView;
+
 @protocol LetViewDelegate
 
-- (void)mouseDownOfLet:(id)aLetView;
+- (void)mouseDownOfLet:(LetView *)aLetView;
 - (void)mouseDraggedOfLetWithEvent:(NSEvent *)theEvent;
-- (void)mouseUpOfLet:(id)aLetView withEvent:(NSEvent *)theEvent;
+- (void)mouseUpOfLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent;
 
 @end
 
