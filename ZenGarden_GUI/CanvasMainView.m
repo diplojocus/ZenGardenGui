@@ -255,6 +255,9 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 #pragma mark - Object Drawing
 
 -(IBAction)putObject:(id)sender {
+  
+  ObjectView *anObject;
+  
   // make sure edit mode is on 
   if (!isEditModeOn) {
     [self toggleEditMode:[self menu]];
@@ -266,22 +269,56 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   
   // If inside canvas view add object at mouse location
   if (NSPointInRect(viewLocation, [self bounds])) {
-    objectView = [[ObjectView alloc] 
-                   initWithFrame:NSMakeRect(viewLocation.x - (DEFAULT_OBJECT_WIDTH / 2),
-                                            viewLocation.y - (DEFAULT_OBJECT_HEIGHT / 2),
-                                            DEFAULT_OBJECT_WIDTH,
-                                            DEFAULT_OBJECT_HEIGHT) delegate:self];
-    [self addSubview:objectView];
-    [arrayOfObjects addObject:objectView];
+    anObject = [[ObjectView alloc] 
+                initWithFrame:NSMakeRect(viewLocation.x - (DEFAULT_OBJECT_WIDTH / 2),
+                                         viewLocation.y - (DEFAULT_OBJECT_HEIGHT / 2),
+                                         DEFAULT_OBJECT_WIDTH,
+                                         DEFAULT_OBJECT_HEIGHT) delegate:self];
+    [self addSubview:anObject];
+    [arrayOfObjects addObject:anObject];
   }
   // If outside canvas view add object at default location
   else {
-    objectView = [[ObjectView alloc] initWithFrame:NSMakeRect(DEFAULT_OBJECT_ORIGIN_X,
-                                                                       DEFAULT_OBJECT_ORIGIN_Y,
-                                                                       DEFAULT_OBJECT_WIDTH,
-                                                                       DEFAULT_OBJECT_HEIGHT) delegate:self];
-    [self addSubview:objectView];
-    [arrayOfObjects addObject:objectView];
+    anObject = [[ObjectView alloc] initWithFrame:NSMakeRect(DEFAULT_OBJECT_ORIGIN_X,
+                                                            DEFAULT_OBJECT_ORIGIN_Y,
+                                                            DEFAULT_OBJECT_WIDTH,
+                                                            DEFAULT_OBJECT_HEIGHT) delegate:self];
+    [self addSubview:anObject];
+    [arrayOfObjects addObject:anObject];
+  }
+}
+
+- (IBAction)addBang:(id)sender {
+  
+  BangView *aBang;
+  
+  // make sure edit mode is on 
+  if (!isEditModeOn) {
+    [self toggleEditMode:[self menu]];
+    [editToggleMenuItem setState:NSOnState];
+  }
+  // Convert mouse location to view coordinates
+  NSPoint mouseLocation = [[self window] convertScreenToBase:[NSEvent mouseLocation]];
+  NSPoint viewLocation = [self convertPoint:mouseLocation fromView:nil];
+  
+  // If inside canvas view add object at mouse location
+  if (NSPointInRect(viewLocation, [self bounds])) {
+    aBang = [[BangView alloc] 
+            initWithFrame:NSMakeRect(viewLocation.x - (50 / 2),
+                                     viewLocation.y - (50 / 2),
+                                     50,
+                                     50) delegate:self];
+    [self addSubview:aBang];
+    [arrayOfObjects addObject:aBang];
+  }
+  // If outside canvas view add object at default location
+  else {
+    aBang = [[ObjectView alloc] initWithFrame:NSMakeRect(50,
+                                                         50,
+                                                         50,
+                                                         50) delegate:self];
+    [self addSubview:aBang];
+    [arrayOfObjects addObject:aBang];
   }
 }
 

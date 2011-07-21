@@ -260,9 +260,9 @@
 #pragma mark - ZenGarden Objects
 
 - (void)removeZGObjectFromZGGraph:(ZGGraph *)graph {
-  // TODO(joewhite4): Make sure ZenGarden is properly deleting objects
   if (zgObject != NULL) {
-    //zg_remove_object(graph, zgObject);
+    NSLog(@"Remove object");
+    zg_remove_object(graph, zgObject);
   }
   else {
     NSLog(@"No ZGObject to remove");

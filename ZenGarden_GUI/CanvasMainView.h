@@ -8,11 +8,12 @@
 
 #import <Cocoa/Cocoa.h>
 #import "ObjectView.h"
+#import "BangView.h"
 #import "ZenGarden.h"
 #import "PdAudio.h"
 
 
-@interface CanvasMainView : NSView <ObjectViewDelegate> {
+@interface CanvasMainView : NSView <ObjectViewDelegate, BangViewDelegate> {
 
   // Object
   ObjectView *objectView;
@@ -54,6 +55,8 @@
 - (IBAction)removeObject:(id)sender;
 
 - (IBAction)putObject:(id)sender;
+
+- (IBAction)addBang:(id)sender;
 
 - (IBAction)removeObject:(id)sender;
 
