@@ -52,11 +52,11 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
   
-  [textField setFrame:NSMakeRect(self.bounds.origin.x + 30,
-                                 self.bounds.origin.y + 30,
-                                 self.bounds.size.width - 60,
-                                 self.bounds.size.height - 60)];
-  
+  [textField setFrame:NSMakeRect(self.bounds.origin.x + 5,
+                                 self.bounds.origin.y + 8,
+                                 self.bounds.size.width - 10,
+                                 self.bounds.size.height - 14)];
+ 
   [self drawBackground:self.bounds];
 }
 
@@ -68,20 +68,26 @@
 #pragma mark - Background Drawing
 
 - (void)drawBackground:(NSRect)rect {
+   
+  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:NSMakeRect(rect.origin.x + 2,
+                                                                          rect.origin.y + 2.5,
+                                                                          rect.size.width - 4,
+                                                                          rect.size.height - 4)
+                                                               xRadius:4 yRadius:4];
   
-  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:
-                              NSMakeRect(rect.origin.x + 5,
-                                         rect.origin.y + 5,
-                                         rect.size.width - 10,
-                                         rect.size.height - 10) 
-                              xRadius:20 yRadius:20];
-  
-  [backgroundColour setFill];
+  [[NSColor whiteColor] setFill];
   [path fill];
   
-  [path setLineWidth:10];
-  [[NSColor lightGrayColor] setStroke];
+  NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:1 alpha:1]
+                                                       endingColor:[NSColor colorWithCalibratedWhite:0.7 alpha:0.7]];
+  [gradient drawInBezierPath:path angle:90.0];
+  
+  [path setLineWidth:1];
+  NSColor *outsideStroke;
+  outsideStroke = [NSColor colorWithCalibratedRed:0.7 green:0.7 blue:0.8 alpha:1.0];
+  [outsideStroke setStroke];
   [path stroke];
+  
 }
 
 - (void)highlightObject:(BOOL)state {
@@ -102,7 +108,7 @@
 
 - (void)addLet:(NSPoint)letOrigin isInlet:(BOOL)isInlet {
   
-  NSRect letRect = NSMakeRect(letOrigin.x, letOrigin.y, 30, 10);
+  NSRect letRect = NSMakeRect(letOrigin.x, letOrigin.y, 12, 4);
   
   LetView *aLetView = [[LetView alloc] initWithFrame:letRect delegate:self];
   [self addSubview:aLetView];
@@ -119,13 +125,15 @@
 #pragma mark - TextField & Events
 
 - (void)addTextField:(NSRect)rect {
-  textField = [[NSTextField alloc] initWithFrame:NSMakeRect(rect.origin.x + 30,
-                                                            rect.origin.y + 30,
-                                                            30,
-                                                            rect.size.height - 60)];
+  textField = [[NSTextField alloc] initWithFrame:NSMakeRect(self.bounds.origin.x + 5,
+                                                            self.bounds.origin.y + 8,
+                                                            self.bounds.size.width - 10,
+                                                            self.bounds.size.height - 14)];
   [textField setEditable:YES];
   [textField setSelectable:YES];
   [textField setBezeled:NO];
+  [textField setDrawsBackground:NO];
+  [textField setFont:[NSFont fontWithName:@"Monaco" size:12.0]];
   [self addSubview:textField];
   [textField setDelegate:self];
 }
@@ -148,7 +156,6 @@
 }
 
 - (void)controlTextDidEndEditing:(NSNotification *)obj {
-  
   // if textfield changes reinstantiate object 
   if (didTextChange) {
     [self removeZGObjectFromZGGraph:[(CanvasMainView *)self.superview zgGraph]];
@@ -170,11 +177,11 @@
   } else {
     // Add inlets
     for (int i = 0; i < zg_get_num_inlets(zgObject); i++) {
-      [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, 0) isInlet:YES];
+      [self addLet:NSMakePoint(self.bounds.origin.x + 10 + 38*i, 3) isInlet:YES];
     }
     // Add outlets
     for (int i = 0; i < zg_get_num_outlets(zgObject); i++) {
-      [self addLet:NSMakePoint(self.bounds.origin.x + 30 + 70*i, self.bounds.size.height - 10) isInlet:NO];
+      [self addLet:NSMakePoint(self.bounds.origin.x + 10 + 70*i, self.bounds.size.height - 6) isInlet:NO];
     }
   }
   isObjectNew = NO;

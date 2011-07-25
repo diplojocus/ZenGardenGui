@@ -41,17 +41,13 @@
 
 - (void)drawBackground {
   
-  NSRect letRect = NSMakeRect(self.bounds.origin.x, self.bounds.origin.y, 30, 10);
-  
-  NSBezierPath *path = [NSBezierPath bezierPathWithRoundedRect:letRect xRadius:2 yRadius:2];
-  
   if (isHighlighted) {
     [[NSColor redColor] setFill];
   }
   else {
     [[NSColor blackColor] setFill];
   }
-  [path fill];
+  NSRectFill(NSMakeRect(self.bounds.origin.x, self.bounds.origin.y, 12, 4));
 }
 
 #pragma mark - Tracking Mouse
