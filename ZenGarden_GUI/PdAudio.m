@@ -70,6 +70,7 @@ void renderCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef in
 
 #pragma mark - PdAudio
 
+#define NUM_AUDIO_BUFFERS 5
 - (id)initWithInputChannels:(NSUInteger)inputChannels OutputChannels:(NSUInteger)outputChannels
     blockSize:(NSUInteger)framesPerBlock andSampleRate:(Float64)sampleRate {
   self = [super init];
@@ -100,7 +101,7 @@ void renderCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef in
     
     // create three audio buffers to go into the new queue and initialise them
     AudioQueueBufferRef outBuffer;
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < NUM_AUDIO_BUFFERS; i++) {
       err = AudioQueueAllocateBuffer(outAQ, outAsbd.mBytesPerFrame*blockSize, &outBuffer);
       renderCallback(self, outAQ, outBuffer);
     }
