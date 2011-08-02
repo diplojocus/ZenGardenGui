@@ -15,6 +15,10 @@
 
 @interface CanvasMainView : NSView <ObjectViewDelegate, BangViewDelegate> {
 
+  // Keywords (joewhite4:probably not the correct place to put it)
+  NSMutableArray *allObjectLabels;
+  NSMutableArray *builtInObjectLabels;
+  
   // Object
   ObjectView *objectView;
   ObjectView *objectToMove;
@@ -38,6 +42,8 @@
   
   NSMenuItem *editToggleMenuItem;
   
+  BOOL isEditModeOn;
+  
   // ZenGarden/PdAudio
   ZGGraph *zgGraph;
   PdAudio *pdAudio;
@@ -46,9 +52,6 @@
 @property (nonatomic, readonly) IBOutlet NSMenuItem *editToggleMenuItem;
 @property (nonatomic, readonly) BOOL isEditModeOn;
 @property (nonatomic, readonly) ZGGraph *zgGraph;
-@property (nonatomic, readonly) ZGContext *zgContext;
-
-- (BOOL)isEditModeOn;
 
 - (IBAction)toggleEditMode:(id)sender;
 

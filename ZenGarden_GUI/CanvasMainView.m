@@ -18,7 +18,6 @@
 @synthesize editToggleMenuItem;
 @synthesize isEditModeOn;
 @synthesize zgGraph;
-@synthesize zgContext;
 
 // C function
 void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) {
@@ -45,8 +44,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
                                          andSampleRate:44100.0];
       [pdAudio play];
       
-      zgGraph  = zg_new_empty_graph(pdAudio.zgContext);
-      zg_attach_graph(pdAudio.zgContext, zgGraph);
+      zgGraph  = zg_context_new_empty_graph(pdAudio.zgContext);
+      zg_graph_attach(zgGraph);
       
       arrayOfObjects = [[NSMutableArray alloc] init];
       isEditModeOn = NO;
@@ -56,9 +55,57 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
     return self;
 }
 
+- (void)awakeFromNib {
+  
+  [[self window] setAcceptsMouseMovedEvents:YES]; 
+  
+  builtInObjectLabels = [[NSMutableArray alloc] initWithObjects:@"adc~", @"+~", @"bp~", @"bang~",
+  @"catch~", @"clip~", @"cos~", @"dac~", @"delread~", @"delwrite~", @"/~", @"env~", @"hip~",
+  @"inlet~", @"line~", @"log~", @"lop~", @"min~", @"*~", @"noise~", @"osc~", @"outlet~",
+  @"phasor~", @"print~", @"receive~", @"r~", @"rsqrt~", @"rfft~", @"rifft~", @"send~", @"s~",
+  @"sig~", @"snapshot~", @"sqrt~", @"-~", @"tabplay~", @"tabread~", @"tabread4~", @"throw~",
+  @"vd~", @"vcf~", @"wrap~", @"abs", @"+", @"atan", @"atan2", @"b", @"bang", @"change", @"clip",
+  @"cos", @"cputime", @"dbtopow", @"dbtorms", @"declare", @"del", @"delay", @"/", @"==", @"exp",
+  @"f", @"float", @"ftom", @">", @">=", @"inlet", @"int", @"<", @"<=", @"line", @"list",
+  @"list append", @"list prepend", @"list split", @"list trim", @"loadbang", @"log", @"&&", @"||",
+  @"max", @"msg", @"metro", @"mtof", @"min", @"mod", @"moses", @"*", @"notein", @"!=", @"openpanel",
+  @"outlet", @"pack", @"pipe", @"pow", @"powtodb", @"print", @"random", @"r", @"recieve", @"%",
+  @"rmstodb", @"route", @"samplerate", @"sel", @"select", @"s", @"send", @"sendcontroller", @"sin",
+  @"soundfiler", @"spigot", @"sqrt", @"stripnote", @"-", @"swap", @"switch", @"symbol", @"table",
+  @"tabread", @"tabwrite", @"tan", @"text", @"timer", @"tgl", @"toggle", @"t", @"trigger",
+  @"unpack", @"until", @"v", @"value", @"wrap", nil];
+}
+
+- (NSArray *)allObjectLabels {
+  // builds the object label array for use in type completion
+  NSArray *anArray = [[[NSArray alloc] init] autorelease];
+  unsigned int i, count;
+  
+  if (allObjectLabels == nil) {
+    
+    allObjectLabels = [builtInObjectLabels mutableCopy];
+    
+    if (anArray != nil) {
+      
+      count = (unsigned int)[anArray count];
+      
+      for (i=0; i<count; i++) {
+      
+        if ([allObjectLabels indexOfObject:[anArray objectAtIndex:i]] == NSNotFound) {
+          [allObjectLabels addObject:[anArray objectAtIndex:i]];
+        }
+      }
+    }
+    [allObjectLabels sortUsingSelector:@selector(compare:)];
+  }
+  return allObjectLabels;
+}
+
 - (void)dealloc {
   [super dealloc];
   [objectView dealloc];
+  [allObjectLabels dealloc];
+  [builtInObjectLabels dealloc];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
@@ -81,12 +128,10 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
     [NSBezierPath strokeLineFromPoint:newConnectionStartPoint
                               toPoint:newConnectionEndPoint];
   }
-  
-  // draw existing connections
   /*
-  for (ObjectView *objectView in arrayOfObjects) {
-    for (LetView *outletView in objectView.letArray) {
-      if (!outletView.isInlet) { // only consider outlets
+  // draw existing connections
+  for (ObjectView *anObject in arrayOfObjects) {
+    for (LetView *outletView in anObject.outletArray) {
         for (LetView *inletView in outletView.connections) {
           NSPoint startPoint = NSMakePoint(NSMidX(outletView.frame), outletView.frame.origin.y + outletView.frame.size.height);
           NSPoint endPoint = NSMakePoint(NSMidX(inletView.frame), inletView.frame.origin.y);
@@ -102,15 +147,12 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 }
 
 - (ZGObject *)addNewObjectToGraphWithInitString:(NSString *)initString withLocation:(NSPoint)location {
-  ZGObject *zgObject = zg_new_object(pdAudio.zgContext, zgGraph, (char *) [initString cStringUsingEncoding:NSASCIIStringEncoding]);
+  
+  ZGObject *zgObject = zg_graph_new_object(zgGraph, (char *) [initString cStringUsingEncoding:NSASCIIStringEncoding]);
   if (zgObject != NULL) {
-    zg_add_object(zgGraph, zgObject, (int) location.x, (int) location.y);
+    zg_graph_add_object(zgGraph, zgObject, (int) location.x, (int) location.y);
   }
   return zgObject;
-}
-
-- (void)awakeFromNib {
-  [[self window] setAcceptsMouseMovedEvents:YES]; 
 } 
 
 - (BOOL)acceptsFirstResponder { return YES; }
@@ -353,8 +395,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   ObjectView *fromObject = (ObjectView *)aLetView.superview;
   
   // Set a thicker line for signal connections
-  if (zg_get_connection_type([fromObject zgObject],
-                             (unsigned int) [[fromObject outletArray] indexOfObject:aLetView]) == DSP) {
+  if (zg_object_get_connection_type([fromObject zgObject],
+                                    (unsigned int) [[fromObject outletArray] indexOfObject:aLetView]) == ZG_CONNECTION_DSP) {
     newConnectionLineWidth = 3;
   }
   else {
@@ -418,12 +460,12 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
                                               [toLetView frame].origin.x + NSMidX([toLetView bounds]),
                                               [toObject frame].origin.y +
                                               [toLetView frame].origin.y + NSMidY([toLetView bounds]));
-          zg_add_connection(zgGraph,
-                            [fromObject zgObject],
-                            (unsigned int) [[fromObject outletArray] indexOfObject:fromLetView],
-                            [toObject zgObject],
-                            (unsigned int) [[toObject inletArray] indexOfObject:toLetView]);
-          
+          zg_graph_add_connection(zgGraph,
+                                  [fromObject zgObject],
+                                  (unsigned int) [[fromObject outletArray] indexOfObject:fromLetView],
+                                  [toObject zgObject],
+                                  (unsigned int) [[toObject inletArray] indexOfObject:toLetView]);
+            
           [self setNeedsDisplay:YES];
           [self needsDisplay];
           toLetView.isHighlighted = NO;

@@ -40,7 +40,7 @@ void renderCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef in
   vDSP_vsmul(floatBuffer, 1, &a, floatBuffer, 1, floatBufferLength);
   
   // process the samples
-  zg_process(pdAudio.zgContext, floatBuffer, floatBuffer);
+  zg_context_process(pdAudio.zgContext, floatBuffer, floatBuffer);
 
   // clip the output to [-1,+1]
   float min = -1.0f;
@@ -97,7 +97,7 @@ void renderCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef in
     AudioQueueSetParameter(outAQ, kAudioQueueParam_Volume, 1.0f);
     
     // create the new context
-    zgContext = zg_new_context(2, 2, blockSize, 44100.0f, NULL, NULL);
+    zgContext = zg_context_new(2, 2, (int)blockSize, 44100.0f, NULL, NULL);
     
     // create three audio buffers to go into the new queue and initialise them
     AudioQueueBufferRef outBuffer;
@@ -114,7 +114,7 @@ void renderCallback(void *inUserData, AudioQueueRef inAQ, AudioQueueBufferRef in
 - (void)dealloc {
   AudioQueueStop(outAQ, YES);
   AudioQueueDispose(outAQ, YES);
-  zg_delete_context(zgContext);
+  zg_context_delete(zgContext);
   [super dealloc];
 }
 

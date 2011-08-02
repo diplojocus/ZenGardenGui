@@ -14,8 +14,8 @@
 		D84D36CB13CF822D0080FEDA /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D84D36CA13CF822D0080FEDA /* libsndfile.a */; };
 		D88EBE75137C0E1B00BEDEE1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */; };
 		D88EBE76137C0E1B00BEDEE1 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */; };
+		D8C3FE0213E6A36E00490FEA /* libzengarden.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8C3FE0113E6A36E00490FEA /* libzengarden.a */; };
 		D8E145A213CB7B7A006681B0 /* PdAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = D88EBE70137C0DE700BEDEE1 /* PdAudio.m */; };
-		D8E744C413D6BFB9003D8154 /* libzengarden.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E744C313D6BFB9003D8154 /* libzengarden.a */; };
 		D8E744C713D6C028003D8154 /* BangView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E744C613D6C028003D8154 /* BangView.m */; };
 		D8ECE9DD13832B9000C0E983 /* LetView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8ECE9DC13832B9000C0E983 /* LetView.m */; };
 		D8F92BB71368970F002174E6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F92BB61368970F002174E6 /* Cocoa.framework */; };
@@ -52,14 +52,13 @@
 		D88EBE70137C0DE700BEDEE1 /* PdAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PdAudio.m; sourceTree = "<group>"; };
 		D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
-		D8E744C013D6BF8C003D8154 /* ZenGarden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZenGarden.h; sourceTree = "<group>"; };
-		D8E744C113D6BF8C003D8154 /* ZGCallbackFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZGCallbackFunction.h; sourceTree = "<group>"; };
-		D8E744C213D6BF96003D8154 /* ConnectionType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectionType.h; sourceTree = "<group>"; };
-		D8E744C313D6BFB9003D8154 /* libzengarden.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libzengarden.a; sourceTree = "<group>"; };
+		D8C3FE0113E6A36E00490FEA /* libzengarden.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzengarden.a; path = "../../../Library/Developer/Xcode/DerivedData/ZenGarden-fqfgkbxtknjzuvemuqafvewzmyzw/Build/Products/Debug/libzengarden.a"; sourceTree = "<group>"; };
 		D8E744C513D6C028003D8154 /* BangView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BangView.h; sourceTree = "<group>"; };
 		D8E744C613D6C028003D8154 /* BangView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BangView.m; sourceTree = "<group>"; };
 		D8ECE9DB13832B9000C0E983 /* LetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LetView.h; sourceTree = "<group>"; };
 		D8ECE9DC13832B9000C0E983 /* LetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LetView.m; sourceTree = "<group>"; };
+		D8EF033213E6A18B005352C7 /* ZenGarden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZenGarden.h; path = ZenGarden/src/ZenGarden.h; sourceTree = SOURCE_ROOT; };
+		D8EF033313E6A18B005352C7 /* ZGCallbackFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZGCallbackFunction.h; path = ZenGarden/src/ZGCallbackFunction.h; sourceTree = SOURCE_ROOT; };
 		D8F92BB21368970F002174E6 /* ZenGarden_GUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZenGarden_GUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8F92BB61368970F002174E6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D8F92BB91368970F002174E6 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -95,7 +94,7 @@
 				D88EBE76137C0E1B00BEDEE1 /* AudioUnit.framework in Frameworks */,
 				D832DFE11379B9DA0065A9D0 /* Accelerate.framework in Frameworks */,
 				D8F92BB71368970F002174E6 /* Cocoa.framework in Frameworks */,
-				D8E744C413D6BFB9003D8154 /* libzengarden.a in Frameworks */,
+				D8C3FE0213E6A36E00490FEA /* libzengarden.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,9 +123,8 @@
 		D84F0191138662F4003692F9 /* ZenGarden */ = {
 			isa = PBXGroup;
 			children = (
-				D8E744C013D6BF8C003D8154 /* ZenGarden.h */,
-				D8E744C113D6BF8C003D8154 /* ZGCallbackFunction.h */,
-				D8E744C213D6BF96003D8154 /* ConnectionType.h */,
+				D8EF033213E6A18B005352C7 /* ZenGarden.h */,
+				D8EF033313E6A18B005352C7 /* ZGCallbackFunction.h */,
 			);
 			name = ZenGarden;
 			sourceTree = "<group>";
@@ -134,7 +132,7 @@
 		D8C24BDA1379F1CF00363F38 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				D8E744C313D6BFB9003D8154 /* libzengarden.a */,
+				D8C3FE0113E6A36E00490FEA /* libzengarden.a */,
 				D84D36CA13CF822D0080FEDA /* libsndfile.a */,
 			);
 			name = Libraries;
@@ -456,6 +454,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/ZenGarden_GUI\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/ZenGarden-fqfgkbxtknjzuvemuqafvewzmyzw/Build/Products/Debug\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
@@ -480,6 +479,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/ZenGarden_GUI\"",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/../../../Library/Developer/Xcode/DerivedData/ZenGarden-fqfgkbxtknjzuvemuqafvewzmyzw/Build/Products/Debug\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;

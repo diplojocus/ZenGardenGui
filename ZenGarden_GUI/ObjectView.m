@@ -14,7 +14,6 @@
 
 @synthesize inletArray;
 @synthesize outletArray;
-@synthesize isLetMouseDown;
 @synthesize isHighlighted;
 @synthesize zgObject;
 
@@ -27,7 +26,8 @@
     isObjectNew = YES;
     didTextChange = NO;
     zgObject = NULL;
-    
+    previousString = NULL;
+    [self setFocusRingType:NSFocusRingOnly];
     [self addTextField:frame];
     [self addObjectResizeTrackingRect:frame];
     objectResizeTrackingArea = [[NSTrackingArea alloc] 
@@ -58,6 +58,11 @@
                                  self.bounds.size.height - 14)];
  
   [self drawBackground:self.bounds];
+  
+  if ([[self window] isKeyWindow] && [[self window] firstResponder] == self) {
+
+    NSLog(@"Draw Focus Ring");
+  }
 }
 
 - (BOOL)isFlipped { return YES; }
@@ -134,6 +139,7 @@
   [textField setBezeled:NO];
   [textField setDrawsBackground:NO];
   [textField setFont:[NSFont fontWithName:@"Monaco" size:12.0]];
+  [textField setFocusRingType:NSFocusRingOnly];
   [self addSubview:textField];
   [textField setDelegate:self];
 }
@@ -144,19 +150,72 @@
 }
 
 - (void)controlTextDidBeginEditing:(NSNotification *)obj {
+  // NSTextField delegate method
   [self highlightObject:YES];
+  fieldEditor = [[obj userInfo] objectForKey:@"NSFieldEditor"];  
+  [fieldEditor setDelegate:self];
+  previousString = NULL;
 }
 
-- (void)controlTextDidChange:(NSNotification *)obj {
-  
+- (void)textDidChange:(NSNotification *)notification {
+  // NSTextView delegate method
+  NSLog(@"Text changed");
   if (!isObjectNew) {
     didTextChange = YES;
   }
-  [textField sizeToFit];
+  // Currently an infinite loop
+  //[fieldEditor completionsForPartialWordRange:NSRangeFromString([textField stringValue]) indexOfSelectedItem:0];
+  NSLog(@"%@",[textField stringValue]);
+  //[fieldEditor complete:nil];
+  
+  BOOL textDidNotChange = [previousString isEqualToString:[fieldEditor string]];
+  
+  if( textDidNotChange ){
+    return;
+  }
+  else {
+    previousString = [[fieldEditor string] copy];
+    [fieldEditor complete:nil];
+  }
 }
 
-- (void)controlTextDidEndEditing:(NSNotification *)obj {
+- (BOOL)textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector {
+  
+  if (commandSelector == @selector(delete:)) {
+    NSLog(@"Backspace has been pressed");
+  }
+  if (commandSelector == @selector(cancelOperation:)) {
+    NSLog(@"escape key has been pressed");
+  }
+  return YES;
+}
+
+- (NSArray *)textView:(NSTextView *)textView completions:(NSArray *)words 
+  forPartialWordRange:(NSRange)charRange indexOfSelectedItem:(NSInteger *)index {
+  // returns list of available objects based on text input from the field editor
+  
+  NSMutableArray *matches = [NSMutableArray array];
+  NSString *partialString = [[textView string] substringWithRange:charRange];
+  NSArray *keywords = [delegate allObjectLabels];
+  unsigned int i;
+  unsigned int count = (unsigned int)[keywords count];
+  NSString *aString;
+  
+  for (i=0; i<count; i++) {
+    aString = [keywords objectAtIndex:i];
+    if ([aString rangeOfString:partialString options:NSAnchoredSearch | NSCaseInsensitiveSearch
+                        range:NSMakeRange(0, [aString length])].location != NSNotFound) {
+      [matches addObject:aString];
+    }
+  }
+  [matches sortUsingSelector:@selector(compare:)];
+  
+  return matches;
+}
+
+- (void)textDidEndEditing:(NSNotification *)notification {
   // if textfield changes reinstantiate object 
+  NSLog(@"Ended editing");
   if (didTextChange) {
     [self removeZGObjectFromZGGraph:[(CanvasMainView *)self.superview zgGraph]];
     for (LetView *aLetView in inletArray) {
@@ -176,11 +235,11 @@
     NSLog(@"zgObject could not be created.");
   } else {
     // Add inlets
-    for (int i = 0; i < zg_get_num_inlets(zgObject); i++) {
+    for (int i = 0; i < zg_object_get_num_inlets(zgObject); i++) {
       [self addLet:NSMakePoint(self.bounds.origin.x + 10 + 38*i, 3) isInlet:YES];
     }
     // Add outlets
-    for (int i = 0; i < zg_get_num_outlets(zgObject); i++) {
+    for (int i = 0; i < zg_object_get_num_outlets(zgObject); i++) {
       [self addLet:NSMakePoint(self.bounds.origin.x + 10 + 70*i, self.bounds.size.height - 6) isInlet:NO];
     }
   }
@@ -268,8 +327,7 @@
 
 - (void)removeZGObjectFromZGGraph:(ZGGraph *)graph {
   if (zgObject != NULL) {
-    NSLog(@"Remove object");
-    zg_remove_object(graph, zgObject);
+    zg_object_remove(zgObject);
   }
   else {
     NSLog(@"No ZGObject to remove");

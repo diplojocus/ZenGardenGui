@@ -21,23 +21,27 @@
 
 - (void)endNewConnectionDrawingFromLet:(LetView *)aLetView withEvent:(NSEvent *)theEvent;
 
+- (NSArray *)allObjectLabels;
+
 @end
 
-@interface ObjectView : NSView <NSTextFieldDelegate, LetViewDelegate> {
+@interface ObjectView : NSView <NSTextViewDelegate, NSTextFieldDelegate, LetViewDelegate> {
 
   // Delegate
   NSObject <ObjectViewDelegate> *delegate;
   
   // Lets
-  float numberOfInlets;
-  float numberOfOutlets;
   NSMutableArray *inletArray;
   NSMutableArray *outletArray;
   
   // Textfield
   NSTextField *textField;
+  NSTextView *fieldEditor;
   BOOL didTextChange;
   BOOL isObjectNew;
+  NSString *previousString;
+  
+  BOOL completePosting;
   
   // Tracking Rectangles
   NSRect objectResizeTrackingRect;
@@ -55,7 +59,6 @@
 @property (nonatomic, readonly) NSMutableArray *inletArray;
 @property (nonatomic, readonly) NSMutableArray *outletArray;
 @property (nonatomic, readonly) BOOL isHighlighted;
-@property (nonatomic, readonly) BOOL isLetMouseDown;
 @property (nonatomic, readonly) ZGObject *zgObject;
 
 - (id)initWithFrame:(NSRect)frame delegate:(NSObject<ObjectViewDelegate> *)aDelegate;
