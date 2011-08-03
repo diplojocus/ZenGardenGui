@@ -13,7 +13,7 @@
 #import "PdAudio.h"
 
 
-@interface CanvasMainView : NSView <ObjectViewDelegate, BangViewDelegate> {
+@interface CanvasMainView : NSScrollView <ObjectViewDelegate, BangViewDelegate> {
 
   // Keywords (joewhite4:probably not the correct place to put it)
   NSMutableArray *allObjectLabels;

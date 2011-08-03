@@ -56,7 +56,6 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 }
 
 - (void)awakeFromNib {
-  
   [[self window] setAcceptsMouseMovedEvents:YES]; 
   
   builtInObjectLabels = [[NSMutableArray alloc] initWithObjects:@"adc~", @"+~", @"bp~", @"bang~",
@@ -160,6 +159,9 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 - (BOOL)isFlipped { return YES; }
 
 - (void)toggleEditMode:(id)sender {
+  
+  NSLog(@"Edit mode");
+
   isEditModeOn = !isEditModeOn;
   [sender setState:isEditModeOn ? NSOnState : NSOffState];
   
@@ -297,6 +299,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 #pragma mark - Object Drawing
 
 -(IBAction)putObject:(id)sender {
+  
+  NSLog(@"Put Object");
   
   ObjectView *anObject;
   

@@ -11,10 +11,19 @@
 @implementation ZenGarden_GUIAppDelegate
 
 @synthesize window;
+@synthesize mainViewController;
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{
-  // Insert code here to initialize your application
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+  
+  mainViewController = [[MainViewController alloc] initWithNibName:@"MainViewController" bundle:nil];
+  [window setContentView:mainViewController.view];
+}
+
+- (void)dealloc {
+  
+  [mainViewController release];
+  [window release];
+  [super dealloc];
 }
 
 @end

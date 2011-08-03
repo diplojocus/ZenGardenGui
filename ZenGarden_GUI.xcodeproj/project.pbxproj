@@ -20,6 +20,9 @@
 		D8E145A213CB7B7A006681B0 /* PdAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = D88EBE70137C0DE700BEDEE1 /* PdAudio.m */; };
 		D8E744C713D6C028003D8154 /* BangView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E744C613D6C028003D8154 /* BangView.m */; };
 		D8ECE9DD13832B9000C0E983 /* LetView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8ECE9DC13832B9000C0E983 /* LetView.m */; };
+		D8F5178D13E9E0A3008F015A /* HelpView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F5178C13E9E0A3008F015A /* HelpView.m */; };
+		D8F5179013E9E167008F015A /* ProjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F5178F13E9E167008F015A /* ProjectView.m */; };
+		D8F5179313E9E67A008F015A /* HeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F5179213E9E67A008F015A /* HeaderView.m */; };
 		D8F92BB71368970F002174E6 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8F92BB61368970F002174E6 /* Cocoa.framework */; };
 		D8F92BC11368970F002174E6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D8F92BBF1368970F002174E6 /* InfoPlist.strings */; };
 		D8F92BC41368970F002174E6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D8F92BC31368970F002174E6 /* main.m */; };
@@ -64,6 +67,12 @@
 		D8ECE9DC13832B9000C0E983 /* LetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LetView.m; sourceTree = "<group>"; };
 		D8EF033213E6A18B005352C7 /* ZenGarden.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZenGarden.h; path = ZenGarden/src/ZenGarden.h; sourceTree = SOURCE_ROOT; };
 		D8EF033313E6A18B005352C7 /* ZGCallbackFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZGCallbackFunction.h; path = ZenGarden/src/ZGCallbackFunction.h; sourceTree = SOURCE_ROOT; };
+		D8F5178B13E9E0A3008F015A /* HelpView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpView.h; sourceTree = "<group>"; };
+		D8F5178C13E9E0A3008F015A /* HelpView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpView.m; sourceTree = "<group>"; };
+		D8F5178E13E9E167008F015A /* ProjectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectView.h; sourceTree = "<group>"; };
+		D8F5178F13E9E167008F015A /* ProjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectView.m; sourceTree = "<group>"; };
+		D8F5179113E9E67A008F015A /* HeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeaderView.h; sourceTree = "<group>"; };
+		D8F5179213E9E67A008F015A /* HeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeaderView.m; sourceTree = "<group>"; };
 		D8F92BB21368970F002174E6 /* ZenGarden_GUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZenGarden_GUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8F92BB61368970F002174E6 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		D8F92BB91368970F002174E6 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -83,10 +92,6 @@
 		D8F92BDD1368970F002174E6 /* ZenGarden_GUITests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZenGarden_GUITests-Prefix.pch"; sourceTree = "<group>"; };
 		D8F92BDE1368970F002174E6 /* ZenGarden_GUITests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZenGarden_GUITests.h; sourceTree = "<group>"; };
 		D8F92BE01368970F002174E6 /* ZenGarden_GUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZenGarden_GUITests.m; sourceTree = "<group>"; };
-		D8F92C1813689D78002174E6 /* CanvasMainViewOld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasMainViewOld.h; sourceTree = "<group>"; };
-		D8F92C1913689D78002174E6 /* CanvasMainViewOld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CanvasMainViewOld.m; sourceTree = "<group>"; };
-		D8F92C361368B370002174E6 /* ObjectViewOld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectViewOld.h; sourceTree = "<group>"; };
-		D8F92C371368B370002174E6 /* ObjectViewOld.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjectViewOld.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,17 +119,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		D8223858139ADD7300ECCB75 /* Old Code */ = {
-			isa = PBXGroup;
-			children = (
-				D8F92C361368B370002174E6 /* ObjectViewOld.h */,
-				D8F92C371368B370002174E6 /* ObjectViewOld.m */,
-				D8F92C1813689D78002174E6 /* CanvasMainViewOld.h */,
-				D8F92C1913689D78002174E6 /* CanvasMainViewOld.m */,
-			);
-			name = "Old Code";
-			sourceTree = "<group>";
-		};
 		D84F0191138662F4003692F9 /* ZenGarden */ = {
 			isa = PBXGroup;
 			children = (
@@ -143,13 +137,23 @@
 			name = Libraries;
 			sourceTree = "<group>";
 		};
+		D8F5179413E9E76A008F015A /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				D8F92BC81368970F002174E6 /* ZenGarden_GUIAppDelegate.h */,
+				D8F92BC91368970F002174E6 /* ZenGarden_GUIAppDelegate.m */,
+				D8F92BCB1368970F002174E6 /* MainMenu.xib */,
+			);
+			name = AppDelegate;
+			sourceTree = "<group>";
+		};
 		D8F92BA71368970F002174E6 = {
 			isa = PBXGroup;
 			children = (
 				D8F92BBC1368970F002174E6 /* ZenGarden_GUI */,
-				D8F92BD71368970F002174E6 /* ZenGarden_GUITests */,
 				D8C24BDA1379F1CF00363F38 /* Libraries */,
 				D8F92BB51368970F002174E6 /* Frameworks */,
+				D8F92BD71368970F002174E6 /* ZenGarden_GUITests */,
 				D8F92BB31368970F002174E6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -188,9 +192,16 @@
 		D8F92BBC1368970F002174E6 /* ZenGarden_GUI */ = {
 			isa = PBXGroup;
 			children = (
+				D8F5179413E9E76A008F015A /* AppDelegate */,
 				D8C3DB7E13E9CBCE008F3560 /* MainViewController.h */,
 				D8C3DB7F13E9CBCE008F3560 /* MainViewController.m */,
 				D8C3DB8013E9CBCE008F3560 /* MainViewController.xib */,
+				D8F5179113E9E67A008F015A /* HeaderView.h */,
+				D8F5179213E9E67A008F015A /* HeaderView.m */,
+				D8F5178E13E9E167008F015A /* ProjectView.h */,
+				D8F5178F13E9E167008F015A /* ProjectView.m */,
+				D8F5178B13E9E0A3008F015A /* HelpView.h */,
+				D8F5178C13E9E0A3008F015A /* HelpView.m */,
 				D8223852139ADD5900ECCB75 /* CanvasMainView.h */,
 				D8223853139ADD5900ECCB75 /* CanvasMainView.m */,
 				D8223855139ADD6300ECCB75 /* ObjectView.h */,
@@ -199,13 +210,9 @@
 				D8E744C613D6C028003D8154 /* BangView.m */,
 				D8ECE9DB13832B9000C0E983 /* LetView.h */,
 				D8ECE9DC13832B9000C0E983 /* LetView.m */,
-				D8F92BC81368970F002174E6 /* ZenGarden_GUIAppDelegate.h */,
-				D8F92BC91368970F002174E6 /* ZenGarden_GUIAppDelegate.m */,
-				D8F92BCB1368970F002174E6 /* MainMenu.xib */,
 				D88EBE6F137C0DE700BEDEE1 /* PdAudio.h */,
 				D88EBE70137C0DE700BEDEE1 /* PdAudio.m */,
 				D84F0191138662F4003692F9 /* ZenGarden */,
-				D8223858139ADD7300ECCB75 /* Old Code */,
 				D8F92BBD1368970F002174E6 /* Supporting Files */,
 			);
 			path = ZenGarden_GUI;
@@ -232,7 +239,7 @@
 				D8F92BD81368970F002174E6 /* Supporting Files */,
 			);
 			path = ZenGarden_GUITests;
-			sourceTree = "<group>";
+			sourceTree = SOURCE_ROOT;
 		};
 		D8F92BD81368970F002174E6 /* Supporting Files */ = {
 			isa = PBXGroup;
@@ -359,6 +366,9 @@
 				D8E145A213CB7B7A006681B0 /* PdAudio.m in Sources */,
 				D8E744C713D6C028003D8154 /* BangView.m in Sources */,
 				D8C3DB8113E9CBCE008F3560 /* MainViewController.m in Sources */,
+				D8F5178D13E9E0A3008F015A /* HelpView.m in Sources */,
+				D8F5179013E9E167008F015A /* ProjectView.m in Sources */,
+				D8F5179313E9E67A008F015A /* HeaderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

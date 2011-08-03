@@ -7,13 +7,17 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "MainViewController.h"
 #import "ZenGarden.h"
+
 
 @interface ZenGarden_GUIAppDelegate : NSObject <NSApplicationDelegate> {
 @private
   NSWindow *window;
+  MainViewController *mainViewController;
 }
 
 @property (assign) IBOutlet NSWindow *window;
+@property (assign) IBOutlet MainViewController *mainViewController;
 
 @end

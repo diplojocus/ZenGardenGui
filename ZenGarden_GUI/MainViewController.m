@@ -8,14 +8,18 @@
 
 #import "MainViewController.h"
 
-
 @implementation MainViewController
+
+@synthesize headerView;
+@synthesize projectView;
+@synthesize helpView;
+@synthesize canvasMainView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Initialization code here.
+      
     }
     
     return self;
@@ -23,7 +27,25 @@
 
 - (void)dealloc
 {
-    [super dealloc];
+  [super dealloc];
 }
+
+- (IBAction)toggleEditMode:(id)sender {
+  [canvasMainView toggleEditMode:sender];
+  NSLog(@"Edit Mode");
+}
+
+- (IBAction)removeObject:(id)sender {
+  [canvasMainView removeObject:nil];
+}
+
+- (IBAction)putObject:(id)sender {
+  [canvasMainView putObject:nil];
+}
+
+- (IBAction)addBang:(id)sender {
+  [canvasMainView addBang:nil];
+}
+
 
 @end
