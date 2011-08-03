@@ -14,6 +14,8 @@
 		D84D36CB13CF822D0080FEDA /* libsndfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D84D36CA13CF822D0080FEDA /* libsndfile.a */; };
 		D88EBE75137C0E1B00BEDEE1 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */; };
 		D88EBE76137C0E1B00BEDEE1 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */; };
+		D8C3DB8113E9CBCE008F3560 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D8C3DB7F13E9CBCE008F3560 /* MainViewController.m */; };
+		D8C3DB8213E9CBCE008F3560 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8C3DB8013E9CBCE008F3560 /* MainViewController.xib */; };
 		D8C3FE0213E6A36E00490FEA /* libzengarden.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8C3FE0113E6A36E00490FEA /* libzengarden.a */; };
 		D8E145A213CB7B7A006681B0 /* PdAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = D88EBE70137C0DE700BEDEE1 /* PdAudio.m */; };
 		D8E744C713D6C028003D8154 /* BangView.m in Sources */ = {isa = PBXBuildFile; fileRef = D8E744C613D6C028003D8154 /* BangView.m */; };
@@ -52,6 +54,9 @@
 		D88EBE70137C0DE700BEDEE1 /* PdAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PdAudio.m; sourceTree = "<group>"; };
 		D88EBE73137C0E1B00BEDEE1 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		D88EBE74137C0E1B00BEDEE1 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		D8C3DB7E13E9CBCE008F3560 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		D8C3DB7F13E9CBCE008F3560 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		D8C3DB8013E9CBCE008F3560 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		D8C3FE0113E6A36E00490FEA /* libzengarden.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libzengarden.a; path = "../../../Library/Developer/Xcode/DerivedData/ZenGarden-fqfgkbxtknjzuvemuqafvewzmyzw/Build/Products/Debug/libzengarden.a"; sourceTree = "<group>"; };
 		D8E744C513D6C028003D8154 /* BangView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BangView.h; sourceTree = "<group>"; };
 		D8E744C613D6C028003D8154 /* BangView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BangView.m; sourceTree = "<group>"; };
@@ -183,6 +188,9 @@
 		D8F92BBC1368970F002174E6 /* ZenGarden_GUI */ = {
 			isa = PBXGroup;
 			children = (
+				D8C3DB7E13E9CBCE008F3560 /* MainViewController.h */,
+				D8C3DB7F13E9CBCE008F3560 /* MainViewController.m */,
+				D8C3DB8013E9CBCE008F3560 /* MainViewController.xib */,
 				D8223852139ADD5900ECCB75 /* CanvasMainView.h */,
 				D8223853139ADD5900ECCB75 /* CanvasMainView.m */,
 				D8223855139ADD6300ECCB75 /* ObjectView.h */,
@@ -307,6 +315,7 @@
 				D8F92BC71368970F002174E6 /* Credits.rtf in Resources */,
 				D8F92BCD1368970F002174E6 /* MainMenu.xib in Resources */,
 				D8196229137290CB00E6B775 /* osc.icns in Resources */,
+				D8C3DB8213E9CBCE008F3560 /* MainViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,6 +358,7 @@
 				D8223857139ADD6300ECCB75 /* ObjectView.m in Sources */,
 				D8E145A213CB7B7A006681B0 /* PdAudio.m in Sources */,
 				D8E744C713D6C028003D8154 /* BangView.m in Sources */,
+				D8C3DB8113E9CBCE008F3560 /* MainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
