@@ -28,7 +28,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-  [[NSColor greenColor] setFill];
+  [[NSColor gridColor] setFill];
   NSRectFill(self.bounds);
 }
 

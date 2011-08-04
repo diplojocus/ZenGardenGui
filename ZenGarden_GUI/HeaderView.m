@@ -29,8 +29,16 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     // Drawing code here.
-  [[NSColor redColor] setFill];
-  NSRectFill(self.bounds);
+  NSBezierPath *path = [NSBezierPath bezierPathWithRect:[self bounds]];
+  
+  [[NSColor whiteColor] setFill];
+  [path fill];
+  
+  NSGradient *gradient = [[NSGradient alloc] initWithStartingColor:[NSColor colorWithCalibratedWhite:1 alpha:1]
+                                                       endingColor:[NSColor colorWithCalibratedWhite:0.7 alpha:0.7]];
+  [gradient drawInBezierPath:path angle:270];
+  [[NSColor grayColor] setStroke];
+  [path stroke];
 }
 
 @end

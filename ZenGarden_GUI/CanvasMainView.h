@@ -53,15 +53,13 @@
 @property (nonatomic, readonly) BOOL isEditModeOn;
 @property (nonatomic, readonly) ZGGraph *zgGraph;
 
-- (IBAction)toggleEditMode:(id)sender;
+- (void)toggleEditMode:(id)sender;
 
-- (IBAction)removeObject:(id)sender;
+- (void)removeObject;
 
-- (IBAction)putObject:(id)sender;
+- (void)putObject;
 
-- (IBAction)addBang:(id)sender;
-
-- (IBAction)removeObject:(id)sender;
+- (void)addBang;
 
 - (void)resetDrawingSelectors;
 

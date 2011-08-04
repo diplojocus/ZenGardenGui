@@ -19,7 +19,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-      
+    
     }
     
     return self;
@@ -32,19 +32,21 @@
 
 - (IBAction)toggleEditMode:(id)sender {
   [canvasMainView toggleEditMode:sender];
-  NSLog(@"Edit Mode");
+  for (NSView *view in self.view.subviews) {
+    [view setNeedsDisplay:YES];
+  }
 }
 
 - (IBAction)removeObject:(id)sender {
-  [canvasMainView removeObject:nil];
+  [canvasMainView removeObject];
 }
 
 - (IBAction)putObject:(id)sender {
-  [canvasMainView putObject:nil];
+  [canvasMainView putObject];
 }
 
 - (IBAction)addBang:(id)sender {
-  [canvasMainView addBang:nil];
+  [canvasMainView addBang];
 }
 
 

@@ -111,6 +111,8 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   
   [self drawBackground:self.bounds];
   
+  NSLog(@"Draw Rect");
+  
   // draw selection path
   selectionPath = [NSBezierPath bezierPathWithRect:selectionRect];
   NSColor *theSelectionColor = [NSColor blackColor];
@@ -159,8 +161,6 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 - (BOOL)isFlipped { return YES; }
 
 - (void)toggleEditMode:(id)sender {
-  
-  NSLog(@"Edit mode");
 
   isEditModeOn = !isEditModeOn;
   [sender setState:isEditModeOn ? NSOnState : NSOffState];
@@ -188,7 +188,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 	
 	if (key == NSDeleteCharacter || key == NSBackspaceCharacter)
 	{
-    [self removeObject:self];
+    [self removeObject];
     return;
   }
   [super keyDown:theEvent];
@@ -271,6 +271,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 #pragma mark - Background Drawing
 
 - (void)drawBackground:(NSRect)rect {
+  NSLog(@"Edit mode background colour");
   if (isEditModeOn) {
     [[[NSColor blueColor] colorWithAlphaComponent:0.2f] setFill];
     [NSBezierPath fillRect:rect];
@@ -298,7 +299,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
 
 #pragma mark - Object Drawing
 
--(IBAction)putObject:(id)sender {
+-(void)putObject {
   
   NSLog(@"Put Object");
   
@@ -334,7 +335,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   }
 }
 
-- (IBAction)addBang:(id)sender {
+- (void)addBang {
   
   BangView *aBang;
   
@@ -368,7 +369,7 @@ void zgCallbackFunction(ZGCallbackFunction function, void *userData, void *ptr) 
   }
 }
 
-- (IBAction)removeObject:(id)sender { 
+- (void)removeObject { 
   // Removes all highlighted objects
   for (ObjectView *object in arrayOfObjects) {
     if ([object isHighlighted]) {
